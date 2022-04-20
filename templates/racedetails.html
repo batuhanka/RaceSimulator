@@ -46,8 +46,6 @@
         </button>
         <span class="label text-{{ singlerace.courtbg }} label-{{ singlerace.courtbg }} float-right courtcode"><b>{{ singlerace.courtcode }}</b></span>
         <button type="button" class="btn btn-{{ singlerace.courtbg }} velocities float-right"><span class="fa-solid fa-calculator"></span><b> Calculate</b></button>
-        <button type="button" class="btn btn-info startrace" data-toggle="modal" data-target="#exampleModalCenter" racecode="{{ singlerace.key }}" cityname="{{ weather.cityname }}"><span class="fas fa-play"></span></button>
-        <button type="button" class="btn btn-info gamepage" racecode="{{ singlerace.key }}" cityname="{{ weather.cityname }}"><span class="fas fa-chess-knight"></span></button>
     </div>
 	
 	{% if nextracetime > singlerace.time and singlerace.time > currenttime %}
