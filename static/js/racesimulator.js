@@ -1,3 +1,26 @@
+jQuery.extend( jQuery.fn.dataTableExt.oSort, {
+	
+    "non-empty-string-asc": function (str1, str2) {
+		 console.log(str1, str2)
+         if(str1 == "" && str2 != "")
+            return 1;
+        if(str2 == "" && str1 != "")
+            return -1;
+        if(str1 == "" && str2 == "")
+        		return 0;
+        return ((str1 < str2) ? -1 : ((str1 > str2) ? 1 : 0));
+    },
+ 
+    "non-empty-string-desc": function (str1, str2) {
+        if(str1 == "" && str2 != "")
+            return -1;
+        if(str2 == "" && str1 != "")
+            return 1;
+        if(str1 == "" && str2 == "")
+        		return 0;
+        return ((str1 < str2) ? 1 : ((str1 > str2) ? -1 : 0));
+    }
+});
 
 var tableOptions = {
 			paging: false,
@@ -16,7 +39,7 @@ var tableOptions2 = {
 			info:false,
 			order: [13,'asc'],
         	columnDefs: [
-            	//{ orderable: true, targets: [0,2,4,5,7,10] },
+            	{ orderable: true, targets: [0,2,4,5,7,10] },
 				{ orderable: true, type:'non-empty-string', targets: [12,13] },
             	{ orderable: false, targets: '_all' },
         	]
@@ -25,87 +48,14 @@ var tableOptions2 = {
 
 $(document).ready(function(){
 	
-	try{
-		$('#programdate').datepicker({
-            dateFormat: 'd MM yy DD',
-			monthNames: [ "Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık" ],
-			dayNamesMin:[ "Paz", "Pzt", "Sal", "Çar", "Per", "Cum", "Cmt" ],
-			dayNames:   ['Pazar','Pazartesi','Salı','Çarşamba','Perşembe','Cuma','Cumartesi'],
- 			firstDay: 	1,
- 		});
-	
-		$('#programdate').datepicker('setDate', new Date());
-	
-	}catch(exp){	}
-	
-
-	$(document).on('click', "#prevdate", function() {
-		var date = $('#programdate').datepicker('getDate');
-       	date.setDate(date.getDate() - 1)
-       	$('#programdate').datepicker('setDate', date);
-
-		var programdate = $('#programdate').datepicker('getDate');
-		$.ajax({
-        	type: "GET",
-        	async: true,
-        	url: '/prgchange/',
-        	traditional : true,
-        	data: {
-            	programdate : programdate,
-        	},
-        	success: function(data) {
-				$("#races").empty();
-				for(let i=0; i<data.races.length; i++){
-					$("#races").append('<a class="racefixture" style="cursor:pointer" id='+data.races[i].fields.raceid+' sehir='+data.races[i].fields.key+'>'+data.races[i].fields.key+'</a>');
-				}
-    	   	}
-
-    	});
-
-
-	});
-	
-	$(document).on('click', "#nextdate", function() {
-		var date = $('#programdate').datepicker('getDate');
-       	date.setDate(date.getDate() + 1)
-       	$('#programdate').datepicker('setDate', date);
-
-		var programdate = $('#programdate').datepicker('getDate');
-		$.ajax({
-        	type: "GET",
-        	async: true,
-        	url: '/prgchange/',
-        	traditional : true,
-        	data: {
-            	programdate : programdate,
-        	},
-        	success: function(data) {
-				$("#races").empty();
-				for(let i=0; i<data.races.length; i++){
-					$("#races").append('<a class="racefixture" style="cursor:pointer" id='+data.races[i].fields.raceid+' sehir='+data.races[i].fields.key+'>'+data.races[i].fields.key+'</a>');
-				}
-    	   	}
-
-    	});
-
-	});
-	
-    $(document).on('click', ".racefixture", function() {
-		var programdate = $('#programdate').datepicker('getDate');
-		window.location = "/fixture/?programdate="+programdate+"&cityname="+$(this).attr("sehir");
-	});
-	
 	$(".racetable").each(function() {
 		var tableid = $(this).attr("id");
 		$('#'+tableid).DataTable( tableOptions );
 	});
 
-	try{
-		var activeitem = $('.collapse.show')[0];
-		var scrollPos =  $($(activeitem).parent().parent()).offset().top - 10;
-		$('html, body').animate({ scrollTop: scrollPos }, 2000);
-	}catch(exception){	}
-
+	var activeitem = $('.collapse.show')[0];
+	var scrollPos =  $($(activeitem).parent().parent()).offset().top - 10;
+	$('html, body').animate({ scrollTop: scrollPos }, 2000);
 
 }); // document ready end
 
@@ -145,7 +95,9 @@ $(document).on('click', ".velocities", function() {
 				if(data.avg_degree == 0){
 					$(thisbtn).remove();
 				}else{
-					$(thisbtn).text(data.avg_degree);
+					$(thisbtn).parent().addClass("text-info font-weight-bold h6");
+					$(thisbtn).parent().text(data.avg_degree)
+					//$(thisbtn).text(data.avg_degree);
 				}
         	}
     	});
@@ -178,7 +130,8 @@ $(document).on('click', ".velocities", function() {
 				if(data.prize_avg_degree == 0){
 					$(thisbtn).remove();
 				}else{
-					$(thisbtn).text(data.prize_avg_degree);
+					$(thisbtn).parent().addClass("text-info font-weight-bold h6");
+					$(thisbtn).parent().text(data.prize_avg_degree)
 				}
         	}
     	});
@@ -245,7 +198,8 @@ $(document).on('click', ".horsepower", function() {
 				if(data.avg_degree == 0){
 					$(thisbtn).remove();
 				}else{
-					$(thisbtn).text(data.avg_degree);
+					$(thisbtn).parent().addClass("text-info font-weight-bold h6");
+					$(thisbtn).parent().text(data.avg_degree)
 				}
         	}
     	});
@@ -275,7 +229,8 @@ $(document).on('click', ".horsespeed", function() {
             	if(data.prize_avg_degree == 0){
 					$(thisbtn).remove();
 				}else{
-					$(thisbtn).text(data.prize_avg_degree);
+					$(thisbtn).parent().addClass("text-info font-weight-bold h6");
+					$(thisbtn).parent().text(data.prize_avg_degree)
 				}
         	}
     	});

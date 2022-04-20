@@ -576,7 +576,7 @@ def convert_to_degree(seconds):
     minutes = seconds // 60
     seconds %= 60
     microsec = seconds % 1 * 100
-    return "%d:%02d:%02d" % (minutes, seconds, microsec)
+    return "%d.%02d.%02d" % (minutes, seconds, microsec)
 
 def convert_date_for_request(datestr):
     day     = datestr.split("/")[0]
