@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+{% load static %}
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>Race Simulator</title>
+		<link  	href="{% static 'img/favicon.png' %}" 			type="image/png" 	rel="icon"/>
+		<link href="{% static 'css/normalize.css' %}" 			type="text/css" 	rel="stylesheet"/>
+ 		<link href="{% static 'css/demo.css' %}" 				type="text/css" 	rel="stylesheet"/> 
+		<link href="{% static 'css/component.css' %}" 			type="text/css" 	rel="stylesheet"/>
+		<link href="{% static 'css/jquery-ui.min.css' %}" 		type="text/css" 	rel="stylesheet"/>
+		<link href="{% static 'css/fontawesome-all.min.css' %}"	type="text/css" 	rel="stylesheet"/>
+
+		<script src="{% static 'js/jquery-3.5.1.min.js' %}" 	type="text/javascript" charset="utf-8"></script>
+		<script src="{% static 'js/jquery-ui.min.js' %}" 		type="text/javascript" charset="utf-8"></script>
+    	<script src="{% static 'js/bootstrap.min.js' %}" 		type="text/javascript" charset="utf-8"></script>
+		<script src="{% static 'js/modernizr.custom.js' %}"		type="text/javascript" charset="utf-8"></script>
+		<script src="{% static 'js/moment.js' %}" 				type="text/javascript" charset="utf-8"></script>
+		<script src="{% static 'js/datetimepicker.min.js' %}" 	type="text/javascript" charset="utf-8"></script>
+		<script src="{% static 'js/racesimulator.js' %}"		type="text/javascript" charset="utf-8"></script>
+		<script src="{% static 'js/fontawesome-all.min.js' %}"	type="text/javascript" charset="utf-8"></script>
+		
+
+
+	</head>
+	<body style="background: linear-gradient(to left, #870000, #bbb500);">
+		<div class="container" >
+			<!-- Top Navigation -->
+			<header>
+				<h1 style="color:black"><u>Race Simulator</u></h1>
+				
+			</header>
+			
+			
+			<section class="color-1" style="height:50%; border-radius: 50px; margin: 1%;">
+				
+				<nav class="cl-effect-8" id="cl-effect-8">
+						
+						<div>
+							<i id="prevdate" class="fa-solid fa-chevron-left"  style="color:white; height:20px; cursor:pointer;"></i>
+							<input id="programdate" class="datebox" type="text"/>
+							<i id="nextdate" class="fa-solid fa-chevron-right" style="color:white; height:20px; cursor:pointer;"></i>
+						</div>
+						
+						<div id="races">
+						{% for race in races %}
+							<a class="racefixture" style="cursor:pointer" id="{{ race.raceid }}" sehir="{{ race.key }}">{{ race.key }}</a>
+						{% endfor %}
+						</div>
+						
+				</nav>
+				
+			</section>
+
+
+			<section class="color-3" style="height:50%; border-radius: 50px; margin: 1%">
+				<nav class="cl-effect-21" id="cl-effect-21">
+					
+					<div class="embed-responsive embed-responsive-1by1">
+  						<iframe class="embed-responsive-item" src="https://vhs.tjk.org/muhtemeller/" style="width:80%; height: 700px;"></iframe>
+					</div>
+
+				</nav>
+			</section>
+			
+		</div><!-- /container -->
+	</body>
+</html>

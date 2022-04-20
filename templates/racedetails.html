@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Race Simulator</title>
+    {% load static %}
+
+    <link href="{% static 'img/favicon.png' %}" 			type="image/png"	rel="icon">
+    <link href="{% static 'css/bootstrap.min.css' %}" 		type="text/css" 	rel="stylesheet">
+    <link href="{% static 'css/bootstrap-toggle.min.css' %}"type="text/css" 	rel="stylesheet">
+    <link href="{% static 'css/datatables.min.css' %}" 		type="text/css" 	rel="stylesheet">
+    <link href="{% static 'css/fontawesome-all.min.css' %}"	type="text/css" 	rel="stylesheet">
+    <link href="{% static 'css/tablesorterstyle.css'%}"     type="text/css"     rel="stylesheet">
+
+    <script src="{% static 'js/jquery-3.5.1.min.js' %}" 	type="text/javascript" charset="utf-8"></script>
+    <script src="{% static 'js/popper.js' %}" 				type="text/javascript" charset="utf-8"></script>
+    <script src="{% static 'js/bootstrap.min.js' %}" 		type="text/javascript" charset="utf-8"></script>
+    <script src="{% static 'js/bootstrap-toggle.min.js' %}" type="text/javascript" charset="utf-8"></script>
+    <script src="{% static 'js/datatables.min.js' %}" 		type="text/javascript" charset="utf-8"></script>
+    <script src="{% static 'js/fontawesome-all.min.js' %}"	type="text/javascript" charset="utf-8"></script>
+    <script src="{% static 'js/racesimulator.js' %}"		type="text/javascript" charset="utf-8" ></script>
+    <script src="{% static 'js/tablesorter.js' %}"         	type="text/javascript" charset="utf-8"></script> 
+
+	<link 	href="{% static 'css/game.css' %}"  type="text/css" 		rel="stylesheet"/>
+	<script src="{% static 	'js/game.js' %}" 	type="text/javascript" 	charset="utf-8"></script>
+
+</head>
+
+<body style="background:linear-gradient(to left, #870000, #bbb500);">
+
+	<div class="container" style="max-width: 90%;">
+
+	<br><br>
+    <div class="page-header" style="text-align: center;">
+        <h2><u>{{ weather.location }}</u></h2>
+        <h2><u>{{ weather.status }}</u></h2>
+    </div>
+
+
+	{% for singlerace in racedetails %}
+	<div id="accordion-{{ singlerace.key }}">
+  	<div class="card" style="border-bottom-left-radius:40px; border-bottom-right-radius: 40px; margin-top:2%;">
+    <div class="card-header text-white bg-{{ singlerace.courtbg }} float-left" style="border-bottom-left-radius:40px; border-bottom-right-radius: 40px;" id="{{ singlerace.key }}-header">
+        <button class="btn text-white bg-{{ singlerace.courtbg }}" data-toggle="collapse" data-target="#collapse{{ singlerace.key }}" aria-expanded="true" aria-controls="collapse{{ singlerace.key }}">
+          <span class="label label-{{ singlerace.courtbg }} left" style="text-decoration: underline;"><b>{{ singlerace.racenumber }}. KOŞU : {{ singlerace.time }} {{ singlerace.summary }}</b></span> 
+        </button>
+        <span class="label text-{{ singlerace.courtbg }} label-{{ singlerace.courtbg }} float-right courtcode"><b>{{ singlerace.courtcode }}</b></span>
+        <button type="button" class="btn btn-{{ singlerace.courtbg }} velocities float-right"><span class="fa-solid fa-calculator"></span><b> Calculate</b></button>
+        <button type="button" class="btn btn-info startrace" data-toggle="modal" data-target="#exampleModalCenter" racecode="{{ singlerace.key }}" cityname="{{ weather.cityname }}"><span class="fas fa-play"></span></button>
+        <button type="button" class="btn btn-info gamepage" racecode="{{ singlerace.key }}" cityname="{{ weather.cityname }}"><span class="fas fa-chess-knight"></span></button>
+    </div>
+	
+	{% if nextracetime > singlerace.time and singlerace.time > currenttime %}
+    	<div id="collapse{{ singlerace.key }}" class="collapse show" aria-labelledby="{{ singlerace.key }}-header" data-parent="#accordion-{{ singlerace.key }}">
+    {% else %}
+    	<div id="collapse{{ singlerace.key }}" class="collapse" aria-labelledby="{{ singlerace.key }}-header" data-parent="#accordion-{{ singlerace.key }}">
+    {% endif %}
+      <div class="card-body">
+      
+      <table id="horselist-{{ singlerace.key }}" class="table table-bordered table-hover racetable" style="font-size:small">
+      	<thead class="thead-light">
+        	<tr>
+        		<th style="vertical-align: middle; text-align:center;">Sonuç</th>
+            	<th style="vertical-align: middle; text-align:center;">Forma</th> 
+                <th style="vertical-align: middle; text-align:center;">No</th>
+				<th style="vertical-align: middle; text-align:center;">At İsmi</th>
+                <th style="vertical-align: middle; text-align:center;">Yaş</th>
+                <th style="vertical-align: middle; text-align:center;">Kilo</th>
+                <th style="vertical-align: middle; text-align:center;">Baba / Anne</th>
+                <th style="vertical-align: middle; text-align:center;">HP</th>
+                <th style="vertical-align: middle; text-align:center;">Jokey</th>
+                <th style="vertical-align: middle; text-align:center;">Sahip / Antrenör</th>
+                <th style="vertical-align: middle; text-align:center;">KGS</th>
+                <th style="vertical-align: middle; text-align:center;">Son 6</th>
+                <th style="vertical-align: middle; text-align:center;">Tümü</th>
+                <th style="vertical-align: middle; text-align:center;">Tabela</th>
+                <th style="vertical-align: middle; text-align:center;">Son 800</th>
+                <th style="vertical-align: middle; text-align:center;">İstatistik</th>
+           </tr>
+       </thead>
+       
+       <tbody>
+       		{% for horse in allhorses %}
+       		{% if horse.racecode  == singlerace.key %}
+       		<tr>
+       			
+       			{% if horse.result == 0 %}
+       			<td> </td>
+       			{% else %}
+       			<td class="text-danger" style="vertical-align: middle; text-align:center; font-weight:bold;">{% if horse.result != 1000 %} {{ horse.result }} {% else %} <p style="color:transparent; cursor:default;">1000</p> {% endif %}</td>
+       			{% endif %} 
+       			<td style="vertical-align: middle; text-align:center;"><img src="{{ horse.jerseyimg }}" width="40" height="40"></td>
+       			<td class="text-info" style="vertical-align: middle; text-align:center; font-weight:bold;">{{ horse.number }}</td>
+       			{% if horse.disabled == True %}<td style="vertical-align: middle; text-align:center;"><button type="button" class="btn btn-sm btn-outline-danger" style="cursor:text">[K] <s>{{ horse.name }}</s></button>{% endif %}
+       			{% if horse.disabled == False %}<td style="vertical-align: middle; text-align:center;">{{ horse.name }}{% endif %}
+       			<sup class="text-info"><b>{{ horse.tool }}</b></sup>
+       			{% if horse.stablemate != False %}<img src="https://medya-cdn.tjk.org/imageftp/Img/e{{ horse.stablemate }}.gif">{% endif %}
+       			</td>
+       			<td style="vertical-align: middle; text-align:center;">{{ horse.age }}</td>
+       			<td style="vertical-align: middle; text-align:center;">{{ horse.weight }}</td>
+       			<td style="vertical-align: middle; text-align:center; font-size:10px;">{{ horse.fathername }} / {{ horse.mothername }}</td>
+       			<td style="vertical-align: middle; text-align:center;">{{ horse.handycap }}</td>
+       			<td style="vertical-align: middle; text-align:center;">{{ horse.jockey }}
+       			{% if horse.apprantice == True %}<sup class="text-info"><b>AP</b></sup>{% endif %}
+       			</td>
+       			<td style="vertical-align: middle; text-align:center; font-size:10px;">{{ horse.owner }} / {{ horse.trainer }}</td>
+       			<td style="vertical-align: middle; text-align:center;">{{ horse.kgs }}</td>
+       			<td style="vertical-align: middle; text-align:center;">{{ horse.lastsix }}</td>
+       			<td style="vertical-align: middle; text-align:center;"><button id="{{ horse.code }}" courtcode="{{ singlerace.courtcode }}" distance="{{ singlerace.distance }}" type="button" class="btn btn-outline-info horsepower"><span class="fas fa-rocket"></span></button></td>
+       			<td style="vertical-align: middle; text-align:center;"><button id="{{ horse.code }}" courtcode="{{ singlerace.courtcode }}" distance="{{ singlerace.distance }}" type="button" class="btn btn-outline-info horsespeed"><i class="fa-solid fa-medal"></i></button></td>
+       			<td style="vertical-align: middle; text-align:center;"><button id="{{ horse.code }}" courtcode="{{ singlerace.courtcode }}" distance="{{ singlerace.distance }}" type="button" class="btn btn-outline-info last800"><i class="fa-solid fa-chart-simple"></i></button></td>
+       			<td style="vertical-align: middle; text-align:center;">
+       			<button id="{{ horse.code }}" horseinfo="{{ horse.number }} - {{ horse.name }}" racecode="{{ horse.racecode }}" cityname="{{ weather.cityname }}" dateinfo="{{ singlerace.daterequest }}" type="button" class="btn btn-outline-info statsinfo" data-toggle="modal" data-target="#statsModalCenter"><i class="fa-solid fa-th-list"></i></button>
+       			</td>
+       		</tr>
+       		{% endif %}
+      		{% endfor %}
+       </tbody>
+       <tfoot>
+       		<tr><td colspan="16" class="text-info">
+       		<b>{{ singlerace.betinfo }}</b>
+			</td></tr>
+       </tfoot>
+       </table>
+      
+
+      </div>
+    </div>
+  	</div>
+	</div> <!--  end of accordion -->
+	{% endfor %}
+
+
+   </div> <!-- end of container -->
+   <br><br><br>
+      
+   <!-- Modal -->
+<div class="modal fade" id="statsModalCenter" tabindex="-1" role="dialog" aria-labelledby="statsModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" style="max-width: 95%;" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center bg-info" style="border-bottom-left-radius:40px; border-bottom-right-radius: 40px;">
+        <h5 class="modal-title" id="statsModalLongTitle">İstatistikler</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div id="statsmodalbody" class="modal-body">
+        
+        <div class="form-group row">
+        
+        	<div class="col">
+				<table id="rivalstatsinfo" class="table table-bordered table-striped" style="font-size:small; display:none;">
+				<thead class="bg-info text-black">
+				<tr>
+					<th style="text-align:center">Rakipleri</th>
+					<th style="text-align:center">Geçtiği</th>
+					<th style="text-align:center">Geçildiği</th>
+					<th style="text-align:center">Toplam</th>
+				</tr>
+				</thead>
+				<tbody>
+
+				</tbody>
+				</table>
+			
+    		</div>
+        
+        
+            <div id="statsinfodiv" class="col">
+            	<div id="loadingdiv" style="text-align: center;">
+					<button class="btn btn-white text-info" type="button" disabled>
+  					<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span><b> Yükleniyor . . .</b></button>
+            	</div>
+			</div>
+			
+    		
+    		<div class="col">
+			
+    		</div>
+  		</div>
+
+
+
+
+        
+        
+      </div>
+      <div class="modal-footer">
+        <button id="statsclosebtn" type="button" class="btn btn-outline-info" data-dismiss="modal">Kapat</button>
+      </div>
+    </div>
+  </div>
+</div>   
+  
+  <input type="hidden" id="citynameinput" value="{{ cityname }}">
+  
+  </body> 
+
+</html>
