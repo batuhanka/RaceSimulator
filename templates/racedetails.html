@@ -42,7 +42,7 @@
   	<div class="card" style="border-bottom-left-radius:40px; border-bottom-right-radius: 40px; margin-top:2%;">
     <div class="card-header text-white bg-{{ singlerace.courtbg }} float-left" style="border-bottom-left-radius:40px; border-bottom-right-radius: 40px;" id="{{ singlerace.key }}-header">
         <button class="btn text-white bg-{{ singlerace.courtbg }}" data-toggle="collapse" data-target="#collapse{{ singlerace.key }}" aria-expanded="true" aria-controls="collapse{{ singlerace.key }}">
-          <span class="label label-{{ singlerace.courtbg }} left" style="text-decoration: underline;"><b>{{ singlerace.racenumber }}. KOŞU : {{ singlerace.time }} {{ singlerace.summary }}</b></span> 
+          <span class="label label-{{ singlerace.courtbg }} left" style="text-decoration: underline;"><b>{{ singlerace.racenumber }}. KOŞU : {{ singlerace.time }} {{ singlerace.summary }} : {{ singlerace.racename }}</b></span> 
         </button>
         <span class="label text-{{ singlerace.courtbg }} label-{{ singlerace.courtbg }} float-right courtcode"><b>{{ singlerace.courtcode }}</b></span>
         <button type="button" class="btn btn-{{ singlerace.courtbg }} velocities float-right"><span class="fa-solid fa-calculator"></span><b> Calculate</b></button>
@@ -72,7 +72,7 @@
                 <th style="vertical-align: middle; text-align:center;">Son 6</th>
                 <th style="vertical-align: middle; text-align:center;">Tümü</th>
                 <th style="vertical-align: middle; text-align:center;">Tabela</th>
-                <th style="vertical-align: middle; text-align:center;">Son 800</th>
+				<!--	<th style="vertical-align: middle; text-align:center;">Son 800</th> -->
                 <th style="vertical-align: middle; text-align:center;">İstatistik</th>
            </tr>
        </thead>
@@ -104,9 +104,9 @@
        			<td style="vertical-align: middle; text-align:center; font-size:10px;">{{ horse.owner }} / {{ horse.trainer }}</td>
        			<td style="vertical-align: middle; text-align:center;">{{ horse.kgs }}</td>
        			<td style="vertical-align: middle; text-align:center;">{{ horse.lastsix }}</td>
-       			<td style="vertical-align: middle; text-align:center;"><button id="{{ horse.code }}" courtcode="{{ singlerace.courtcode }}" distance="{{ singlerace.distance }}" type="button" class="btn btn-outline-info horsepower"><span class="fas fa-rocket"></span></button></td>
-       			<td style="vertical-align: middle; text-align:center;"><button id="{{ horse.code }}" courtcode="{{ singlerace.courtcode }}" distance="{{ singlerace.distance }}" type="button" class="btn btn-outline-info horsespeed"><i class="fa-solid fa-medal"></i></button></td>
-       			<td style="vertical-align: middle; text-align:center;"><button id="{{ horse.code }}" courtcode="{{ singlerace.courtcode }}" distance="{{ singlerace.distance }}" type="button" class="btn btn-outline-info last800"><i class="fa-solid fa-chart-simple"></i></button></td>
+       			<td style="vertical-align: middle; text-align:center;"><button id="{{ horse.code }}" courtcode="{{ singlerace.courtcode }}" distance="{{ singlerace.distance }}" weight="{{ horse.weight }}" type="button" class="btn btn-outline-info horsepower"><span class="fas fa-rocket"></span></button></td>
+       			<td style="vertical-align: middle; text-align:center;"><button id="{{ horse.code }}" courtcode="{{ singlerace.courtcode }}" distance="{{ singlerace.distance }}" weight="{{ horse.weight }}" type="button" class="btn btn-outline-info horsespeed"><i class="fa-solid fa-medal"></i></button></td>
+				<!--	<td style="vertical-align: middle; text-align:center;"><button id="{{ horse.code }}" courtcode="{{ singlerace.courtcode }}" distance="{{ singlerace.distance }}" weight="{{ horse.weight }}" type="button" class="btn btn-outline-info last800"><i class="fa-solid fa-chart-simple"></i></button></td> -->
        			<td style="vertical-align: middle; text-align:center;">
        			<button id="{{ horse.code }}" horseinfo="{{ horse.number }} - {{ horse.name }}" racecode="{{ horse.racecode }}" cityname="{{ weather.cityname }}" dateinfo="{{ singlerace.daterequest }}" type="button" class="btn btn-outline-info statsinfo" data-toggle="modal" data-target="#statsModalCenter"><i class="fa-solid fa-th-list"></i></button>
        			</td>
@@ -115,7 +115,7 @@
       		{% endfor %}
        </tbody>
        <tfoot>
-       		<tr><td colspan="16" class="text-info">
+       		<tr><td colspan="15" class="text-info">
        		<b>{{ singlerace.betinfo }}</b>
 			</td></tr>
        </tfoot>

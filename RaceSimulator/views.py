@@ -45,6 +45,7 @@ def fixture(request):
     daterequest         = temp[0]+temp[1]+temp[2]+temp[3]
     prgdate             = datetime.strptime(daterequest, '%a%b%d%Y')
     date_for_request    = prgdate.strftime("%Y%m%d")
+    now                 = datetime.now()
     cityname            = request.GET.get("cityname")
     url                 = '''https://ebayi.tjk.org/s/d/program/%s/full/%s.json''' %(date_for_request, cityname)
     program             = requests.get(url).json()
@@ -72,34 +73,43 @@ def fixture(request):
     except:
         pass
     
+    if date_for_request == now.strftime("%Y%m%d"):
+        currenttime     = now.strftime("%H:%M")
+        nextracetime    = (now + timedelta(minutes=30)).strftime("%H:%M")
+    else:
+        currenttime     = prgdate.strftime("%H:%M")
+        nextracetime    = (prgdate + timedelta(minutes=30)).strftime("%H:%M")
     
-    
-    return render(request, "racedetails.html", {'currenttime': prgdate.strftime("%H:%M"), 'nextracetime': (prgdate + timedelta(minutes=30)).strftime("%H:%M"), 'weather': weather_info, 'cityname': cityname, 'racedetails' : all_races, 'agfdetails' : all_agf_rates, 'allhorses' : all_horses })
+    return render(request, "racedetails.html", {'currenttime': currenttime, 'nextracetime': nextracetime, 'weather': weather_info, 'cityname': cityname, 'racedetails' : all_races, 'agfdetails' : all_agf_rates, 'allhorses' : all_horses })
 
 def horsepower(request):
     horsecode           = request.GET.get("horsecode")
     courtcode           = request.GET.get("courtcode")
     distance            = request.GET.get("distance")
+    weight              = request.GET.get("weight")
     horse_power_list    = CONT.get_horse_power(horsecode)
     avg_speed           = CONT.get_horse_avg_speed(horse_power_list, courtcode)
+    #avg_speed           = avg_speed / float(weight)
     if avg_speed != 0:
-        avg_degree          = CONT.convert_to_degree(float(distance) / avg_speed)
+        avg_degree      = CONT.convert_to_degree(float(distance) / float(avg_speed))
     else:
         avg_degree = 0
-    return HttpResponse(json.dumps({'avg_speed': avg_degree}), "application/json")
+    return HttpResponse(json.dumps({'avg_degree': avg_degree}), "application/json")
 
 
 def horsespeed(request):
     horsecode           = request.GET.get("horsecode")
     courtcode           = request.GET.get("courtcode")
     distance            = request.GET.get("distance")
+    weight              = request.GET.get("weight")
     horse_power_list    = CONT.get_horse_power(horsecode)
     prize_avg_speed     = CONT.get_horse_prize_avg_speed(horse_power_list, courtcode)
+    #prize_avg_speed     = prize_avg_speed / float(weight)
     if prize_avg_speed != 0:
-        prize_avg_degree    = CONT.convert_to_degree(float(distance) / prize_avg_speed)
+        prize_avg_degree    = CONT.convert_to_degree(float(distance) / float(prize_avg_speed))
     else:
         prize_avg_degree = 0
-    return HttpResponse(json.dumps({'prize_avg_speed': prize_avg_degree}), "application/json")
+    return HttpResponse(json.dumps({'prize_avg_degree': prize_avg_degree}), "application/json")
 
 
 def last800(request):
@@ -108,10 +118,10 @@ def last800(request):
     distance            = request.GET.get("distance")
     last_avg_speed      = CONT.get_last_800(horsecode, courtcode)
     if last_avg_speed != 0:
-        last_avg_degree    = CONT.convert_to_degree(float(distance) / last_avg_speed)
+        last_avg_degree    = CONT.convert_to_degree(float(distance) / float(last_avg_speed))
     else:
         last_avg_degree = 0
-    return HttpResponse(json.dumps({'last_avg_speed': last_avg_degree}), "application/json")
+    return HttpResponse(json.dumps({'last_avg_degree': last_avg_degree}), "application/json")
 
 def statsinfo(request):
     horsecode   = request.GET.get("horsecode")

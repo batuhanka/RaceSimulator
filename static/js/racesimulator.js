@@ -5,7 +5,7 @@ var tableOptions = {
 			info:false,
 			order: [0,'asc'],
         	columnDefs: [
-            	{ orderable: true, className: 'reorder', targets: [0,2,4,5,7,10,12,13,14] },
+            	{ orderable: true,  targets: [0,2,4,5,7,10] },
             	{ orderable: false, targets: '_all' },
         	]
 }
@@ -16,7 +16,8 @@ var tableOptions2 = {
 			info:false,
 			order: [13,'asc'],
         	columnDefs: [
-            	{ orderable: true, className: 'reorder', targets: [0,2,4,5,7,10,12,13,14] },
+            	//{ orderable: true, targets: [0,2,4,5,7,10] },
+				{ orderable: true, type:'non-empty-string', targets: [12,13] },
             	{ orderable: false, targets: '_all' },
         	]
 }
@@ -95,8 +96,8 @@ $(document).ready(function(){
 	});
 	
 	$(".racetable").each(function() {
-		var tableid = $(this).attr("id")
-		$("#"+tableid).DataTable( tableOptions );
+		var tableid = $(this).attr("id");
+		$('#'+tableid).DataTable( tableOptions );
 	});
 
 	try{
@@ -120,7 +121,7 @@ $(document).ajaxStop(function() {
 $(document).on('click', ".velocities", function() {
 	
 	// Horse Power Calculations
-	datatable = $(this).parent().parent().find('table')
+	datatable = $(this).parent().parent().find('.racetable')
 	$(this).parent().parent().find('table').find('.horsepower').each(function (){
 		$(this).html("");
 		$(this).append('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>');
@@ -128,6 +129,7 @@ $(document).on('click', ".velocities", function() {
 		var horsecode 	= $(this).attr("id");
 		var courtcode 	= $(this).attr("courtcode");
 		var distance 	= $(this).attr("distance");
+		var weight 		= $(this).attr("weight");
 		$.ajax({
         	type: "GET",
         	async: true,
@@ -137,10 +139,14 @@ $(document).on('click', ".velocities", function() {
             	horsecode : horsecode,
 				courtcode : courtcode,
 				distance  : distance,
+				weight	  : weight,
         	},
         	success: function(data) {
-				$(thisbtn).text(data.avg_speed);
-				//$(thisbtn).parent().text(data.avg_speed)
+				if(data.avg_degree == 0){
+					$(thisbtn).remove();
+				}else{
+					$(thisbtn).text(data.avg_degree);
+				}
         	}
     	});
 		
@@ -156,6 +162,7 @@ $(document).on('click', ".velocities", function() {
 		var horsecode 	= $(this).attr("id");
 		var courtcode 	= $(this).attr("courtcode");
 		var distance 	= $(this).attr("distance");
+		var weight 		= $(this).attr("weight");
 		$.ajax({
         	type: "GET",
         	async: true,
@@ -165,9 +172,14 @@ $(document).on('click', ".velocities", function() {
             	horsecode : horsecode,
 				courtcode : courtcode,
 				distance  : distance,
+				weight	  : weight,
         	},
         	success: function(data) {
-            	$(thisbtn).text(data.prize_avg_speed);
+				if(data.prize_avg_degree == 0){
+					$(thisbtn).remove();
+				}else{
+					$(thisbtn).text(data.prize_avg_degree);
+				}
         	}
     	});
 		
@@ -175,6 +187,7 @@ $(document).on('click', ".velocities", function() {
 	
 	
 	// Horse Last 800 Speed Calculations
+	/*
 	$(this).parent().parent().find('table').find('.last800').each(function (){
 		$(this).html("");
 		$(this).append('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>');
@@ -182,6 +195,7 @@ $(document).on('click', ".velocities", function() {
 		var horsecode 	= $(this).attr("id");
 		var courtcode 	= $(this).attr("courtcode");
 		var distance 	= $(this).attr("distance");
+		var weight 		= $(this).attr("weight");
 		$.ajax({
         	type: "GET",
         	async: true,
@@ -191,30 +205,20 @@ $(document).on('click', ".velocities", function() {
             	horsecode : horsecode,
 				courtcode : courtcode,
 				distance  : distance,
+				weight	  : weight,
         	},
         	success: function(data) {
-            	$(thisbtn).text(data.last_avg_speed);
+            	if(data.last_avg_degree == 0){
+					$(thisbtn).remove();
+				}else{
+					$(thisbtn).text(data.last_avg_degree);
+				}
         	}
     	});
 		
 	});
+	*/
 	
-	
-});
-
-
-$(document).on('click', ".gamepage", function() {
-	
-	var racecode 	= $(this).attr("racecode");
-	var cityname 	= $(this).attr("cityname");
-	window.location = "/gamepage/?cityname="+cityname+"&racecode="+racecode
-	
-});
-
-$(document).on('click', ".startrace", function() {
-	var racecode 	= $(this).attr("racecode");
-	var cityname 	= $(this).attr("cityname");
-	window.location = "/startrace/"
 });
 
 
@@ -225,6 +229,7 @@ $(document).on('click', ".horsepower", function() {
 		var horsecode 	= $(this).attr("id");
 		var courtcode 	= $(this).attr("courtcode");
 		var distance 	= $(this).attr("distance");
+		var weight 		= $(this).attr("weight");
 		$.ajax({
         	type: "GET",
         	async: true,
@@ -234,10 +239,15 @@ $(document).on('click', ".horsepower", function() {
             	horsecode : horsecode,
 				courtcode : courtcode,
 				distance  : distance,
+				weight	  : weight,
         	},
         	success: function(data) {
-            	$(thisbtn).text(data.avg_speed)
-        }
+				if(data.avg_degree == 0){
+					$(thisbtn).remove();
+				}else{
+					$(thisbtn).text(data.avg_degree);
+				}
+        	}
     	});
 });
 
@@ -249,6 +259,7 @@ $(document).on('click', ".horsespeed", function() {
 		var horsecode 	= $(this).attr("id");
 		var courtcode 	= $(this).attr("courtcode");
 		var distance 	= $(this).attr("distance");
+		var weight 		= $(this).attr("weight");
 		$.ajax({
         	type: "GET",
         	async: true,
@@ -258,14 +269,21 @@ $(document).on('click', ".horsespeed", function() {
             	horsecode : horsecode,
 				courtcode : courtcode,
 				distance  : distance,
+				weight    : weight,
         	},
         	success: function(data) {
-            	$(thisbtn).text(data.prize_avg_speed)
-        }
+            	if(data.prize_avg_degree == 0){
+					$(thisbtn).remove();
+				}else{
+					$(thisbtn).text(data.prize_avg_degree);
+				}
+        	}
     	});
 		
 });
 
+
+/*
 $(document).on('click', ".last800", function() {
 		var thisbtn	 	= $(this);
 		$(this).html("");
@@ -273,6 +291,7 @@ $(document).on('click', ".last800", function() {
 		var horsecode 	= $(this).attr("id");
 		var courtcode 	= $(this).attr("courtcode");
 		var distance 	= $(this).attr("distance");
+		var weight 		= $(this).attr("weight");
 		$.ajax({
         	type: "GET",
         	async: true,
@@ -282,14 +301,19 @@ $(document).on('click', ".last800", function() {
             	horsecode : horsecode,
 				courtcode : courtcode,
 				distance  : distance,
+				weight    : weight,
         	},
         	success: function(data) {
-            	$(thisbtn).text(data.last_avg_speed)
-        }
+            	if(data.last_avg_degree == 0){
+					$(thisbtn).remove();
+				}else{
+					$(thisbtn).text(data.last_avg_degree);
+				}
+        	}
     	});
 		
 });
-
+*/
 
 $(document).on('click', ".statsinfo", function() {
 		var horsecode 	= $(this).attr("id");

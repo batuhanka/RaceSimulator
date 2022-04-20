@@ -1,4 +1,5 @@
 from django.db import models
+from django.template.defaultfilters import default
 
 class RaceInfo(models.Model):
     key     = models.CharField(max_length=200)
@@ -64,6 +65,7 @@ class SingleRaceInfo(models.Model):
     courtcode   = models.CharField(max_length=200)
     courtbg     = models.CharField(max_length=200)
     racenumber  = models.IntegerField();
+    racename    = models.CharField(max_length=200)
     group       = models.CharField(max_length=200)
     info        = models.CharField(max_length=200)
     summary     = models.CharField(max_length=200)

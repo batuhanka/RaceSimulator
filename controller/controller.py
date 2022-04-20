@@ -56,6 +56,8 @@ def get_all_races(racedeatils):
         item.courtbg    = find_court_background(one['PIST'])
         item.distance   = one['MESAFE']
         item.racenumber = one['RACENO']
+        if(one['ONEMLIKOSUADI_TR']):
+            item.racename   = one['ONEMLIKOSUADI_TR']
         item.group      = one['GRUP_TR']
         item.info       = one['CINSDETAY_TR']
         item.summary    = one['BILGI_TR']
@@ -219,8 +221,7 @@ def get_last_800(horsecode, courtcode):
     speeds          = []
 
     #### first increment check for old horses
-    ## horse_details_url   = 'https://www.tjk.org/TR/YarisSever/Query/ConnectedPage/AtKosuBilgileri?QueryParameter_Yil=-1&QueryParameter_SehirId=-1&QueryParameter_PistKodu=-1&QueryParameter_MesafeStart=-1&QueryParameter_MesafeEnd=-1&QueryParameter_Kosmaz=on&Sort=&QueryParameter_AtId='+horsecode
-    horse_details_url   = 'https://www.tjk.org/TR/YarisSever/Query/ConnectedPage/AtKosuBilgileri?QueryParameter_AtId='+horsecode
+    horse_details_url   = 'https://www.tjk.org/TR/YarisSever/Query/ConnectedPage/AtKosuBilgileri?QueryParameter_Yil=-1&QueryParameter_SehirId=-1&QueryParameter_PistKodu=-1&QueryParameter_MesafeStart=-1&QueryParameter_MesafeEnd=-1&QueryParameter_Kosmaz=on&Sort=&QueryParameter_AtId='+horsecode
     horsedetails    = requests.get(horse_details_url)
     source          = BeautifulSoup(horsedetails.content,"lxml")
     allraces        = source.find("table", {"id": "queryTable"})
@@ -306,7 +307,7 @@ def get_horse_avg_speed(horse_power_list, courtcode):
     for item in horse_power_list:
         
         if(item.court == courtcode and item.degree != "" and item.degree != "Koşmaz" and item.degree != "Drcsz" and item.jockey != "Kayıt Koşmaz"):
-            race_count = race_count + 1
+            race_count      = race_count + 1
             raw_degree      = item.degree
             values          = raw_degree.split(".")
             total_seconds   = 0
@@ -316,8 +317,9 @@ def get_horse_avg_speed(horse_power_list, courtcode):
                 total_seconds   = total_seconds + float(values[2]) / 100
             except:
                 pass
-            speed           = float(float(item.distance) / float(total_seconds))
-            total_speed      += speed
+            ##speed           = float( (float(item.distance) * float(item.weight.replace(",","."))) / float(total_seconds) )
+            speed           = float( float(item.distance) / float(total_seconds) )
+            total_speed     += speed
             
     
     if(race_count == 0):  ## no data for this court
@@ -335,7 +337,6 @@ def get_horse_prize_avg_speed(horse_power_list, courtcode):
         
         if(item.court == courtcode and item.degree != "" and item.degree != "Koşmaz" and item.degree != "Drcsz" and item.jockey != "Kayıt Koşmaz" and int(item.rank) < 6):
             race_count = race_count + 1
-            #print(item.racedate+" "+item.racecity+" "+item.distance+" "+item.court+" "+item.degree)
             raw_degree      = item.degree
             values          = raw_degree.split(".")
             total_seconds   = 0
@@ -345,8 +346,9 @@ def get_horse_prize_avg_speed(horse_power_list, courtcode):
                 total_seconds   = total_seconds + float(values[2]) / 100
             except:
                 pass
-            speed           = float(float(item.distance) / float(total_seconds))
-            total_speed      += speed
+            #speed           = float( (float(item.distance) * float(item.weight.replace(",","."))) / float(total_seconds))
+            speed           = float( float(item.distance) / float(total_seconds))
+            total_speed     += speed
             
     
     if(race_count == 0):  ## no data for this court
@@ -480,8 +482,7 @@ def get_horse_power(horsecode):
     
     #### first increment check for old horses
     ## for all races 
-    ##horse_details_url   = 'https://www.tjk.org/TR/YarisSever/Query/ConnectedPage/AtKosuBilgileri?QueryParameter_Yil=-1&QueryParameter_SehirId=-1&QueryParameter_PistKodu=-1&QueryParameter_MesafeStart=-1&QueryParameter_MesafeEnd=-1&QueryParameter_Kosmaz=on&Sort=&QueryParameter_AtId='+horsecode
-    horse_details_url = 'https://www.tjk.org/TR/YarisSever/Query/ConnectedPage/AtKosuBilgileri?QueryParameter_AtId='+horsecode
+    horse_details_url   = 'https://www.tjk.org/TR/YarisSever/Query/ConnectedPage/AtKosuBilgileri?QueryParameter_Yil=-1&QueryParameter_SehirId=-1&QueryParameter_PistKodu=-1&QueryParameter_MesafeStart=-1&QueryParameter_MesafeEnd=-1&QueryParameter_Kosmaz=on&Sort=&QueryParameter_AtId='+horsecode
     horsedetails    = requests.get(horse_details_url)
     source          = BeautifulSoup(horsedetails.content,"lxml")
     allraces        = source.find("table", {"id": "queryTable"})
@@ -574,7 +575,8 @@ def convert_to_degree(seconds):
     seconds %= 3600
     minutes = seconds // 60
     seconds %= 60
-    return "%2d:%.2f" % (minutes, seconds)
+    microsec = seconds % 1 * 100
+    return "%d:%02d:%02d" % (minutes, seconds, microsec)
 
 def convert_date_for_request(datestr):
     day     = datestr.split("/")[0]
