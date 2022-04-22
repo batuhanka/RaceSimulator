@@ -1,5 +1,4 @@
 from django.db import models
-from django.template.defaultfilters import default
 
 class RaceInfo(models.Model):
     key     = models.CharField(max_length=200)

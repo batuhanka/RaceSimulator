@@ -101,7 +101,7 @@ $(document).ready(function(){
             	horsecode 	: horsecode,
         	},
         	success: function(data) {
-				$(thisdiv).parent().empty().append(data.yearprize+' tl');
+				$(thisdiv).parent().empty().append(data.yearprize+' &#8378;');
         	}
     	});
 	});
