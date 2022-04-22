@@ -9,6 +9,15 @@ from bs4 import BeautifulSoup
 import math
 from datetime import datetime
 
+citycodemap = {1:'Adana', 2:'İzmir', 3:'İstanbul', 4:'Bursa', 5:'Ankara', 6:'Şanlıurfa', 7:'Elazığ', 8:'Diyarbakır', 9:'Kocaeli', 10:'Antalya'}
+
+def get_city_code(val):
+    for key, value in citycodemap.items():
+        if val == value:
+            return key
+    return "key doesn't exist"
+
+
 def get_races(date):
     
     url     = 'https://ebayi.tjk.org/s/d/program/'+date+'/yarislar.json'
@@ -66,11 +75,23 @@ def get_all_races(racedeatils):
 
     return result
 
+def find_rule_detail(raceid, racedate, cityinfo, citycode):
+    url         = 'https://www.tjk.org/TR/YarisSever/Info/Sehir/GunlukYarisProgrami?SehirId='+str(citycode)+'&QueryParameter_Tarih='+racedate+'&SehirAdi='+cityinfo
+    response    = requests.get(url)
+    source      = BeautifulSoup(response.content, "lxml")
+    racediv     = source.find("div", {"id": str(raceid)})
+    anchorinfo  = racediv.find("a", {"class", "aciklamaFancy"})
+    return anchorinfo['title']
+
+
+
 def get_weather_info(weatherdeatils):
     
     weather_info            = WeatherInfo()
     weather_info.location   = weatherdeatils['HIPODROMADI']
+    weather_info.cityinfo   = weatherdeatils['HIPODROMYERI']
     weather_info.cityname   = find_weather_location(weatherdeatils['HIPODROMYERI'])
+    weather_info.citycode   = get_city_code(weatherdeatils['HIPODROMYERI'])
     weather_info.status     = weatherdeatils['HAVA_TR']
     weather_info.temperature= weatherdeatils['SICAKLIK']
     weather_info.humidity   = weatherdeatils['NEM']
@@ -137,6 +158,8 @@ def get_all_horses(racedeatils):
             item.kgs        = horse['KGS']
             item.jerseyimg  = horse['FORMA'].replace("medya", "medya-cdn")
             item.disabled   = horse['KOSMAZ']
+            
+            
             
             #if(horsetype == "i̇ngilizler"):
             #    pedigree_text = get_pedigree_info(horse['AD'].replace(" ","+").lower(), horse['BABA'].split(" (")[0], horse['ANNE'].split(" (")[0])
@@ -438,36 +461,42 @@ def get_rival_info(horsecode, racecode, cityname, dateinfo):
                     url         = '''https://ebayi.tjk.org/s/d/sonuclar/%s/full/%s.json''' %(daterequest, find_weather_location(cityname))
                     program     = requests.get(url).json()
                     try:
+                        sourceorder = 0
+                        targetorder = 0
+                        rivalname   = ""
                         for race in program['kosular']:
                             if race['NO'] == raceorder and race['KOD'] == raceid:
                                 for item in race['atlar']:
                                     
-                                    if item['KOD'] == horsecode:
-                                        sourceorder = item['SONUC']
+                                    if item['KOD'] in rivals:
+                                        targetorder = int(item['SONUC'])
+                                        rivalname   = item['AD']
+                                        rivalcode   = item['KOD']
+                                        print(item)
                                     
-                                    for rival in rivals:
-                                        if rival == item['KOD']:
-                                            targetorder = item['SONUC']
-                                            rivalname = item['AD']
-                                            
-                                            if rival not in occur.keys():
-                                                info = []
-                                                info.append(rivalname)
-                                                info.append(0)
-                                                info.append(0)
-                                                occur[rival] = info
-                                                
-                                                if(int(sourceorder) < int(targetorder)):
-                                                    occur[rival][1] = occur[rival][1] + 1
-                                                else:
-                                                    occur[rival][2] = occur[rival][2] + 1
-                                                
-                                            else:
-                                                if(int(sourceorder) < int(targetorder)):
-                                                    occur[rival][1] = occur[rival][1] + 1
-                                                else:
-                                                    occur[rival][2] = occur[rival][2] + 1
-                                            
+                                    if item['KOD'] == horsecode:
+                                        sourceorder     = int(item['SONUC'])
+                                
+                                if(sourceorder != 0 and targetorder != 0):
+                                    
+                                    
+                                    if rivalcode in occur.keys():
+                                        if(sourceorder < targetorder):
+                                            occur[rivalcode][1] = occur[rivalcode][1] + 1
+                                        else:
+                                            occur[rivalcode][2] = occur[rivalcode][2] + 1
+                                    else:
+                                        info = []
+                                        info.append(rivalname)
+                                        if(sourceorder < targetorder):
+                                            info.append(1)
+                                            info.append(0)
+                                        else:
+                                            info.append(0)
+                                            info.append(1)
+                                        
+                                        occur[rivalcode] = info
+
                     except:
                         pass
     return occur   
@@ -537,7 +566,7 @@ def get_horse_power(horsecode):
                 pass
     
     if len(result) == 1:
-        print("ilk defa kosacaktır")
+        pass ## firstly recorded
     
     return result
 

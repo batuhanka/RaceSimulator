@@ -28,7 +28,8 @@ var tableOptions = {
 			info:false,
 			order: [0,'asc'],
         	columnDefs: [
-            	{ orderable: true,  targets: [0,2,4,5,7,10] },
+            	{ orderable: true,  targets: [0,2,3,4,5,7,8,10] },
+				{ orderable: true, type:'non-empty-string', targets: [13,14,15] },
             	{ orderable: false, targets: '_all' },
         	]
 }
@@ -37,10 +38,10 @@ var tableOptions2 = {
 			paging: false,
 			searching: false,
 			info:false,
-			order: [13,'asc'],
+			order: [15,'asc'],
         	columnDefs: [
-            	{ orderable: true, targets: [0,2,4,5,7,10] },
-				{ orderable: true, type:'non-empty-string', targets: [12,13] },
+            	{ orderable: true, targets: [0,2,3,4,5,7,8,10] },
+				{ orderable: true, type:'non-empty-string', targets: [13,14,15] },
             	{ orderable: false, targets: '_all' },
         	]
 }
@@ -53,9 +54,57 @@ $(document).ready(function(){
 		$('#'+tableid).DataTable( tableOptions );
 	});
 
-	var activeitem = $('.collapse.show')[0];
-	var scrollPos =  $($(activeitem).parent().parent()).offset().top - 10;
-	$('html, body').animate({ scrollTop: scrollPos }, 2000);
+	try{
+		var activeitem = $('.collapse.show')[0];	
+		var scrollPos =  $($(activeitem).parent().parent()).offset().top - 10;
+		$('html, body').animate({ scrollTop: scrollPos }, 2000);
+	}catch(exp){}
+
+
+	$(".racerule").each(function(){
+		var thisspan	= $(this);
+		var raceid 		= $(this).attr("raceid");
+		var racedate 	= $(this).attr("racedate");
+		var cityinfo 	= $(this).attr("cityinfo");
+		var citycode 	= $(this).attr("citycode");
+		
+		$.ajax({
+        	type: "GET",
+        	async: true,
+        	url: '/racerule/',
+        	traditional : true,
+        	data: {
+            	raceid 		: raceid,
+				racedate 	: racedate,
+				cityinfo  	: cityinfo,
+				citycode	: citycode,
+        	},
+        	success: function(data) {
+				$(thisspan).text(data.rule);
+        	}
+    	});
+		
+		
+	});
+	
+	
+	$(".yearprize").each(function(){
+		var thisdiv		= $(this);
+		var horsecode	= $(this).attr("horsecode");
+		
+		$.ajax({
+        	type: "GET",
+        	async: true,
+        	url: '/yearprize/',
+        	traditional : true,
+        	data: {
+            	horsecode 	: horsecode,
+        	},
+        	success: function(data) {
+				$(thisdiv).parent().empty().append(data.yearprize+' tl');
+        	}
+    	});
+	});
 
 }); // document ready end
 

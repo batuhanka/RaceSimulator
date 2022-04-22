@@ -12,6 +12,9 @@ class RaceInfo(models.Model):
 class WeatherInfo(models.Model):
     location    = models.CharField(max_length=200)
     status      = models.CharField(max_length=200)
+    cityname    = models.CharField(max_length=200)
+    cityinfo    = models.CharField(max_length=200)
+    citycode    = models.IntegerField();
     temperature = models.CharField(max_length=200)
     humidity    = models.CharField(max_length=200)
     grassstatus = models.CharField(max_length=200)
@@ -49,6 +52,7 @@ class HorseInfo(models.Model):
     ganyan      = models.CharField(max_length=200)
     lastsix     = models.CharField(max_length=200)
     tool        = models.CharField(max_length=200)
+    yearprize   = models.CharField(max_length=200)
     dpvalue     = models.CharField(max_length=200)
     divalue     = models.CharField(max_length=200)
     cdvalue     = models.CharField(max_length=200)
@@ -70,6 +74,7 @@ class SingleRaceInfo(models.Model):
     info        = models.CharField(max_length=200)
     summary     = models.CharField(max_length=200)
     betinfo     = models.CharField(max_length=200)
+    rule        = models.CharField(max_length=200)
     
 class AgfInfo(models.Model):
     racenumber  = models.IntegerField();

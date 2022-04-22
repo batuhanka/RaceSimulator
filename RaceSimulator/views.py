@@ -10,11 +10,12 @@ import requests
 from django.http.response import HttpResponse
 import json
 from django.core import serializers
+from bs4 import BeautifulSoup
 
 
 citycodemap = {1:'Adana', 2:'İzmir', 3:'İstanbul', 4:'Bursa', 5:'Ankara', 6:'Şanlıurfa', 7:'Elazığ', 8:'Diyarbakır', 9:'Kocaeli', 10:'Antalya'}
 
-def get_key(val):
+def get_city_code(val):
     for key, value in citycodemap.items():
         if val == value:
             return key
@@ -136,6 +137,27 @@ def statsinfo(request):
     }
     data = json.dumps(context, indent=4, sort_keys=True, default=str)
     return HttpResponse(data, "application/json")
+
+def yearprize(request):
+    horsecode   = request.GET.get("horsecode")
+    yearprize   = 0
+    try:
+        url         = 'https://www.tjk.org/TR/YarisSever/Query/ConnectedPage/AtKosuBilgileri?1=1&QueryParameter_AtId='+horsecode
+        response    = requests.get(url)
+        source      = BeautifulSoup(response.content, "lxml")
+        prizes      = source.find("div", {"class": "grid_10 alpha omega kunye"}).find("table").find("tbody").find_all("tr")
+        yearprize   = prizes[4].find_all("td")[7].text.split(" t")[0]
+    except:
+        pass
+    return HttpResponse(json.dumps({'yearprize': yearprize}), "application/json")
+
+def racerule(request):
+    raceid      = request.GET.get("raceid")
+    racedate    = request.GET.get("racedate")
+    cityinfo    = request.GET.get("cityinfo")
+    citycode    = request.GET.get("citycode")
+    rule_detail = CONT.find_rule_detail(raceid, racedate, cityinfo, citycode)
+    return HttpResponse(json.dumps({'rule': rule_detail}), "application/json")
 
 def singlerace(request):
     

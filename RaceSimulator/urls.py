@@ -25,6 +25,8 @@ urlpatterns = [
     path('horsespeed/', views.horsespeed,   name='horsespeed'),
     path('last800/',    views.last800,      name='last800'),
     path('statsinfo/',  views.statsinfo,    name='statsinfo'),
+    path('racerule/',   views.racerule,     name='racerule'),
+    path('yearprize/',  views.yearprize,    name='yearprize'),
     path('startrace/',  views.startrace,    name='startrace'),
     path('gamepage/',   views.gamepage,     name='gamepage'),
 ]
