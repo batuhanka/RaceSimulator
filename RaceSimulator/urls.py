@@ -29,4 +29,5 @@ urlpatterns = [
     path('yearprize/',  views.yearprize,    name='yearprize'),
     path('startrace/',  views.startrace,    name='startrace'),
     path('gamepage/',   views.gamepage,     name='gamepage'),
+    path('horsetype/',  views.horsetype,    name='horsetype'),
 ]

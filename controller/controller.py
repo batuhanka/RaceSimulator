@@ -8,6 +8,7 @@ from RaceSimulator.models import RaceInfo, SingleRaceInfo, AgfInfo, HorseInfo, W
 from bs4 import BeautifulSoup
 import math
 from datetime import datetime
+import re
 
 citycodemap = {1:'Adana', 2:'İzmir', 3:'İstanbul', 4:'Bursa', 5:'Ankara', 6:'Şanlıurfa', 7:'Elazığ', 8:'Diyarbakır', 9:'Kocaeli', 10:'Antalya'}
 
@@ -180,7 +181,6 @@ def get_all_horses(racedeatils):
             result.append(item)
 
     return result
-
 
 def get_all_horses_single_race(horses, racecode):
     

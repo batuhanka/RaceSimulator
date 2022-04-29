@@ -95,19 +95,27 @@
        			{% endif %} 
        			<td style="vertical-align: middle; text-align:center;"><img src="{{ horse.jerseyimg }}" width="40" height="40"></td>
        			<td class="text-info" style="vertical-align: middle; text-align:center; font-weight:bold;">{{ horse.number }}</td>
-       			{% if horse.disabled == True %}<td style="vertical-align: middle; text-align:center;"><button type="button" class="btn btn-sm btn-outline-danger" style="cursor:text">[K] <s>{{ horse.name }}</s></button>{% endif %}
-       			{% if horse.disabled == False %}<td style="vertical-align: middle; text-align:center;">{{ horse.name }}{% endif %}
+       			{% if horse.disabled == True %}
+       			<td style="vertical-align: middle; text-align:center;"><button type="button" class="btn btn-sm btn-outline-danger" style="cursor:text">[K] <s>{{ horse.name }}</s></button>
+       			{% endif %}
+       			{% if horse.disabled == False %}
+       			<td style="vertical-align: middle; text-align:center;">{{ horse.name }}
+       			{% endif %}
        			<sup class="text-info"><b>{{ horse.tool }}</b></sup>
        			{% if horse.stablemate != False %}<img src="https://medya-cdn.tjk.org/imageftp/Img/e{{ horse.stablemate }}.gif">{% endif %}
        			</td>
-       			<td style="vertical-align: middle; text-align:center;">{{ horse.age }}</td>
+       			<td style="vertical-align: middle; text-align:center;"><span class="badge badge-pill" style="font-size: x-small;">{{ horse.age }}</span></td>
        			<td style="vertical-align: middle; text-align:center;">{{ horse.weight }}</td>
-       			<td style="vertical-align: middle; text-align:center; font-size:10px;">{{ horse.fathername }} / {{ horse.mothername }}</td>
+       			<td style="vertical-align: middle; text-align:center;" horsecode="{{ horse.code }}" class="parent"> 
+       			<span class="badge badge-pill" style="font-size: x-small; margin:1%; ">{{ horse.fathername }}</span> <br>
+       			<span class="badge badge-pill" style="font-size: x-small; margin:1%;">{{ horse.mothername }} </span> </td>
        			<td style="vertical-align: middle; text-align:center;">{{ horse.handycap }}</td>
        			<td style="vertical-align: middle; text-align:center;">{{ horse.jockey }}
        			{% if horse.apprantice == True %}<sup class="text-info"><b>AP</b></sup>{% endif %}
        			</td>
-       			<td style="vertical-align: middle; text-align:center; font-size:10px;">{{ horse.owner }} / {{ horse.trainer }}</td>
+       			<td style="vertical-align: middle; text-align:center; font-size:10px;">
+       			<span>{{ horse.owner }}</span> <br> 
+       			<span>{{ horse.trainer }}</span> </td>
        			<td style="vertical-align: middle; text-align:center;">{{ horse.kgs }}</td>
        			<td style="vertical-align: middle; text-align:center;"><div class="spinner-border spinner-border-sm text-info yearprize" horsecode="{{ horse.code }}" role="status"><span class="sr-only"></span></div></td>
        			<td style="vertical-align: middle; text-align:center;">{{ horse.lastsix }}</td>

@@ -11,6 +11,7 @@ from django.http.response import HttpResponse
 import json
 from django.core import serializers
 from bs4 import BeautifulSoup
+import re
 
 
 citycodemap = {1:'Adana', 2:'İzmir', 3:'İstanbul', 4:'Bursa', 5:'Ankara', 6:'Şanlıurfa', 7:'Elazığ', 8:'Diyarbakır', 9:'Kocaeli', 10:'Antalya'}
@@ -150,6 +151,31 @@ def yearprize(request):
     except:
         pass
     return HttpResponse(json.dumps({'yearprize': yearprize}), "application/json")
+
+
+def horsetype(request):
+    horsecode   = request.GET.get("horsecode")
+    url         = 'https://www.tjk.org/TR/YarisSever/Query/Pedigri/Pedigri?Atkodu='+horsecode
+    response    = requests.get(url)
+    source      = BeautifulSoup(response.content, "lxml")
+    parents     = source.find_all("td", {"rowspan": "4"})
+    father      = parents[0].text.strip()
+    mother      = parents[1].text.strip()
+    fathertype  = "a"
+    mothertype  = "a"
+    try:
+        idx         = re.search("[a-v]", father).start()
+        idx2        = re.search("[a-v]", mother).start()
+        fathertype  = father[idx]
+        mothertype  = mother[idx2]
+    except:
+        pass
+    context = {
+        'fathertype': fathertype,
+        'mothertype': mothertype,
+    }
+    data = json.dumps(context, indent=4, sort_keys=True, default=str)
+    return HttpResponse(data, "application/json")
 
 def racerule(request):
     raceid      = request.GET.get("raceid")

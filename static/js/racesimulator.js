@@ -27,9 +27,10 @@ var tableOptions = {
 			searching: false,
 			info:false,
 			order: [0,'asc'],
+			autoWidth: false,
         	columnDefs: [
             	{ orderable: true,  targets: [0,2,3,4,5,7,8,10] },
-				{ orderable: true, type:'non-empty-string', targets: [13,14,15] },
+				{ orderable: true,  type:'non-empty-string', targets: [13,14,15] },
             	{ orderable: false, targets: '_all' },
         	]
 }
@@ -39,6 +40,7 @@ var tableOptions2 = {
 			searching: false,
 			info:false,
 			order: [15,'asc'],
+			autoWidth: false,
         	columnDefs: [
             	{ orderable: true, targets: [0,2,3,4,5,7,8,10] },
 				{ orderable: true, type:'non-empty-string', targets: [13,14,15] },
@@ -88,6 +90,61 @@ $(document).ready(function(){
 	});
 	
 	
+	
+	$(".parent").each(function(){
+		var thistd 		= $(this);
+		var horsecode	= $(this).attr("horsecode");
+		
+		$.ajax({
+        	type: "GET",
+        	async: true,
+        	url: '/horsetype/',
+        	traditional : true,
+        	data: {
+            	horsecode 	: horsecode,
+        	},
+        	success: function(data) {
+	
+				var horsetd		= $(thistd).prev().prev();
+				var horsecolor 	= $(horsetd).text().split(" ")[1];
+				// set horse don colour
+				if(horsecolor == 'a'){
+					$((horsetd).children()[0]).addClass("badge-danger");
+				}
+				if(horsecolor == 'd'){
+					$((horsetd).children()[0]).addClass("badge-warning");
+				}
+				if(horsecolor == 'k'){
+					$((horsetd).children()[0]).addClass("badge-secondary");
+				}
+	
+				// set father don colour
+				if(data.fathertype == 'a'){
+					$($(thistd).children()[0]).addClass("badge-danger");
+				}
+				if(data.fathertype == 'd'){
+					$($(thistd).children()[0]).addClass("badge-warning");
+				}
+				if(data.fathertype == 'k'){
+					$($(thistd).children()[0]).addClass("badge-secondary");
+				}
+				
+				// set mother don colour
+				if(data.mothertype == 'a'){
+					$($(thistd).children()[2]).addClass("badge-danger");
+				}
+				if(data.mothertype == 'd'){
+					$($(thistd).children()[2]).addClass("badge-warning");
+				}
+				if(data.mothertype == 'k'){
+					$($(thistd).children()[2]).addClass("badge-secondary");
+				}
+        	}
+    	});
+	});
+	
+	
+	
 	$(".yearprize").each(function(){
 		var thisdiv		= $(this);
 		var horsecode	= $(this).attr("horsecode");
@@ -105,7 +162,8 @@ $(document).ready(function(){
         	}
     	});
 	});
-
+	
+	
 }); // document ready end
 
 
