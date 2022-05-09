@@ -80,6 +80,8 @@
                 <th style="vertical-align: middle; text-align:center;">Tabela</th>
 				<!--	<th style="vertical-align: middle; text-align:center;">Son 800</th> -->
                 <th style="vertical-align: middle; text-align:center;">İstatistik</th>
+                <th style="vertical-align: middle; text-align:center;">AGF1</th>
+                <th style="vertical-align: middle; text-align:center;">AGF2</th>
            </tr>
        </thead>
        
@@ -126,12 +128,44 @@
        			<td style="vertical-align: middle; text-align:center;">
        			<button id="{{ horse.code }}" horseinfo="{{ horse.number }} - {{ horse.name }}" racecode="{{ horse.racecode }}" cityname="{{ weather.cityname }}" dateinfo="{{ singlerace.daterequest }}" type="button" class="btn btn-outline-info statsinfo" data-toggle="modal" data-target="#statsModalCenter"><i class="fa-solid fa-th-list"></i></button>
        			</td>
+       			<td style="vertical-align: middle; text-align:center;">
+       			{% if horse.agf1 %}
+       			<div class="progress mx-auto" data-value='{{ horse.agf1 }}' style="max-height:60px; max-width:60px;">
+          		<span class="progress-left">
+                        <span class="progress-bar border-info"></span>
+          		</span>
+          		<span class="progress-right">
+                        <span class="progress-bar border-info"></span>
+          		</span>
+          		<div class="progress-value w-100 h-100 rounded-circle d-flex align-items-center justify-content-center">
+            	<div class="text-info font-weight-bold">%{{ horse.agf1 }}</div>
+          		</div>
+        		</div>
+        		{% endif %}
+        		</td>
+        		
+        		<td style="vertical-align: middle; text-align:center;">
+        		{% if horse.agf2 %}
+        		<div class="progress mx-auto" data-value='{{ horse.agf2 }}' style="max-height:60px; max-width:60px;">
+          		<span class="progress-left">
+                        <span class="progress-bar border-info"></span>
+          		</span>
+          		<span class="progress-right">
+                        <span class="progress-bar border-info"></span>
+          		</span>
+          		<div class="progress-value w-100 h-100 rounded-circle d-flex align-items-center justify-content-center">
+            	<div class="text-info font-weight-bold">%{{ horse.agf2 }}</div>
+          		</div>
+        		</div>
+        		{% endif %}
+       			</td>
+       			
        		</tr>
        		{% endif %}
       		{% endfor %}
        </tbody>
        <tfoot>
-       		<tr><td colspan="17" class="text-info">
+       		<tr><td colspan="19" class="text-info">
        		<b>{{ singlerace.betinfo }}</b>
 			</td></tr>
        </tfoot>
@@ -162,7 +196,7 @@
         
         <div class="form-group row">
         
-        	<div class="col">
+        	<div class="col" style="margin-top:0.5%";>
 				<table id="rivalstatsinfo" class="table table-bordered table-striped" style="font-size:small; display:none;">
 				<thead class="bg-info text-black">
 				<tr>
@@ -188,7 +222,7 @@
 			</div>
 			
     		
-    		<div class="col">
+    		<div id="siblinginfodiv" class="col">
 			
     		</div>
   		</div>

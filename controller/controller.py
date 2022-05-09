@@ -9,6 +9,7 @@ from bs4 import BeautifulSoup
 import math
 from datetime import datetime
 import re
+import statistics
 
 citycodemap = {1:'Adana', 2:'İzmir', 3:'İstanbul', 4:'Bursa', 5:'Ankara', 6:'Şanlıurfa', 7:'Elazığ', 8:'Diyarbakır', 9:'Kocaeli', 10:'Antalya'}
 
@@ -160,8 +161,6 @@ def get_all_horses(racedeatils):
             item.jerseyimg  = horse['FORMA'].replace("medya", "medya-cdn")
             item.disabled   = horse['KOSMAZ']
             
-            
-            
             #if(horsetype == "i̇ngilizler"):
             #    pedigree_text = get_pedigree_info(horse['AD'].replace(" ","+").lower(), horse['BABA'].split(" (")[0], horse['ANNE'].split(" (")[0])
             #if(pedigree_text != ""):
@@ -178,6 +177,15 @@ def get_all_horses(racedeatils):
             item.ganyan     = horse['GANYAN']
             item.lastsix    = horse['SON6'].replace("K","").replace("C","")
             item.tool       = horse['TAKI']
+            try:
+                item.agf1   = horse['AGF1']
+            except:
+                pass
+            try:
+                item.agf2   = horse['AGF2']
+            except:
+                pass
+            
             result.append(item)
 
     return result
@@ -214,28 +222,11 @@ def get_all_horses_single_race(horses, racecode):
             item.ganyan     = horse['GANYAN']
             item.lastsix    = horse['SON6'].replace("K","").replace("C","")
             item.tool       = horse['TAKI']
+            
             result.append(item)
 
     return result
 
-
-def get_all_agf_rates(agfdeatils):
-    
-    result = []
-    for agf in agfdeatils:
-        for one in agf['kosular']:
-            racenumber = one['NO']
-            for horse in one['atlar']:
-                item            = AgfInfo()
-                item.racenumber = racenumber
-                item.horsenumber= horse['NO']
-                item.horsename  = horse['AD']
-                item.agforder   = horse['AGFSIRANO']
-                item.agfrate    = horse['AGFORAN']
-                item.jockey     = horse['JOKEY']
-                result.append(item)
-
-    return result
 
 def get_last_800(horsecode, courtcode):
     
@@ -325,12 +316,10 @@ def get_last_800(horsecode, courtcode):
     
 def get_horse_avg_speed(horse_power_list, courtcode):
     
-    race_count          = 0
-    total_speed         = 0
+    samples = []
     for item in horse_power_list:
         
         if(item.court == courtcode and item.degree != "" and item.degree != "Koşmaz" and item.degree != "Drcsz" and item.jockey != "Kayıt Koşmaz"):
-            race_count      = race_count + 1
             raw_degree      = item.degree
             values          = raw_degree.split(".")
             total_seconds   = 0
@@ -341,25 +330,25 @@ def get_horse_avg_speed(horse_power_list, courtcode):
             except:
                 pass
             ##speed           = float( (float(item.distance) * float(item.weight.replace(",","."))) / float(total_seconds) )
-            speed           = float( float(item.distance) / float(total_seconds) )
-            total_speed     += speed
+            speed       = float( float(item.distance) / float(total_seconds) )
+            samples.append(speed)
             
     
-    if(race_count == 0):  ## no data for this court
+    if(len(samples) == 0):  ## no data for this court
         avg_speed = 0
-    else:
-        avg_speed = float(total_speed / race_count)
+    if(len(samples) == 1):  ## if there is only one data
+        avg_speed = samples[0]
+    if(len(samples) > 1):
+        avg_speed = statistics.mean(samples)
 
     return avg_speed
 
 def get_horse_prize_avg_speed(horse_power_list, courtcode):
     
-    race_count          = 0
-    total_speed         = 0
+    samples = []
     for item in horse_power_list:
         
         if(item.court == courtcode and item.degree != "" and item.degree != "Koşmaz" and item.degree != "Drcsz" and item.jockey != "Kayıt Koşmaz" and int(item.rank) < 6):
-            race_count = race_count + 1
             raw_degree      = item.degree
             values          = raw_degree.split(".")
             total_seconds   = 0
@@ -371,37 +360,53 @@ def get_horse_prize_avg_speed(horse_power_list, courtcode):
                 pass
             #speed           = float( (float(item.distance) * float(item.weight.replace(",","."))) / float(total_seconds))
             speed           = float( float(item.distance) / float(total_seconds))
-            total_speed     += speed
+            samples.append(speed)
             
     
-    if(race_count == 0):  ## no data for this court
+    if(len(samples) == 0):  ## no data for this court
         prize_avg_speed = 0
-    else:
-        prize_avg_speed = float(total_speed / race_count)
+    if(len(samples) == 1):  ## if there is only one data
+        prize_avg_speed = samples[0]
+    if(len(samples) > 1):  ## no data for this court
+        prize_avg_speed = statistics.mean(samples)
 
     return prize_avg_speed
 
+def get_sibling_info(horsecode):
+    result  = []
+    url     = 'https://www.tjk.org/TR/YarisSever/Query/Kardes/Kardes?Atkodu='+horsecode
+    details = requests.get(url)
+    source  = BeautifulSoup(details.content,"lxml")
+    tables  = source.find_all("table")
+    if(len(tables) == 0):
+        result.append("Bu atın aynı anneden kardeşi yoktur.")
+    else:
+        result.append(str(tables[0]).replace('<span class="tlsymbol">t<span></span></span>',''))
+                          
+    return result
+
 def get_stats_info(horsecode):
     
-    url         = 'https://www.tjk.org/TR/YarisSever/Query/AtKosuIstatistik/AtKosuIstatistik?Atkodu='+horsecode
-    details     = requests.get(url)
-    source      = BeautifulSoup(details.content,"lxml")
-    tables      = source.find_all("table")
-    result      = []
+    url     = 'https://www.tjk.org/TR/YarisSever/Query/AtKosuIstatistik/AtKosuIstatistik?Atkodu='+horsecode
+    details = requests.get(url)
+    source  = BeautifulSoup(details.content,"lxml")
+    tables  = source.find_all("table")
+    result  = []
     
     for table in tables:
         links = table.find_all("a")
         for link in links:
             finalstr = 'https://www.tjk.org' + link['href']
-            link['href'] = finalstr 
-        result.append(str(table))
+            link['href'] = finalstr
+        
+        result.append(str(table).replace('<span class="tlsymbol">t<span></span></span>',''))
     return result    
 
 def get_rival_info(horsecode, racecode, cityname, dateinfo):
     
-    url                 = '''https://ebayi.tjk.org/s/d/program/%s/full/%s.json''' %(dateinfo, cityname)
-    program             = requests.get(url).json()
-    rivals              = []
+    url     = '''https://ebayi.tjk.org/s/d/program/%s/full/%s.json''' %(dateinfo, cityname)
+    program = requests.get(url).json()
+    rivals  = []
 
     for race in program['kosular']:
         if race['KOD'] == racecode:
@@ -472,7 +477,6 @@ def get_rival_info(horsecode, racecode, cityname, dateinfo):
                                         targetorder = int(item['SONUC'])
                                         rivalname   = item['AD']
                                         rivalcode   = item['KOD']
-                                        print(item)
                                     
                                     if item['KOD'] == horsecode:
                                         sourceorder     = int(item['SONUC'])

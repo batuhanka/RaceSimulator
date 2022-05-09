@@ -52,6 +52,8 @@ class HorseInfo(models.Model):
     lastsix     = models.CharField(max_length=200)
     tool        = models.CharField(max_length=200)
     yearprize   = models.CharField(max_length=200)
+    agf1        = models.CharField(max_length=200)
+    agf2        = models.CharField(max_length=200)
     dpvalue     = models.CharField(max_length=200)
     divalue     = models.CharField(max_length=200)
     cdvalue     = models.CharField(max_length=200)
@@ -79,6 +81,7 @@ class AgfInfo(models.Model):
     racenumber  = models.IntegerField();
     horsenumber = models.IntegerField();
     horsename   = models.CharField(max_length=200)
+    agfcount    = models.IntegerField();
     agforder    = models.IntegerField();
     agfrate     = models.FloatField()
     jockey      = models.CharField(max_length=200)

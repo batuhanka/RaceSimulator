@@ -1,8 +1,7 @@
 jQuery.extend( jQuery.fn.dataTableExt.oSort, {
 	
     "non-empty-string-asc": function (str1, str2) {
-		 console.log(str1, str2)
-         if(str1 == "" && str2 != "")
+        if(str1 == "" && str2 != "")
             return 1;
         if(str2 == "" && str1 != "")
             return -1;
@@ -29,7 +28,7 @@ var tableOptions = {
 			order: [0,'asc'],
 			autoWidth: false,
         	columnDefs: [
-            	{ orderable: true,  targets: [0,2,3,4,5,7,8,10] },
+            	{ orderable: true,  targets: [0,2,3,4,5,7,8,10,17,18] },
 				{ orderable: true,  type:'non-empty-string', targets: [13,14,15] },
             	{ orderable: false, targets: '_all' },
         	]
@@ -42,7 +41,7 @@ var tableOptions2 = {
 			order: [15,'asc'],
 			autoWidth: false,
         	columnDefs: [
-            	{ orderable: true, targets: [0,2,3,4,5,7,8,10] },
+            	{ orderable: true, targets: [0,2,3,4,5,7,8,10,17,18] },
 				{ orderable: true, type:'non-empty-string', targets: [13,14,15] },
             	{ orderable: false, targets: '_all' },
         	]
@@ -50,6 +49,24 @@ var tableOptions2 = {
 
 
 $(document).ready(function(){
+	
+	$(".progress").each(function() {
+
+    var value 	= $(this).attr('data-value');
+    var left 	= $(this).find('.progress-left .progress-bar');
+    var right 	= $(this).find('.progress-right .progress-bar');
+
+    if (value > 0) {
+    	if (value <= 50) {
+        	right.css('transform', 'rotate(' + (value) / 100 * 360 + 'deg)')
+      	} else {
+        	right.css('transform', 'rotate(180deg)')
+        	left.css('transform', 'rotate(' + (value - 50) / 100 * 360 + 'deg)')
+      	}
+    }
+
+  	});
+	
 	
 	$(".racetable").each(function() {
 		var tableid = $(this).attr("id");
@@ -384,6 +401,7 @@ $(document).on('click', ".statsinfo", function() {
 		var cityname 	= $(this).attr("cityname");
 		var dateinfo 	= $(this).attr("dateinfo");
 		$("#rivalstatsinfo tbody").empty();
+		$("#siblinginfodiv").empty();
 		$("#rivalstatsinfo").hide();
 		$.ajax({
         	type: "GET",
@@ -399,9 +417,14 @@ $(document).on('click', ".statsinfo", function() {
         	success: function(data) {
 				$("#statsModalLongTitle").text("İstatistikler");
 				$("#statsinfodiv").empty();
+				$("#siblinginfodiv").empty();
 				$("#rivalstatsinfo").hide();
 				for (let i = 0; i < data.stats.length; i++) {
 					$("#statsinfodiv").append(data.stats[i])
+				}
+				
+				for (let i = 0; i < data.siblinginfo.length; i++) {
+					$("#siblinginfodiv").append(data.siblinginfo[i])
 				}
 				
 				for (let [key, value] of Object.entries(data.rivalsinfo)){
@@ -412,6 +435,7 @@ $(document).on('click', ".statsinfo", function() {
 														'<td style="text-align:center">'+(parseInt(value[1]) + parseInt(value[2]))+'</td>'+
 														'</tr>')
 				}
+				
 				$("#rivalstatsinfo").show();
 				$("#statsModalLongTitle").text(horseinfo);
 			}
@@ -422,6 +446,7 @@ $(document).on('click', ".statsinfo", function() {
 $(document).on('click', "#statsclosebtn", function() {
 	$("#statsModalLongTitle").text("İstatistikler");
 	$("#statsinfodiv").empty();
+	$("#siblinginfodiv").empty();
 	$("#statsinfodiv").append(	'<div id="loadingdiv" style="text-align: center;"><button class="btn btn-white text-info" type="button" disabled>'+
   								'<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span><b> Yükleniyor . . .</b></button></div>');
 });
@@ -429,6 +454,7 @@ $(document).on('click', "#statsclosebtn", function() {
 $(document).on('click', ".close", function() {
 	$("#statsModalLongTitle").text("İstatistikler");
 	$("#statsinfodiv").empty();
+	$("#siblinginfodiv").empty();
 	$("#statsinfodiv").append(	'<div id="loadingdiv" style="text-align: center;"><button class="btn btn-white text-info" type="button" disabled>'+
   								'<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span><b> Yükleniyor . . .</b></button></div>');
 });

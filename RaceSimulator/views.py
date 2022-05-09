@@ -53,11 +53,9 @@ def fixture(request):
     program             = requests.get(url).json()
     weatherdetails      = program['hava']
     racedetails         = program['kosular']
-    agfdetails          = program['agf']
     weather_info        = CONT.get_weather_info(weatherdetails)
     all_races           = CONT.get_all_races(racedetails)
     all_horses          = CONT.get_all_horses(racedetails)
-    all_agf_rates       = CONT.get_all_agf_rates(agfdetails)
     
     try:
         resultsurl          = '''https://ebayi.tjk.org/s/d/sonuclar/%s/full/%s.json''' %(date_for_request, cityname)
@@ -82,7 +80,7 @@ def fixture(request):
         currenttime     = prgdate.strftime("%H:%M")
         nextracetime    = (prgdate + timedelta(minutes=30)).strftime("%H:%M")
     
-    return render(request, "racedetails.html", {'currenttime': currenttime, 'nextracetime': nextracetime, 'weather': weather_info, 'cityname': cityname, 'racedetails' : all_races, 'agfdetails' : all_agf_rates, 'allhorses' : all_horses })
+    return render(request, "racedetails.html", {'currenttime': currenttime, 'nextracetime': nextracetime, 'weather': weather_info, 'cityname': cityname, 'racedetails' : all_races, 'allhorses' : all_horses })
 
 def horsepower(request):
     horsecode           = request.GET.get("horsecode")
@@ -131,10 +129,12 @@ def statsinfo(request):
     cityname    = request.GET.get("cityname")
     dateinfo    = request.GET.get("dateinfo")
     rivalsinfo  = CONT.get_rival_info(horsecode, racecode, cityname, dateinfo)
+    siblinginfo = CONT.get_sibling_info(horsecode)
     results     = CONT.get_stats_info(horsecode)
     context = {
-        'rivalsinfo': rivalsinfo,
-        'stats'     : results,
+        'rivalsinfo'    : rivalsinfo,
+        'siblinginfo'   : siblinginfo,
+        'stats'         : results,
     }
     data = json.dumps(context, indent=4, sort_keys=True, default=str)
     return HttpResponse(data, "application/json")
@@ -202,7 +202,6 @@ def singlerace(request):
     return HttpResponse(json.dumps({'raceinfo': horses}), "application/json")
 
 def startrace(request):
-    #return render(request, "trial2.html")
     return render(request, "trial.html")
 
 def gamepage(request):
