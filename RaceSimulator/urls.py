@@ -23,6 +23,7 @@ urlpatterns = [
     path('singlerace/', views.singlerace,   name='singlerace'),
     path('horsepower/', views.horsepower,   name='horsepower'),
     path('horsespeed/', views.horsespeed,   name='horsespeed'),
+    path('gallop/',     views.gallop,       name='gallop'),
     path('last800/',    views.last800,      name='last800'),
     path('statsinfo/',  views.statsinfo,    name='statsinfo'),
     path('racerule/',   views.racerule,     name='racerule'),

@@ -4,11 +4,10 @@ Created on Mar 22, 2022
 @author: batuhan
 '''
 import requests
-from RaceSimulator.models import RaceInfo, SingleRaceInfo, AgfInfo, HorseInfo, WeatherInfo, HorsePowerInfo
+from RaceSimulator.models import RaceInfo, SingleRaceInfo, HorseInfo, WeatherInfo, HorsePowerInfo
 from bs4 import BeautifulSoup
 import math
 from datetime import datetime
-import re
 import statistics
 
 citycodemap = {1:'Adana', 2:'İzmir', 3:'İstanbul', 4:'Bursa', 5:'Ankara', 6:'Şanlıurfa', 7:'Elazığ', 8:'Diyarbakır', 9:'Kocaeli', 10:'Antalya'}
@@ -371,6 +370,29 @@ def get_horse_prize_avg_speed(horse_power_list, courtcode):
         prize_avg_speed = statistics.mean(samples)
 
     return prize_avg_speed
+
+def get_gallop_info(horsename):
+    url     = 'https://www.tjk.org/TR/YarisSever/Query/Data/IdmanIstatistikleri?QueryParameter_ATADI='+horsename.replace(" ","+")
+    details = requests.get(url)
+    source  = BeautifulSoup(details.content,"lxml")
+    table   = source.find("table", {"id":"queryTable"}).find("tbody")
+    rows    = table.find_all("tr")
+    
+    gallop = []
+    try:
+        for row in rows:
+            if 'hidable' not in row['class']:
+                columns = row.find_all("td")
+                degree  = columns[8].text.strip()
+                minutes = degree.split(".")[0]
+                seconds = degree.split(".")[1]
+                mseconds= degree.split(".")[2] 
+                if(minutes == '0'): 
+                    gallop.append(float(seconds) + (float(mseconds) / 100))
+    except:
+        pass
+
+    return "%.2f" % statistics.mean(gallop)
 
 def get_sibling_info(horsecode):
     result  = []

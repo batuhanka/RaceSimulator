@@ -112,6 +112,15 @@ def horsespeed(request):
     return HttpResponse(json.dumps({'prize_avg_degree': prize_avg_degree}), "application/json")
 
 
+def gallop(request):
+    horsecode   = request.GET.get("horsecode")
+    courtcode   = request.GET.get("courtcode")
+    distance    = request.GET.get("distance")
+    weight      = request.GET.get("weight")
+    horsename   = request.GET.get("horsename")
+    gallop_avg  = CONT.get_gallop_info(horsename)
+    return HttpResponse(json.dumps({'gallop_avg_degree': gallop_avg}), "application/json")
+
 def last800(request):
     horsecode           = request.GET.get("horsecode")
     courtcode           = request.GET.get("courtcode")

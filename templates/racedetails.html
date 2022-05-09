@@ -78,7 +78,7 @@
                 <th style="vertical-align: middle; text-align:center;">EİD</th>
                 <th style="vertical-align: middle; text-align:center;">Tümü</th>
                 <th style="vertical-align: middle; text-align:center;">Tabela</th>
-				<!--	<th style="vertical-align: middle; text-align:center;">Son 800</th> -->
+				<th style="vertical-align: middle; text-align:center;">Galop 400m</th>
                 <th style="vertical-align: middle; text-align:center;">İstatistik</th>
                 <th style="vertical-align: middle; text-align:center;">AGF1</th>
                 <th style="vertical-align: middle; text-align:center;">AGF2</th>
@@ -124,6 +124,7 @@
        			<td style="vertical-align: middle; text-align:center;">{{ horse.bestdegree }}</td>
        			<td style="vertical-align: middle; text-align:center;"><button id="{{ horse.code }}" courtcode="{{ singlerace.courtcode }}" distance="{{ singlerace.distance }}" weight="{{ horse.weight }}" type="button" class="btn btn-outline-info horsepower"><span class="fas fa-rocket"></span></button></td>
        			<td style="vertical-align: middle; text-align:center;"><button id="{{ horse.code }}" courtcode="{{ singlerace.courtcode }}" distance="{{ singlerace.distance }}" weight="{{ horse.weight }}" type="button" class="btn btn-outline-info horsespeed"><i class="fa-solid fa-medal"></i></button></td>
+       			<td style="vertical-align: middle; text-align:center;"><button id="{{ horse.code }}" courtcode="{{ singlerace.courtcode }}" distance="{{ singlerace.distance }}" weight="{{ horse.weight }}" horsename="{{ horse.name }}" type="button" class="btn btn-outline-info gallop"><i class="fa-solid fa-history"></i></button></td>
 				<!--	<td style="vertical-align: middle; text-align:center;"><button id="{{ horse.code }}" courtcode="{{ singlerace.courtcode }}" distance="{{ singlerace.distance }}" weight="{{ horse.weight }}" type="button" class="btn btn-outline-info last800"><i class="fa-solid fa-chart-simple"></i></button></td> -->
        			<td style="vertical-align: middle; text-align:center;">
        			<button id="{{ horse.code }}" horseinfo="{{ horse.number }} - {{ horse.name }}" racecode="{{ horse.racecode }}" cityname="{{ weather.cityname }}" dateinfo="{{ singlerace.daterequest }}" type="button" class="btn btn-outline-info statsinfo" data-toggle="modal" data-target="#statsModalCenter"><i class="fa-solid fa-th-list"></i></button>

@@ -263,6 +263,40 @@ $(document).on('click', ".velocities", function() {
 	});
 	
 	
+	// Horse Gallop Calculations
+	$(this).parent().parent().find('table').find('.gallop').each(function (){
+		$(this).html("");
+		$(this).append('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>');
+		var thisbtn	 	= $(this);
+		var horsecode 	= $(this).attr("id");
+		var courtcode 	= $(this).attr("courtcode");
+		var distance 	= $(this).attr("distance");
+		var weight 		= $(this).attr("weight");
+		var horsename	= $(this).attr("horsename");
+		$.ajax({
+        	type: "GET",
+        	async: true,
+        	url: '/gallop/',
+        	traditional : true,
+        	data: {
+            	horsecode : horsecode,
+				courtcode : courtcode,
+				distance  : distance,
+				weight	  : weight,
+				horsename : horsename,
+        	},
+        	success: function(data) {
+				if(data.gallop_avg_degree == 0){
+					$(thisbtn).remove();
+				}else{
+					$(thisbtn).parent().addClass("text-info font-weight-bold h6");
+					$(thisbtn).parent().text(data.gallop_avg_degree)
+				}
+        	}
+    	});
+		
+	});
+	
 	// Horse Last 800 Speed Calculations
 	/*
 	$(this).parent().parent().find('table').find('.last800').each(function (){
@@ -361,6 +395,39 @@ $(document).on('click', ".horsespeed", function() {
 		
 });
 
+
+$(document).on('click', ".gallop", function() {
+		var thisbtn	 	= $(this);
+		$(this).html("");
+		$(this).append('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>');
+		var horsecode 	= $(this).attr("id");
+		var courtcode 	= $(this).attr("courtcode");
+		var distance 	= $(this).attr("distance");
+		var weight 		= $(this).attr("weight");
+		var horsename	= $(this).attr("horsename");
+		$.ajax({
+        	type: "GET",
+        	async: true,
+        	url: '/gallop/',
+        	traditional : true,
+        	data: {
+            	horsecode : horsecode,
+				courtcode : courtcode,
+				distance  : distance,
+				weight    : weight,
+				horsename : horsename,
+        	},
+        	success: function(data) {
+            	if(data.gallop_avg_degree == 0){
+					$(thisbtn).remove();
+				}else{
+					$(thisbtn).parent().addClass("text-info font-weight-bold h6");
+					$(thisbtn).parent().text(data.gallop_avg_degree)
+				}
+        	}
+    	});
+		
+});
 
 /*
 $(document).on('click', ".last800", function() {
