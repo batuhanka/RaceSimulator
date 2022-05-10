@@ -25,19 +25,19 @@ SECRET_KEY = '6(#((r1#ey$wvc1-wkev5rn%b*b*jt)y2cqfvtxfx*y$%=y-f^'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost','54.221.11.145']
 
 
 # Application definition
 
 INSTALLED_APPS = [
-    'bootstrap4',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'bootstrap4',
     'fontawesomefree',
     'RaceSimulator'
 ]
