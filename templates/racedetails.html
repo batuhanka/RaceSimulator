@@ -12,6 +12,7 @@
     <link href="{% static 'css/fontawesome-all.min.css' %}"	type="text/css" 	rel="stylesheet">
     <link href="{% static 'css/tablesorterstyle.css'%}"     type="text/css"     rel="stylesheet">
     <link href="{% static 'css/racedetails.css'%}"     		type="text/css"     rel="stylesheet">
+	
 
     <script src="{% static 'js/jquery-3.5.1.min.js' %}" 	type="text/javascript" charset="utf-8"></script>
     <script src="{% static 'js/popper.js' %}" 				type="text/javascript" charset="utf-8"></script>
@@ -20,7 +21,8 @@
     <script src="{% static 'js/datatables.min.js' %}" 		type="text/javascript" charset="utf-8"></script>
     <script src="{% static 'js/fontawesome-all.min.js' %}"	type="text/javascript" charset="utf-8"></script>
     <script src="{% static 'js/racesimulator.js' %}"		type="text/javascript" charset="utf-8" ></script>
-    <script src="{% static 'js/tablesorter.js' %}"         	type="text/javascript" charset="utf-8"></script> 
+    <script src="{% static 'js/tablesorter.js' %}"         	type="text/javascript" charset="utf-8"></script>
+    <script src="{% static 'js/dataTables.fixedColumns.min.js' %}"type="text/javascript" charset="utf-8"></script>
 
 </head>
 
@@ -34,6 +36,7 @@
         <h2><u>{{ weather.status }}</u></h2>
     </div>
 
+	
 
 	{% for singlerace in racedetails %}
 	<div id="accordion-{{ singlerace.key }}">
@@ -48,13 +51,15 @@
         
      </div>
      
+    
+     
 	
 	{% if nextracetime > singlerace.time and singlerace.time > currenttime %}
     	<div id="collapse{{ singlerace.key }}" class="collapse show" aria-labelledby="{{ singlerace.key }}-header" data-parent="#accordion-{{ singlerace.key }}">
     {% else %}
     	<div id="collapse{{ singlerace.key }}" class="collapse" aria-labelledby="{{ singlerace.key }}-header" data-parent="#accordion-{{ singlerace.key }}">
     {% endif %}
-      <div class="card-body">
+      <div class="card-body table-responsive">
       
       <table id="horselist-{{ singlerace.key }}" class="table table-bordered table-hover racetable" style="font-size:small">
       	<thead class="thead-light">
