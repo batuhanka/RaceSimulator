@@ -28,8 +28,8 @@ var tableOptions = {
 			order: [0,'asc'],
 			autoWidth: false,
         	columnDefs: [
-            	{ orderable: true,  targets: [0,2,3,4,5,7,8,10,17,18] },
-				{ orderable: true,  type:'non-empty-string', targets: [13,14,15] },
+            	{ orderable: true,  targets: [0,2,4,5,7,9,11,16,17] },
+				{ orderable: true,  type:'non-empty-string', targets: [12,13,14] },
             	{ orderable: false, targets: '_all' },
         	]
 }
@@ -38,11 +38,11 @@ var tableOptions2 = {
 			paging: false,
 			searching: false,
 			info:false,
-			order: [15,'asc'],
+			order: [13,'asc'],
 			autoWidth: false,
         	columnDefs: [
-            	{ orderable: true, targets: [0,2,3,4,5,7,8,10,17,18] },
-				{ orderable: true, type:'non-empty-string', targets: [13,14,15] },
+            	{ orderable: true, targets: [0,2,4,5,7,9,11,16,17] },
+				{ orderable: true, type:'non-empty-string', targets: [12,13,14] },
             	{ orderable: false, targets: '_all' },
         	]
 }
@@ -156,26 +156,6 @@ $(document).ready(function(){
 				if(data.mothertype == 'k'){
 					$($(thistd).children()[2]).addClass("badge-secondary");
 				}
-        	}
-    	});
-	});
-	
-	
-	
-	$(".yearprize").each(function(){
-		var thisdiv		= $(this);
-		var horsecode	= $(this).attr("horsecode");
-		
-		$.ajax({
-        	type: "GET",
-        	async: true,
-        	url: '/yearprize/',
-        	traditional : true,
-        	data: {
-            	horsecode 	: horsecode,
-        	},
-        	success: function(data) {
-				$(thisdiv).parent().empty().append(data.yearprize+' &#8378;');
         	}
     	});
 	});
@@ -297,6 +277,35 @@ $(document).on('click', ".velocities", function() {
     	});
 		
 	});
+	
+	
+	
+	// Horse Year Prize Calculations
+	$(this).parent().parent().find('table').find('.yearprize').each(function (){
+		$(this).html("");
+		$(this).append('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>');
+		var thisbtn	 	= $(this);
+		var horsecode 	= $(this).attr("id");
+		$.ajax({
+        	type: "GET",
+        	async: true,
+        	url: '/yearprize/',
+        	traditional : true,
+        	data: {
+            	horsecode 	: horsecode,
+        	},
+        	success: function(data) {
+				if(data.yearprize == 0){
+					$(thisbtn).remove();
+				}else{
+					$(thisbtn).parent().addClass("text-info font-weight-bold h7");
+					$(thisbtn).parent().text(data.yearprize+"  ₺")
+				}
+        	}
+    	});
+		
+	});
+	
 	
 	// Horse Last 800 Speed Calculations
 	/*
@@ -429,6 +438,34 @@ $(document).on('click', ".gallop", function() {
     	});
 		
 });
+
+
+
+$(document).on('click', ".yearprize", function() {
+		$(this).html("");
+		$(this).append('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>');
+		var thisbtn	 	= $(this);
+		var horsecode 	= $(this).attr("id");
+		$.ajax({
+        	type: "GET",
+        	async: true,
+        	url: '/yearprize/',
+        	traditional : true,
+        	data: {
+            	horsecode 	: horsecode,
+        	},
+        	success: function(data) {
+				if(data.yearprize == 0){
+					$(thisbtn).remove();
+				}else{
+					$(thisbtn).parent().addClass("text-info font-weight-bold h7");
+					$(thisbtn).parent().text(data.yearprize+"  ₺");
+				}
+        	}
+    	});
+		
+});
+
 
 /*
 $(document).on('click', ".last800", function() {

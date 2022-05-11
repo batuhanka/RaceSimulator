@@ -391,8 +391,16 @@ def get_gallop_info(horsename):
                     gallop.append(float(seconds) + (float(mseconds) / 100))
     except:
         pass
+    
+    result = 0
+    if(len(gallop) == 0):
+        result = 0
+    if(len(gallop) == 1):
+        result = gallop[0]
+    if(len(gallop) > 1):
+        result = statistics.mean(gallop)
 
-    return "%.2f" % statistics.mean(gallop)
+    return "%.2f" % result
 
 def get_sibling_info(horsecode):
     result  = []

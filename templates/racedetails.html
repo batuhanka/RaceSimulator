@@ -22,7 +22,6 @@
     <script src="{% static 'js/fontawesome-all.min.js' %}"	type="text/javascript" charset="utf-8"></script>
     <script src="{% static 'js/racesimulator.js' %}"		type="text/javascript" charset="utf-8" ></script>
     <script src="{% static 'js/tablesorter.js' %}"         	type="text/javascript" charset="utf-8"></script>
-    <script src="{% static 'js/dataTables.fixedColumns.min.js' %}"type="text/javascript" charset="utf-8"></script>
 
 </head>
 
@@ -61,7 +60,7 @@
     {% endif %}
       <div class="card-body table-responsive">
       
-      <table id="horselist-{{ singlerace.key }}" class="table table-bordered table-hover racetable" style="font-size:small">
+      <table id="horselist-{{ singlerace.key }}" class="table table-hover racetable" style="font-size:small">
       	<thead class="thead-light">
         	<tr>
         		<th style="vertical-align: middle; text-align:center;">Sonuç</th>
@@ -73,11 +72,11 @@
                 <th style="vertical-align: middle; text-align:center;">Baba / Anne</th>
                 <th style="vertical-align: middle; text-align:center;">HP</th>
                 <th style="vertical-align: middle; text-align:center;">Jokey</th>
-                <th style="vertical-align: middle; text-align:center;">Sahip / Antrenör</th>
+<!--                 <th style="vertical-align: middle; text-align:center;">Sahip / Antrenör</th> -->
                 <th style="vertical-align: middle; text-align:center;">KGS</th>
-                <th style="vertical-align: middle; text-align:center;">Yıllık Kazanç</th>
-                <th style="vertical-align: middle; text-align:center;">Son 6</th>
-                <th style="vertical-align: middle; text-align:center;">EİD</th>
+                <th style="vertical-align: middle; text-align:center;">Son6</th>
+                <th style="vertical-align: middle; text-align:center;">Kazanç</th>
+<!--                 <th style="vertical-align: middle; text-align:center;">EİD</th> -->
                 <th style="vertical-align: middle; text-align:center;">Tümü</th>
                 <th style="vertical-align: middle; text-align:center;">Tabela</th>
 				<th style="vertical-align: middle; text-align:center;">Galop 400m</th>
@@ -117,18 +116,19 @@
        			<td style="vertical-align: middle; text-align:center;">{{ horse.jockey }}
        			{% if horse.apprantice == True %}<sup class="text-info"><b>AP</b></sup>{% endif %}
        			</td>
-       			<td style="vertical-align: middle; text-align:center; font-size:10px;">
+       			<!-- <td style="vertical-align: middle; text-align:center; font-size:10px;">
        			<span>{{ horse.owner }}</span> <br> 
-       			<span>{{ horse.trainer }}</span> </td>
+       			<span>{{ horse.trainer }}</span> </td> -->
        			<td style="vertical-align: middle; text-align:center;">{{ horse.kgs }}</td>
-       			<td style="vertical-align: middle; text-align:center;"><div class="spinner-border spinner-border-sm text-info yearprize" horsecode="{{ horse.code }}" role="status"><span class="sr-only"></span></div></td>
-       			<td style="vertical-align: middle; text-align:center;">{{ horse.lastsix }}</td>
-       			<td style="vertical-align: middle; text-align:center;">{{ horse.bestdegree }}</td>
+				<td style="vertical-align: middle; text-align:center;">{{ horse.lastsix }}</td>
+				<!-- <td style="vertical-align: middle; text-align:center;">{{ horse.bestdegree }}</td> -->
+       			<td style="vertical-align: middle; text-align:center;"><button id="{{ horse.code }}" type="button" class="btn btn-outline-info yearprize"><span class="fa-solid fa-turkish-lira-sign"></span></button></td>
        			<td style="vertical-align: middle; text-align:center;"><button id="{{ horse.code }}" courtcode="{{ singlerace.courtcode }}" distance="{{ singlerace.distance }}" weight="{{ horse.weight }}" type="button" class="btn btn-outline-info horsepower"><span class="fas fa-rocket"></span></button></td>
        			<td style="vertical-align: middle; text-align:center;"><button id="{{ horse.code }}" courtcode="{{ singlerace.courtcode }}" distance="{{ singlerace.distance }}" weight="{{ horse.weight }}" type="button" class="btn btn-outline-info horsespeed"><i class="fa-solid fa-medal"></i></button></td>
        			<td style="vertical-align: middle; text-align:center;"><button id="{{ horse.code }}" courtcode="{{ singlerace.courtcode }}" distance="{{ singlerace.distance }}" weight="{{ horse.weight }}" horsename="{{ horse.name }}" type="button" class="btn btn-outline-info gallop"><i class="fa-solid fa-history"></i></button></td>
-				<!--	<td style="vertical-align: middle; text-align:center;"><button id="{{ horse.code }}" courtcode="{{ singlerace.courtcode }}" distance="{{ singlerace.distance }}" weight="{{ horse.weight }}" type="button" class="btn btn-outline-info last800"><i class="fa-solid fa-chart-simple"></i></button></td> -->
-       			<td style="vertical-align: middle; text-align:center;">
+       			<!--	<td style="vertical-align: middle; text-align:center;"><button id="{{ horse.code }}" courtcode="{{ singlerace.courtcode }}" distance="{{ singlerace.distance }}" weight="{{ horse.weight }}" type="button" class="btn btn-outline-info last800"><i class="fa-solid fa-chart-simple"></i></button></td> -->
+       			
+				<td style="vertical-align: middle; text-align:center;">
        			<button id="{{ horse.code }}" horseinfo="{{ horse.number }} - {{ horse.name }}" racecode="{{ horse.racecode }}" cityname="{{ weather.cityname }}" dateinfo="{{ singlerace.daterequest }}" type="button" class="btn btn-outline-info statsinfo" data-toggle="modal" data-target="#statsModalCenter"><i class="fa-solid fa-th-list"></i></button>
        			</td>
        			
@@ -172,7 +172,7 @@
       		{% endfor %}
        </tbody>
        <tfoot>
-       		<tr><td colspan="20" class="text-info">
+       		<tr><td colspan="18" class="text-info">
        		<b>{{ singlerace.betinfo }}</b>
 			</td></tr>
        </tfoot>
