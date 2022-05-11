@@ -22,9 +22,6 @@
     <script src="{% static 'js/racesimulator.js' %}"		type="text/javascript" charset="utf-8" ></script>
     <script src="{% static 'js/tablesorter.js' %}"         	type="text/javascript" charset="utf-8"></script> 
 
-	<link 	href="{% static 'css/game.css' %}"  type="text/css" 		rel="stylesheet"/>
-	<script src="{% static 	'js/game.js' %}" 	type="text/javascript" 	charset="utf-8"></script>
-
 </head>
 
 <body style="background:linear-gradient(to left, #870000, #bbb500);">
@@ -201,7 +198,7 @@
         
         <div class="form-group row">
         
-        	<div class="col" style="margin-top:0.5%";>
+        	<div class="col" style="margin-top:0.5%;">
 				<table id="rivalstatsinfo" class="table table-bordered table-striped" style="font-size:small; display:none;">
 				<thead class="bg-info text-black">
 				<tr>
@@ -246,6 +243,8 @@
 </div>   
   
   <input type="hidden" id="citynameinput" value="{{ cityname }}">
+  
+  </div>
   
   </body> 
 

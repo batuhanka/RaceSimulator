@@ -26,7 +26,8 @@ var tableOptions = {
 			searching: false,
 			info:false,
 			order: [0,'asc'],
-			autoWidth: false,
+			autoWidth: true,
+			responsive: true,
         	columnDefs: [
             	{ orderable: true,  targets: [0,2,3,4,5,7,8,10,17,18] },
 				{ orderable: true,  type:'non-empty-string', targets: [13,14,15] },
@@ -39,7 +40,8 @@ var tableOptions2 = {
 			searching: false,
 			info:false,
 			order: [15,'asc'],
-			autoWidth: false,
+			autoWidth: true,
+			responsive: true,
         	columnDefs: [
             	{ orderable: true, targets: [0,2,3,4,5,7,8,10,17,18] },
 				{ orderable: true, type:'non-empty-string', targets: [13,14,15] },

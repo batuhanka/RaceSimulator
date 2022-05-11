@@ -13,7 +13,6 @@ from django.core import serializers
 from bs4 import BeautifulSoup
 import re
 
-
 citycodemap = {1:'Adana', 2:'İzmir', 3:'İstanbul', 4:'Bursa', 5:'Ankara', 6:'Şanlıurfa', 7:'Elazığ', 8:'Diyarbakır', 9:'Kocaeli', 10:'Antalya'}
 
 def get_city_code(val):
@@ -86,7 +85,7 @@ def horsepower(request):
     horsecode           = request.GET.get("horsecode")
     courtcode           = request.GET.get("courtcode")
     distance            = request.GET.get("distance")
-    weight              = request.GET.get("weight")
+    #weight              = request.GET.get("weight")
     horse_power_list    = CONT.get_horse_power(horsecode)
     avg_speed           = CONT.get_horse_avg_speed(horse_power_list, courtcode)
     #avg_speed           = avg_speed / float(weight)
@@ -101,7 +100,7 @@ def horsespeed(request):
     horsecode           = request.GET.get("horsecode")
     courtcode           = request.GET.get("courtcode")
     distance            = request.GET.get("distance")
-    weight              = request.GET.get("weight")
+    #weight              = request.GET.get("weight")
     horse_power_list    = CONT.get_horse_power(horsecode)
     prize_avg_speed     = CONT.get_horse_prize_avg_speed(horse_power_list, courtcode)
     #prize_avg_speed     = prize_avg_speed / float(weight)
@@ -113,10 +112,10 @@ def horsespeed(request):
 
 
 def gallop(request):
-    horsecode   = request.GET.get("horsecode")
-    courtcode   = request.GET.get("courtcode")
-    distance    = request.GET.get("distance")
-    weight      = request.GET.get("weight")
+    #horsecode   = request.GET.get("horsecode")
+    #courtcode   = request.GET.get("courtcode")
+    #distance    = request.GET.get("distance")
+    #weight      = request.GET.get("weight")
     horsename   = request.GET.get("horsename")
     gallop_avg  = CONT.get_gallop_info(horsename)
     return HttpResponse(json.dumps({'gallop_avg_degree': gallop_avg}), "application/json")
@@ -209,23 +208,4 @@ def singlerace(request):
             horses = race['atlar']
     
     return HttpResponse(json.dumps({'raceinfo': horses}), "application/json")
-
-def startrace(request):
-    return render(request, "trial.html")
-
-def gamepage(request):
-    date_for_request    = datetime.now().strftime("%Y%m%d")
-    cityname            = request.GET.get("cityname")
-    racecode            = request.GET.get("racecode")
-    url                 = '''https://ebayi.tjk.org/s/d/program/%s/full/%s.json''' %(date_for_request, cityname)
-    program             = requests.get(url).json()
-    racedetails         = program['kosular']
-
-    for race in racedetails:
-        if racecode == race['KOD']:
-            horses = race['atlar']
-            
-    result = CONT.get_all_horses_single_race(horses, racecode)
-    return render(request, "trial.html", {'horses': result})
-
 

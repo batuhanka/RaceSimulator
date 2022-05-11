@@ -28,7 +28,5 @@ urlpatterns = [
     path('statsinfo/',  views.statsinfo,    name='statsinfo'),
     path('racerule/',   views.racerule,     name='racerule'),
     path('yearprize/',  views.yearprize,    name='yearprize'),
-    path('startrace/',  views.startrace,    name='startrace'),
-    path('gamepage/',   views.gamepage,     name='gamepage'),
     path('horsetype/',  views.horsetype,    name='horsetype'),
 ]
