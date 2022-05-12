@@ -1,11 +1,55 @@
-.progress {
+.progress{
+    height: 50px;
+    background-color: rgba(255,255,255,0.3);
+    border-radius: 50px;
+    box-shadow: none;
+    padding: 5px;
+    margin-bottom: 30px;
+    overflow: visible;
+}
+.progress .progress-bar{
+    box-shadow: none;
+    position: relative;
+    border-radius: 20px;
+    animation: animate-positive 2s;
+}
+.progress .progress-title{
+    font-size: 17px;
+    font-weight: 700;
+    color: #fff;
+    text-transform: uppercase;
+    margin: 0;
+    position: absolute;
+    top: 12px;
+    left: 15px;
+}
+.progress .progress-value{
+    width: 45px;
+    height: 33px;
+    line-height: 35px;
+    background: #f5f5f5;
+    border-radius: 50px;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+    font-size: 14px;
+    font-weight: bold;
+    color: #e95095;
+    position: absolute;
+    top: 4px;
+    right: 4px;
+}
+
+
+
+
+
+.agfprogress {
   width: 150px;
   height: 150px;
   background: none;
   position: relative;
 }
 
-.progress::after {
+.agfprogress::after {
   content: "";
   width: 100%;
   height: 100%;
@@ -16,7 +60,7 @@
   left: 0;
 }
 
-.progress>span {
+.agfprogress>span {
   width: 50%;
   height: 100%;
   overflow: hidden;
@@ -25,11 +69,11 @@
   z-index: 1;
 }
 
-.progress .progress-left {
+.agfprogress .agfprogress-left {
   left: 0;
 }
 
-.progress .progress-bar {
+.agfprogress .agfprogress-bar {
   width: 100%;
   height: 100%;
   background: none;
@@ -39,7 +83,7 @@
   top: 0;
 }
 
-.progress .progress-left .progress-bar {
+.agfprogress .agfprogress-left .agfprogress-bar {
   left: 100%;
   border-top-right-radius: 80px;
   border-bottom-right-radius: 80px;
@@ -48,11 +92,11 @@
   transform-origin: center left;
 }
 
-.progress .progress-right {
+.agfprogress .agfprogress-right {
   right: 0;
 }
 
-.progress .progress-right .progress-bar {
+.agfprogress .agfprogress-right .agfprogress-bar {
   left: -100%;
   border-top-left-radius: 80px;
   border-bottom-left-radius: 80px;
@@ -61,7 +105,7 @@
   transform-origin: center right;
 }
 
-.progress .progress-value {
+.agfprogress .agfprogress-value {
   position: absolute;
   top: 0;
   left: 0;

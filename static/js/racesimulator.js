@@ -50,11 +50,11 @@ var tableOptions2 = {
 
 $(document).ready(function(){
 	
-	$(".progress").each(function() {
+	$(".agfprogress").each(function() {
 
     var value 	= $(this).attr('data-value');
-    var left 	= $(this).find('.progress-left .progress-bar');
-    var right 	= $(this).find('.progress-right .progress-bar');
+    var left 	= $(this).find('.agfprogress-left .agfprogress-bar');
+    var right 	= $(this).find('.agfprogress-right .agfprogress-bar');
 
     if (value > 0) {
     	if (value <= 50) {
