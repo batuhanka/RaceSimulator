@@ -47,7 +47,6 @@ var tableOptions2 = {
         	]
 }
 
-
 $(document).ready(function(){
 	
 	$(".agfprogress").each(function() {
@@ -169,11 +168,17 @@ $(document).ajaxStop(function() {
 	try{
   		$(datatable).DataTable().destroy();
 		$(datatable).DataTable(tableOptions2);
+		$(".simulation").each(function (){
+			$(this).prop('disabled', false);
+		});
 	}catch(exp){	}
 });
 
 
 $(document).on('click', ".velocities", function() {
+	
+	$(this).prev().show();
+	$(this).prev().prop('disabled',true);
 	
 	// Horse Power Calculations
 	datatable = $(this).parent().parent().find('.racetable')
@@ -307,38 +312,63 @@ $(document).on('click', ".velocities", function() {
 	});
 	
 	
-	// Horse Last 800 Speed Calculations
-	/*
-	$(this).parent().parent().find('table').find('.last800').each(function (){
-		$(this).html("");
-		$(this).append('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>');
-		var thisbtn	 	= $(this);
-		var horsecode 	= $(this).attr("id");
-		var courtcode 	= $(this).attr("courtcode");
-		var distance 	= $(this).attr("distance");
-		var weight 		= $(this).attr("weight");
-		$.ajax({
-        	type: "GET",
-        	async: true,
-        	url: '/last800/',
-        	traditional : true,
-        	data: {
-            	horsecode : horsecode,
-				courtcode : courtcode,
-				distance  : distance,
-				weight	  : weight,
-        	},
-        	success: function(data) {
-            	if(data.last_avg_degree == 0){
-					$(thisbtn).remove();
-				}else{
-					$(thisbtn).text(data.last_avg_degree);
-				}
-        	}
-    	});
+});
+
+
+$(document).on('click', ".simulation", function() {
+	
+	
+	var cardbody	= $(this).parent().next().children();
+	var racetable 	= $(this).parent().parent().find("table")[0];
+	var datatable	= $(racetable).DataTable();
+	datatable.order([18,'asc']).draw();
+	var rows 		= $(racetable).find("tbody tr");
+	var racers 		= [];
+	
+	for(var i=0; i<rows.length; i++){
+		var horse			= {};
+		var cols 			= $(rows[i]).find("td");
+		horse["jersey"]		= $(cols[1]).children()[0];
+		horse["number"] 	= $(cols[2]).children()[0];
+		horse["name"] 		= $(cols[3]).children()[0];
+		var speed			= $($(cols[17]).children()[0]).attr('data-value');
+		horse["progress"]	= '<div class="progress"><div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: '+speed+'%"></div></div>';
+		racers.push(horse);
+	};
+	
+	$(racetable).fadeOut(2000, function(){ 
 		
-	});
-	*/
+	$(this).remove(); 
+	
+	$(cardbody).append('<table id="trial" class="table table-striped">'+
+						'<thead class="thead-light">'+
+						'<tr class="row align-items-center" style="display:revert;">'+
+							'<th class="col-1">Forma</th>'+
+							'<th class="col-1">No</th>'+
+							'<th class="col-2">At İsmi</th>'+
+							'<th class="col-8" style="text-align: center;">Yarış Simulasyonu</th>'+
+						'</tr>'+
+						'</thead>'+
+						'<tbody>'+
+						'</tbody>'+
+						'</table>');
+	
+	
+	for(var i=0; i<racers.length; i++){
+		
+		$("#trial tbody").append('<tr class="row align-items-center" style="display:revert;">'+
+								 '<td class="col-1" style="vertical-align: middle;">'+racers[i]["jersey"].outerHTML+'</td>'+
+								 '<td class="col-1" style="vertical-align: middle;">'+racers[i]["number"].outerHTML+'</td>'+
+								 '<td class="col-2" style="vertical-align: middle;">'+racers[i]["name"].outerHTML+'</td>'+
+								 '<td class="col-8" style="vertical-align: middle;">'+racers[i]["progress"]+'</td>'+
+								 '</tr>');
+							
+	}
+	
+	
+	$(".progress-bar").animate({width: "100%"}, 3500);
+	
+	}); // race table clear animate completed
 	
 });
 
@@ -465,39 +495,6 @@ $(document).on('click', ".yearprize", function() {
     	});
 		
 });
-
-
-/*
-$(document).on('click', ".last800", function() {
-		var thisbtn	 	= $(this);
-		$(this).html("");
-		$(this).append('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>');
-		var horsecode 	= $(this).attr("id");
-		var courtcode 	= $(this).attr("courtcode");
-		var distance 	= $(this).attr("distance");
-		var weight 		= $(this).attr("weight");
-		$.ajax({
-        	type: "GET",
-        	async: true,
-        	url: '/last800/',
-        	traditional : true,
-        	data: {
-            	horsecode : horsecode,
-				courtcode : courtcode,
-				distance  : distance,
-				weight    : weight,
-        	},
-        	success: function(data) {
-            	if(data.last_avg_degree == 0){
-					$(thisbtn).remove();
-				}else{
-					$(thisbtn).text(data.last_avg_degree);
-				}
-        	}
-    	});
-		
-});
-*/
 
 $(document).on('click', ".statsinfo", function() {
 		var horsecode 	= $(this).attr("id");
