@@ -66,7 +66,7 @@ $(document).ready(function(){
 
   	});
 	
-	
+	/*
 	$(".racetable").each(function() {
 		var tableid = $(this).attr("id");
 		$('#'+tableid).DataTable( tableOptions );
@@ -158,7 +158,7 @@ $(document).ready(function(){
         	}
     	});
 	});
-	
+	*/
 	
 }); // document ready end
 
@@ -171,14 +171,22 @@ $(document).ajaxStop(function() {
 		$(".simulation").each(function (){
 			$(this).prop('disabled', false);
 		});
+		$(".showracelist").each(function (){
+			$(this).prop('disabled', false);
+		});
 	}catch(exp){	}
 });
 
 
 $(document).on('click', ".velocities", function() {
 	
+	// Show Simulation Button
 	$(this).prev().show();
 	$(this).prev().prop('disabled',true);
+	
+	// Show Race List Button 
+	$(this).prev().prev().show();
+	$(this).prev().prev().prop('disabled',true);
 	
 	// Horse Power Calculations
 	datatable = $(this).parent().parent().find('.racetable')
@@ -314,33 +322,40 @@ $(document).on('click', ".velocities", function() {
 	
 });
 
-
 $(document).on('click', ".simulation", function() {
-	
 	
 	var cardbody	= $(this).parent().next().children();
 	var racetable 	= $(this).parent().parent().find("table")[0];
 	var datatable	= $(racetable).DataTable();
+	
+	var bestdegree 	= $($($(racetable).find("tbody tr")[0]).find("td")[13]).text();
+	var temp 		= bestdegree.split('.'); // split it at the colons
+	var bestseconds = ( (+temp[0] * 60) + (+temp[1]) + (+temp[2] / 100) ); 
+	
 	datatable.order([18,'asc']).draw();
 	var rows 		= $(racetable).find("tbody tr");
 	var racers 		= [];
+	
 	
 	for(var i=0; i<rows.length; i++){
 		var horse			= {};
 		var cols 			= $(rows[i]).find("td");
 		horse["jersey"]		= $(cols[1]).children()[0];
+		var jerseybg		= $($(cols[1]).children()[0]).attr('jerseybg');
 		horse["number"] 	= $(cols[2]).children()[0];
 		horse["name"] 		= $(cols[3]).children()[0];
-		var speed			= $($(cols[17]).children()[0]).attr('data-value');
-		horse["progress"]	= '<div class="progress"><div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: '+speed+'%"></div></div>';
+		var temp 			= $(cols[13]).text().split(".");
+		var horseseconds 	= ( (+temp[0] * 60) + (+temp[1]) + (+temp[2] / 100) );
+		var calcwidth		= (bestseconds * 100 / horseseconds) + '%';
+		horse["progress"]	= '<div class="progress"><div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" calc="'+calcwidth+'" style="width: 0%; background-color:'+jerseybg+';"></div></div>';
 		racers.push(horse);
 	};
 	
 	$(racetable).fadeOut(2000, function(){ 
 		
-	$(this).remove(); 
+	$(this).hide(); 
 	
-	$(cardbody).append('<table id="trial" class="table table-striped">'+
+	$(cardbody).append('<table id="'+racetable.id+'-racers" class="table table-striped racers">'+
 						'<thead class="thead-light">'+
 						'<tr class="row align-items-center" style="display:revert;">'+
 							'<th class="col-1">Forma</th>'+
@@ -356,7 +371,7 @@ $(document).on('click', ".simulation", function() {
 	
 	for(var i=0; i<racers.length; i++){
 		
-		$("#trial tbody").append('<tr class="row align-items-center" style="display:revert;">'+
+		$("#"+racetable.id+"-racers tbody").append('<tr class="row align-items-center" style="display:revert;">'+
 								 '<td class="col-1" style="vertical-align: middle;">'+racers[i]["jersey"].outerHTML+'</td>'+
 								 '<td class="col-1" style="vertical-align: middle;">'+racers[i]["number"].outerHTML+'</td>'+
 								 '<td class="col-2" style="vertical-align: middle;">'+racers[i]["name"].outerHTML+'</td>'+
@@ -365,13 +380,23 @@ $(document).on('click', ".simulation", function() {
 							
 	}
 	
+	$("#"+racetable.id+"-racers").find(".progress-bar").each(function(){
+		$(this).animate({width: $(this).attr('calc') }, 8000);
+	});
 	
-	$(".progress-bar").animate({width: "100%"}, 3500);
+	//$(".progress-bar").animate({width: "100%"}, 3500);
 	
 	}); // race table clear animate completed
 	
 });
 
+
+$(document).on('click', ".showracelist", function() {
+	var racetable 	= $(this).parent().parent().find("table")[0];
+	var racers 		= $(this).parent().parent().find("table")[1];
+	$(racers).remove();
+	$(racetable).show();
+});
 
 $(document).on('click', ".horsepower", function() {
 		var thisbtn	 	= $(this);

@@ -44,6 +44,7 @@ class HorseInfo(models.Model):
     handycap    = models.IntegerField();
     kgs         = models.IntegerField();
     jerseyimg   = models.CharField(max_length=200)
+    jerseybg    = models.CharField(max_length=200)
     disabled    = models.BooleanField()
     apprantice  = models.BooleanField()
     stablemate  = models.CharField(max_length=200)

@@ -9,6 +9,8 @@ from bs4 import BeautifulSoup
 import math
 from datetime import datetime
 import statistics
+from PIL import Image
+from _io import BytesIO
 
 citycodemap = {1:'Adana', 2:'İzmir', 3:'İstanbul', 4:'Bursa', 5:'Ankara', 6:'Şanlıurfa', 7:'Elazığ', 8:'Diyarbakır', 9:'Kocaeli', 10:'Antalya'}
 
@@ -125,7 +127,36 @@ def get_pedigree_info(horsename, fathername, mothername):
             pass
     
     return pedigree_text
+ 
+def find_jersey_bg_hex(imageurl):
     
+    response = requests.get(imageurl)
+    # Read Image
+    img = Image.open(BytesIO(response.content))
+    # Convert Image into RGB
+    img = img.convert('RGB')
+    width, height = img.size
+    # Initialize Variable
+    r_total = 0
+    g_total = 0
+    b_total = 0
+    count = 0
+ 
+    # Iterate through each pixel
+    for x in range(0, width):
+        for y in range(0, height):
+            # r,g,b value of pixel
+            r, g, b = img.getpixel((x, y))
+ 
+            if(r==255 and g==255 and b==255):
+                pass
+            else:
+                r_total += r
+                g_total += g
+                b_total += b
+                count += 1
+ 
+    return '#{:02x}{:02x}{:02x}'.format(round(r_total/count), round(g_total/count), round(b_total/count))   
 
 def get_all_horses(racedeatils):
     
@@ -158,7 +189,9 @@ def get_all_horses(racedeatils):
             item.handycap   = horse['HANDIKAP']
             item.kgs        = horse['KGS']
             item.jerseyimg  = horse['FORMA'].replace("medya", "medya-cdn")
+            item.jerseybg   = find_jersey_bg_hex(horse['FORMA'].replace("medya", "medya-cdn")) 
             item.disabled   = horse['KOSMAZ']
+            
             
             #if(horsetype == "i̇ngilizler"):
             #    pedigree_text = get_pedigree_info(horse['AD'].replace(" ","+").lower(), horse['BABA'].split(" (")[0], horse['ANNE'].split(" (")[0])

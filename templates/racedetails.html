@@ -63,7 +63,8 @@ $(".progress-bar").animate({
         <button class="btn text-white bg-{{ singlerace.courtbg }}" data-toggle="collapse" data-target="#collapse{{ singlerace.key }}" aria-expanded="true" aria-controls="collapse{{ singlerace.key }}">
           <span class="label label-{{ singlerace.courtbg }} left" style="text-decoration: underline;"><b>{{ singlerace.racenumber }}. KOŞU : {{ singlerace.time }} {{ singlerace.summary }} : {{ singlerace.racename }}</b></span> 
         </button>
-        <button style="display:none;" type="button" class="btn btn-danger simulation float-right"><span class="fa-solid fa-flag-checkered fa-shake"></span><b> Simulasyon</b></button>
+        <button style="display:none; margin-right: 1%;" type="button" class="btn btn-info showracelist float-right"><span class="fa-solid fa-list"></span><b> Koşu Bilgileri</b></button>
+        <button style="display:none; margin-right: 1%;" type="button" class="btn btn-danger simulation float-right"><span class="fa-solid fa-flag-checkered fa-shake"></span><b> Simulasyon</b></button>
         <button type="button" class="btn btn-{{ singlerace.courtbg }} velocities float-right" style="margin-right: 1%;"><span class="fa-solid fa-calculator fa-beat-fade"></span><b> Hesapla</b></button>
         <span class="label text-{{ singlerace.courtbg }} label-{{ singlerace.courtbg }} float-right courtcode">{{ singlerace.courtcode }}</span>
         <div><span raceid="{{ singlerace.key }}" racedate="{{ singlerace.date }}" cityinfo="{{ weather.cityinfo }}" citycode="{{ weather.citycode }}"  class="label text-white label-{{ singlerace.courtbg }} racerule"></span></div>
@@ -116,7 +117,7 @@ $(".progress-bar").animate({
        			{% else %}
        			<td class="text-danger text-center align-middle"><b>{% if horse.result != 1000 %} {{ horse.result }} {% else %} <p style="color:transparent; cursor:default;">1000</p> {% endif %}</b></td>
        			{% endif %} 
-       			<td class="align-middle"><img src="{{ horse.jerseyimg }}" width="40" height="40"></td>
+       			<td class="align-middle"><img src="{{ horse.jerseyimg }}" width="50" height="50" jerseybg="{{ horse.jerseybg }}" style="border-radius: 50%; border: 2px solid #17a2b8;"></td>
        			<td class="align-middle text-center text-info"><b>{{ horse.number }}</b></td>
        			{% if horse.disabled == True %}
        			<td class="align-middle"><button type="button" class="btn btn-sm btn-outline-danger" style="cursor:text">[K] <s>{{ horse.name }}</s></button>
