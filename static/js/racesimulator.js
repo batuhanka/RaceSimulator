@@ -66,7 +66,7 @@ $(document).ready(function(){
 
   	});
 	
-	/*
+	
 	$(".racetable").each(function() {
 		var tableid = $(this).attr("id");
 		$('#'+tableid).DataTable( tableOptions );
@@ -158,7 +158,7 @@ $(document).ready(function(){
         	}
     	});
 	});
-	*/
+	
 	
 }); // document ready end
 
@@ -358,10 +358,10 @@ $(document).on('click', ".simulation", function() {
 	$(cardbody).append('<table id="'+racetable.id+'-racers" class="table racers">'+
 						'<thead class="thead-light">'+
 						'<tr class="row align-items-center" style="display:revert;">'+
-							'<th class="col-12 col-sm-1">Forma</th>'+
-							'<th class="col-12 col-sm-1">No</th>'+
-							'<th class="col-12 col-sm-2">At İsmi</th>'+
-							'<th class="col-12 col-sm-8" style="text-align: center;">Yarış Simulasyonu</th>'+
+							'<th class="col-sm-1">Forma</th>'+
+							'<th class="col-sm-1">No</th>'+
+							'<th class="col-sm-2">At İsmi</th>'+
+							'<th class="col-sm-8" style="text-align: center;">Yarış Simulasyonu</th>'+
 						'</tr>'+
 						'</thead>'+
 						'<tbody>'+
@@ -372,10 +372,10 @@ $(document).on('click', ".simulation", function() {
 	for(var i=0; i<racers.length; i++){
 		
 		$("#"+racetable.id+"-racers tbody").append('<tr class="row align-items-center" style="display:revert;">'+
-								 '<td class="col-12 col-sm-1" style="vertical-align: middle;">'+racers[i]["jersey"].outerHTML+'</td>'+
-								 '<td class="col-12 col-sm-1" style="vertical-align: middle;">'+racers[i]["number"].outerHTML+'</td>'+
-								 '<td class="col-12 col-sm-2" style="vertical-align: middle;">'+racers[i]["name"].outerHTML+'</td>'+
-								 '<td class="col-12 col-sm-8" style="vertical-align: middle;">'+racers[i]["progress"]+'</td>'+
+								 '<td class="col-sm-1" style="vertical-align: middle;">'+racers[i]["jersey"].outerHTML+'</td>'+
+								 '<td class="col-sm-1" style="vertical-align: middle;">'+racers[i]["number"].outerHTML+'</td>'+
+								 '<td class="col-sm-2" style="vertical-align: middle;">'+racers[i]["name"].outerHTML+'</td>'+
+								 '<td class="col-sm-8" style="vertical-align: middle;">'+racers[i]["progress"]+'</td>'+
 								 '</tr>');
 							
 	}
