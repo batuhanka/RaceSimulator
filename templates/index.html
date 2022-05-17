@@ -44,6 +44,12 @@
 							<i id="nextdate" class="fa-solid fa-chevron-right" style="color:white; cursor:pointer;"></i>
 						</div>
 						
+						<br>
+						<div>
+							<input type="checkbox" id="mobilecheck">
+  							<label for="mobilecheck"> Mobile Check</label><br>
+						</div>
+						
 						<div id="races">
 						{% for race in races %}
 							<a class="racefixture" style="cursor:pointer" id="{{ race.raceid }}" sehir="{{ race.key }}">{{ race.key }}</a>

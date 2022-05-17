@@ -32,9 +32,8 @@
 	<br><br>
     <div class="page-header" style="text-align: center;">
         <h1><span class="badge badge-pill badge-info">{{ weather.location }}</span></h1>
-		<!-- <h2><u>{{ weather.status }}</u></h2> -->
+		<h2><u>MOBILE</u></h2>
     </div>
-
 
 	{% for singlerace in racedetails %}
 	<div id="accordion-{{ singlerace.key }}">
@@ -51,8 +50,6 @@
         
      </div>
      
-    
-     
 	
 	{% if nextracetime > singlerace.time and singlerace.time > currenttime %}
     	<div id="collapse{{ singlerace.key }}" class="collapse show" aria-labelledby="{{ singlerace.key }}-header" data-parent="#accordion-{{ singlerace.key }}">
@@ -61,19 +58,127 @@
     {% endif %}
       <div class="card-body table-responsive">
       
-      <table id="horselist-{{ singlerace.key }}" class="table table-hover align-middle text-left racetable" style="font-size:small">
+      <table id="horselist-{{ singlerace.key }}" class="table align-middle text-left">
+      
+      <thead class="thead-light">
+		<tr>
+			<th>Forma</th>
+			<th>At Bilgileri</th>
+			<th style="text-align: end;">Jokey / Sahip</th>
+			<th style="text-align: center;">AGF1</th>
+			<th style="text-align: center;">AGF2</th>
+		</tr>
+		</thead>
+      
+      {% for horse in allhorses %}
+      {% if horse.racecode  == singlerace.key %}
+      
+		<tbody>
+		<tr>
+			<td rowspan='3' colspan='1' style="width:5%; vertical-align:middle;" >
+				<img src="{{ horse.jerseyimg }}" width="70" height="70" jerseybg="{{ horse.jerseybg }}" style="border-radius: 50%; border: 2px solid #17a2b8;">
+			</td>
+			
+			<td>
+			<button type="button" class="btn btn-sm btn-outline-info" style="cursor:text; font-size: larger;"><b>{{ horse.number }}</b></button>
+			{% if horse.disabled == True %}
+       			<button type="button" class="btn btn-sm btn-outline-danger" style="cursor:text; font-size: larger;">[KOŞMAZ] <s>{{ horse.name }}</s></button>
+       		{% endif %}
+       		{% if horse.disabled == False %}
+       			<span><b>{{ horse.name }}</b>
+       		{% endif %}
+       			<sup class="text-info"><b>{{ horse.tool }}</b></sup>
+       		{% if horse.stablemate != False %}
+       			<img src="https://medya-cdn.tjk.org/imageftp/Img/e{{ horse.stablemate }}.gif"></span>
+       		{% endif %}    
+			</td>
+			
+			<td style="text-align: end;">
+				<span >{{ horse.jockey }}
+       			{% if horse.apprantice == True %}<span class="text-info"><b>[AP]</b></span>{% endif %}
+       			</span>
+			</td>
+			
+			<td rowspan='3' colspan='1' style="text-align:center; vertical-align:middle;">
+				{% if horse.agf1 %}
+       			<div class="agfprogress mx-auto" data-value='{{ horse.agf1 }}' style="max-height:70px; max-width:70px;">
+          		<span class="agfprogress-left">
+                        <span class="agfprogress-bar border-info"></span>
+          		</span>
+          		<span class="agfprogress-right">
+                        <span class="agfprogress-bar border-info"></span>
+          		</span>
+          		<div class="agfprogress-value w-100 h-100 rounded-circle d-flex align-items-center justify-content-center">
+            	<div class="text-info font-weight-bold">%{{ horse.agf1 }}</div>
+          		</div>
+        		</div>
+        		{% endif %}
+			</td>
+			
+			<td rowspan='3' colspan='1' style="text-align:center; vertical-align:middle;" >
+				{% if horse.agf2 %}
+        		<div class="agfprogress mx-auto" data-value='{{ horse.agf2 }}' style="max-height:70px; max-width:70px;">
+          		<span class="agfprogress-left">
+                        <span class="agfprogress-bar border-info"></span>
+          		</span>
+          		<span class="agfprogress-right">
+                        <span class="agfprogress-bar border-info"></span>
+          		</span>
+          		<div class="agfprogress-value w-100 h-100 rounded-circle d-flex align-items-center justify-content-center">
+            	<div class="text-info font-weight-bold">%{{ horse.agf2 }}</div>
+          		</div>
+        		</div>
+        		{% endif %}
+			</td>
+		</tr>
+
+		<tr>
+			<td style="border: 0px;">
+			<span>Kilo: {{ horse.weight }}</span>
+			<span>HP: {{ horse.handycap }}</span>
+			<span>{{ horse.age }}</span>
+      		{% if horse.weightex != 0 %}
+      			<sup class="text-info"><b>+{{ horse.weightex }}</b></sup> 
+      		{% endif %}
+			</td>
+			
+			<td style="text-align: end; border: 0px;">
+				<span>SON6: {{ horse.lastsix }}</span>
+			 	<span>KGS: {{ horse.kgs }}</span> 
+			</td>
+		</tr>
+	
+		<tr>
+			<td style="border: 0px;">
+				<span>Baba: {{ horse.fathername }}</span> <br>
+				<span>Anne: {{ horse.mothername }}</span>
+			</td>
+			
+			<td style="text-align: end; border: 0px;">
+				<span>Sahip: {{ horse.owner }}</span> <br>
+       			<span>Antrenör: {{ horse.trainer }}</span> 
+			</td>
+		</tr>
+		</tbody>
+		{% endif %}
+      	{% endfor %}
+	</table>
+      
+      
+    <!--   <table id="horselist-{{ singlerace.key }}" class="table table-hover align-middle text-left racetable" style="font-size:small">
       	<thead class="thead-light">
         	<tr>
         		<th class="text-center">Sonuç</th>
-            	<th>Forma</th> 
+            	<th>At Bilgi</th> 
                 <th>No</th>
-				<th>At İsmi</th>
+				<th>At İsmi</th> 
                 <th>Yaş</th>
                 <th>Kilo</th>
                 <th>Baba / Anne</th>
                 <th>HP</th>
+               
                 <th>Jokey</th>
-                <th>KGS</th>
+                 <th>KGS</th>
                 <th>Son6</th>
                 <th>YK</th>
                 <th>Tümü</th>
@@ -97,7 +202,57 @@
        			{% else %}
        			<td class="text-danger text-center align-middle"><b>{% if horse.result != 1000 %} {{ horse.result }} {% else %} <p style="color:transparent; cursor:default;">1000</p> {% endif %}</b></td>
        			{% endif %} 
-       			<td class="align-middle"><img src="{{ horse.jerseyimg }}" width="50" height="50" jerseybg="{{ horse.jerseybg }}" style="border-radius: 50%; border: 2px solid #17a2b8;"></td>
+       			
+       			<td class="align-middle">
+       			
+    <div class="row">
+    <div class="col-sm-5">
+    	<img src="{{ horse.jerseyimg }}" width="50" height="50" jerseybg="{{ horse.jerseybg }}" style="border-radius: 50%; border: 2px solid #17a2b8;">
+    </div>
+    
+    <div class="col-sm-2">
+      <div class="row">
+        <div class="container">
+			<b>{{ horse.number }}</b>
+			{% if horse.disabled == True %}
+       			<button type="button" class="btn btn-sm btn-outline-danger" style="cursor:text">[K] <s>{{ horse.name }}</s></button>
+       		{% endif %}
+       		{% if horse.disabled == False %}
+       			<span>{{ horse.name }}
+       		{% endif %}
+       			<sup class="text-info"><b>{{ horse.tool }}</b></sup>
+       		{% if horse.stablemate != False %}
+       			<img src="https://medya-cdn.tjk.org/imageftp/Img/e{{ horse.stablemate }}.gif"></span>
+       		{% endif %}    
+		</div>
+      </div>
+      
+      <div class="row">
+        <div class="container">
+        	<span class="badge badge-pill" style="font-size: x-small;">{{ horse.age }}</span>
+        	<span>Kilo: {{ horse.weight }}</span>
+      		{% if horse.weightex != 0 %}
+      			<sup class="text-info"><b>+{{ horse.weightex }}</b></sup> 
+      		{% endif %}
+      		<span>HP: {{ horse.handycap }}</span> <span>KGS: {{ horse.kgs }}</span> 
+        </div>
+      </div>
+      
+       <div class="row">
+        <div class="container" style="background-color:purple;">
+			
+			<span class="badge badge-pill" style="font-size: x-small; margin:1%;">Baba: {{ horse.fathername }}</span>
+			<span class="badge badge-pill" style="font-size: x-small; margin:1%;">Anne: {{ horse.mothername }}</span>
+
+		</div>
+      </div>
+      
+    </div>
+    </div>
+       			
+       			</td>
+       			
+       			
        			<td class="align-middle text-center text-info"><b>{{ horse.number }}</b></td>
        			{% if horse.disabled == True %}
        			<td class="align-middle"><button type="button" class="btn btn-sm btn-outline-danger" style="cursor:text">[K] <s>{{ horse.name }}</s></button>
@@ -107,7 +262,7 @@
        			{% endif %}
        			<sup class="text-info"><b>{{ horse.tool }}</b></sup>
        			{% if horse.stablemate != False %}<img src="https://medya-cdn.tjk.org/imageftp/Img/e{{ horse.stablemate }}.gif"></span>{% endif %}
-       			</td>
+       			</td> 
        			<td class="align-middle"><span class="badge badge-pill" style="font-size: x-small;">{{ horse.age }}</span></td>
        			<td class="align-middle">{{ horse.weight }}
        			{% if horse.weightex != 0 %}
@@ -118,6 +273,7 @@
        			<span class="badge badge-pill" style="font-size: x-small; margin:1%;">{{ horse.fathername }}</span> <br>
        			<span class="badge badge-pill" style="font-size: x-small; margin:1%;">{{ horse.mothername }} </span> </td>
        			<td class="align-middle">{{ horse.handycap }}</td>
+       			
        			<td class="align-middle">{{ horse.jockey }}
        			{% if horse.apprantice == True %}<sup class="text-info"><b>AP</b></sup>{% endif %}
        			</td>
@@ -178,7 +334,7 @@
        <tfoot>
        		<tr><td colspan="18" class="text-info"><b>{{ singlerace.betinfo }}</b></td></tr>
        	</tfoot>
-       	</table>
+       	</table> -->
       
 
       </div>

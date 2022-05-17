@@ -20,6 +20,7 @@ $(document).ready(function(){
        	$('#programdate').datepicker('setDate', date);
 
 		var programdate = $('#programdate').datepicker('getDate');
+		var mobile		= $("#mobilecheck").is(':checked');
 		$.ajax({
         	type: "GET",
         	async: true,
@@ -27,6 +28,7 @@ $(document).ready(function(){
         	traditional : true,
         	data: {
             	programdate : programdate,
+				mobile		: mobile,
         	},
         	success: function(data) {
 				$("#races").empty();
@@ -46,6 +48,7 @@ $(document).ready(function(){
        	$('#programdate').datepicker('setDate', date);
 
 		var programdate = $('#programdate').datepicker('getDate');
+		var mobile		= $("#mobilecheck").is(':checked');
 		$.ajax({
         	type: "GET",
         	async: true,
@@ -53,6 +56,7 @@ $(document).ready(function(){
         	traditional : true,
         	data: {
             	programdate : programdate,
+				mobile		: mobile,
         	},
         	success: function(data) {
 				$("#races").empty();
@@ -67,7 +71,8 @@ $(document).ready(function(){
 	
     $(document).on('click', ".racefixture", function() {
 		var programdate = $('#programdate').datepicker('getDate');
-		window.location = "/fixture/?programdate="+programdate+"&cityname="+$(this).attr("sehir");
+		var mobile		= $("#mobilecheck").is(':checked');
+		window.location = "/fixture/?mobile="+mobile+"&programdate="+programdate+"&cityname="+$(this).attr("sehir");
 	});
 	
 

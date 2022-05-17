@@ -78,7 +78,7 @@ $(document).ready(function(){
 		$('html, body').animate({ scrollTop: scrollPos }, 2000);
 	}catch(exp){}
 
-
+	
 	$(".racerule").each(function(){
 		var thisspan	= $(this);
 		var raceid 		= $(this).attr("raceid");
