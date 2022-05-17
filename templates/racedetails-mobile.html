@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <head>
     <title>Race Simulator</title>
     {% load static %}
@@ -37,9 +36,9 @@
 
 	{% for singlerace in racedetails %}
 	<div id="accordion-{{ singlerace.key }}">
-  	<div class="card" style="border-bottom-left-radius:40px; border-bottom-right-radius: 40px; margin-top:2%;">
+  	<div class="card" style="border-bottom-left-radius:40px; border-bottom-right-radius: 40px; margin-top:2%; font-size: x-large;">
     <div class="card-header text-white bg-{{ singlerace.courtbg }} float-left" style="border-bottom-left-radius:40px; border-bottom-right-radius: 40px;" id="{{ singlerace.key }}-header">
-        <button class="btn text-white bg-{{ singlerace.courtbg }}" data-toggle="collapse" data-target="#collapse{{ singlerace.key }}" aria-expanded="true" aria-controls="collapse{{ singlerace.key }}">
+        <button class="btn text-white bg-{{ singlerace.courtbg }}" style="font-size: large;" data-toggle="collapse" data-target="#collapse{{ singlerace.key }}" aria-expanded="true" aria-controls="collapse{{ singlerace.key }}">
           <span class="label label-{{ singlerace.courtbg }} left" style="text-decoration: underline;"><b>{{ singlerace.racenumber }}. KOŞU : {{ singlerace.time }} {{ singlerace.summary }} : {{ singlerace.racename }}</b></span> 
         </button>
         <button style="display:none; margin-right: 1%;" type="button" class="btn btn-info showracelist float-right"><span class="fa-solid fa-list"></span><b> Koşu Bilgileri</b></button>
