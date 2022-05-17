@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <head>
     <title>Race Simulator</title>
     {% load static %}
@@ -11,7 +11,7 @@
     <link href="{% static 'css/datatables.min.css' %}" 		type="text/css" 	rel="stylesheet">
     <link href="{% static 'css/fontawesome-all.min.css' %}"	type="text/css" 	rel="stylesheet">
     <link href="{% static 'css/tablesorterstyle.css'%}"     type="text/css"     rel="stylesheet">
-    <link href="{% static 'css/racedetails.css'%}"     		type="text/css"     rel="stylesheet">
+<!--     <link href="{% static 'css/racedetails.css'%}"     		type="text/css"     rel="stylesheet"> -->
 	
 
     <script src="{% static 'js/jquery-3.5.1.min.js' %}" 	type="text/javascript" charset="utf-8"></script>
@@ -58,7 +58,7 @@
     {% endif %}
       <div class="card-body table-responsive">
       
-      <table id="horselist-{{ singlerace.key }}" class="table align-middle text-left">
+<!--       <table id="horselist-{{ singlerace.key }}" class="table align-middle text-left">
       
       <thead class="thead-light">
 		<tr>
@@ -82,7 +82,7 @@
 			<td>
 			<button type="button" class="btn btn-sm btn-outline-info" style="cursor:text; font-size: larger;"><b>{{ horse.number }}</b></button>
 			{% if horse.disabled == True %}
-       			<button type="button" class="btn btn-sm btn-outline-danger" style="cursor:text; font-size: larger;">[KOŞMAZ] <s>{{ horse.name }}</s></button>
+       			<button type="button" class="btn btn-sm btn-outline-danger" style="cursor:text; font-size: larger;">[K] <s>{{ horse.name }}</s></button>
        		{% endif %}
        		{% if horse.disabled == False %}
        			<span><b>{{ horse.name }}</b>
@@ -162,8 +162,76 @@
 		</tbody>
 		{% endif %}
       	{% endfor %}
+	</table> -->
+    
+    
+    
+    <table id="horselist-{{ singlerace.key }}" class="table">
+    	<thead class=thead-light>
+    		<tr>
+    			<th colspan="2">At Bilgileri</th>
+    			<th style="text-align:end;">Jokey / Sahip / Antrenör</th>
+    		</tr>
+    	</thead>
+		<tbody>
+		{% for horse in allhorses %}
+     	{% if horse.racecode  == singlerace.key %}
+		<tr>
+			<td rowspan="2" style="width:5%; vertical-align:middle;"> 
+				<img src="{{ horse.jerseyimg }}" width="70" height="70" jerseybg="{{ horse.jerseybg }}" style="border-radius: 50%; border: 2px solid #17a2b8;"> 
+			</td>
+			<td>
+				<button type="button" class="btn btn-sm btn-outline-info" style="cursor:text; font-size: larger;"><b>{{ horse.number }}</b></button>
+				{% if horse.disabled == True %}
+       			<button type="button" class="btn btn-sm btn-outline-danger" style="cursor:text; font-size: larger;">[K] <s>{{ horse.name }}</s></button>
+       			{% endif %}
+       			{% if horse.disabled == False %}
+       				<span><b>{{ horse.name }}</b>
+       			{% endif %}
+       				<sup class="text-info"><b>{{ horse.tool }}</b></sup>
+       			{% if horse.stablemate != False %}
+       				<img src="https://medya-cdn.tjk.org/imageftp/Img/e{{ horse.stablemate }}.gif"></span>
+       			{% endif %}
+			</td>
+			<td style="text-align:end;">
+			<span>{{ horse.jockey }}</span>
+			{% if horse.apprantice == True %}
+			<sup class="text-info"><b>AP</b></sup>
+			{% endif %}
+			</td>
+		</tr>
+		<tr>
+			<td style="border:0px;">
+			<span>{{ horse.age }}</span>
+			<span style="margin-left: 2%;">{{ horse.weight }}kg</span>
+      		{% if horse.weightex != 0 %}
+      			<sup class="text-info"><b>+{{ horse.weightex }}</b></sup> 
+      		{% endif %}
+			</td>
+			<td style="text-align:end; border:0px;">
+				<span>{{ horse.lastsix }}</span>
+			</td>
+		</tr>
+		<tr>
+			<td style="border:0px;">
+				<span>HP: {{ horse.handycap }}</span> <br>
+				<span>KGS: {{ horse.kgs }}</span> <br>
+				
+			</td>
+			<td style="border:0px;">
+				<span>Baba: {{ horse.fathername }}</span> <br>
+				<span>Anne: {{ horse.mothername }}</span> <br>
+				
+			</td>
+			<td style="text-align:end; border:0px;">
+				<span>Sahip: {{ horse.owner }}</span> <br>
+       			<span>Antrenör: {{ horse.trainer }}</span> 
+			</td>
+		</tr>
+		{% endif %}
+      	{% endfor %}
+		</tbody>
 	</table>
-      
       
     <!--   <table id="horselist-{{ singlerace.key }}" class="table table-hover align-middle text-left racetable" style="font-size:small">
       	<thead class="thead-light">

@@ -189,7 +189,7 @@ def get_all_horses(racedeatils):
             item.handycap   = horse['HANDIKAP']
             item.kgs        = horse['KGS']
             item.jerseyimg  = horse['FORMA'].replace("medya", "medya-cdn")
-            item.jerseybg   = find_jersey_bg_hex(horse['FORMA'].replace("medya", "medya-cdn")) 
+            #item.jerseybg   = find_jersey_bg_hex(horse['FORMA'].replace("medya", "medya-cdn")) 
             item.disabled   = horse['KOSMAZ']
             
             
