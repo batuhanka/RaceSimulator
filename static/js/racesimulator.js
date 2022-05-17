@@ -121,17 +121,18 @@ $(document).ready(function(){
         	},
         	success: function(data) {
 	
-				var horsetd		= $(thistd).prev().prev();
-				var horsecolor 	= $(horsetd).text().split(" ")[1];
+				//var horsetd		= $(thistd).prev().prev();
+				var horsespan 	= $(thistd).parent().prev().find("span")[0];
+				var horsecolor 	= $(horsespan).text().split(" ")[1];
 				// set horse don colour
 				if(horsecolor == 'a'){
-					$((horsetd).children()[0]).addClass("badge-danger");
+					$(horsespan).addClass("badge-danger");
 				}
 				if(horsecolor == 'd'){
-					$((horsetd).children()[0]).addClass("badge-warning");
+					$(horsespan).addClass("badge-warning");
 				}
 				if(horsecolor == 'k'){
-					$((horsetd).children()[0]).addClass("badge-secondary");
+					$(horsespan).addClass("badge-secondary");
 				}
 	
 				// set father don colour
