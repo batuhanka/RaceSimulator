@@ -1,78 +1,5 @@
-jQuery.extend( jQuery.fn.dataTableExt.oSort, {
-	
-    "non-empty-string-asc": function (str1, str2) {
-        if(str1 == "" && str2 != "")
-            return 1;
-        if(str2 == "" && str1 != "")
-            return -1;
-        if(str1 == "" && str2 == "")
-        		return 0;
-        return ((str1 < str2) ? -1 : ((str1 > str2) ? 1 : 0));
-    },
- 
-    "non-empty-string-desc": function (str1, str2) {
-        if(str1 == "" && str2 != "")
-            return -1;
-        if(str2 == "" && str1 != "")
-            return 1;
-        if(str1 == "" && str2 == "")
-        		return 0;
-        return ((str1 < str2) ? 1 : ((str1 > str2) ? -1 : 0));
-    }
-});
-
-var tableOptions = {
-			paging: false,
-			searching: false,
-			info:false,
-			order: [0,'asc'],
-			autoWidth: false,
-        	columnDefs: [
-            	{ orderable: true,  targets: [0,2,4,5,7,9,11,16,17] },
-				{ orderable: true,  type:'non-empty-string', targets: [12,13,14] },
-            	{ orderable: false, targets: '_all' },
-        	]
-}
-
-var tableOptions2 = {
-			paging: false,
-			searching: false,
-			info:false,
-			order: [13,'asc'],
-			autoWidth: false,
-        	columnDefs: [
-            	{ orderable: true, targets: [0,2,4,5,7,9,11,16,17] },
-				{ orderable: true, type:'non-empty-string', targets: [12,13,14] },
-            	{ orderable: false, targets: '_all' },
-        	]
-}
-
 $(document).ready(function(){
 	
-	/*
-	$(".agfprogress").each(function() {
-
-    var value 	= $(this).attr('data-value');
-    var left 	= $(this).find('.agfprogress-left .agfprogress-bar');
-    var right 	= $(this).find('.agfprogress-right .agfprogress-bar');
-
-    if (value > 0) {
-    	if (value <= 50) {
-        	right.css('transform', 'rotate(' + (value) / 100 * 360 + 'deg)')
-      	} else {
-        	right.css('transform', 'rotate(180deg)')
-        	left.css('transform', 'rotate(' + (value - 50) / 100 * 360 + 'deg)')
-      	}
-    }
-
-  	});
-	*/
-	
-	$(".racetable").each(function() {
-		var tableid = $(this).attr("id");
-		$('#'+tableid).DataTable( tableOptions );
-	});
-
 	try{
 		var activeitem = $('.collapse.show')[0];	
 		var scrollPos =  $($(activeitem).parent().parent()).offset().top - 10;
@@ -164,7 +91,7 @@ $(document).ready(function(){
 	
 }); // document ready end
 
-
+/*
 var datatable;
 $(document).ajaxStop(function() {
 	try{
@@ -178,10 +105,15 @@ $(document).ajaxStop(function() {
 		});
 	}catch(exp){	}
 });
-
+*/
 
 $(document).on('click', ".velocities", function() {
 	
+	//Show Loading Row
+	$(this).closest("table").find("tbody tr.loadingrow").show();
+	
+	
+	/*
 	// Show Simulation Button
 	$(this).prev().show();
 	$(this).prev().prop('disabled',true);
@@ -320,10 +252,11 @@ $(document).on('click', ".velocities", function() {
     	});
 		
 	});
-	
+	*/
 	
 });
 
+/*
 $(document).on('click', ".simulation", function() {
 	
 	var cardbody	= $(this).parent().next().children();
@@ -588,5 +521,5 @@ $(document).on('click', ".close", function() {
   								'<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span><b> Yükleniyor . . .</b></button></div>');
 });
 
-
+*/
 
