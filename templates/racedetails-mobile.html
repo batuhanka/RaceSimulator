@@ -59,11 +59,7 @@
     {% endif %}
       <div class="card-body table-responsive" style="font-size: x-large;">
       
-<<<<<<< HEAD
     	<table id="horselist-{{ singlerace.key }}" class="table racetable">
-=======
-    	<table id="horselist-{{ singlerace.key }}" class="table">
->>>>>>> f6a03e7978be2b84dfe858732b1f9116689f594a
     	<thead class=thead-light>
     	<tr>
     		<th colspan="3" style="text-align:center;">  
@@ -137,37 +133,27 @@
 			</td>
 		</tr>
 		
-<<<<<<< HEAD
-		
-		
-		<tr class="calculations" style="display:none;">
+		<tr class="calculations" style="display:none;" horsecode="{{ horse.code }}" horsename="{{ horse.name }}" kgs="{{ horse.kgs }}">
 			<td colspan="2" style="font-size:larger; border:0px;">
-				<span class="badge">Yıllık Kazanç: <b class="text-info yearprize">112.456 ₺</b></span>
+				<span class="badge">Yıllık Kazanç: <b class="text-info yearprize"></b></span>
 			</td>
 			<td style="text-align:end; font-size:larger; border:0px;">
-				<span class="badge" >Galop400: <b class="text-info gallop">25.50</b></span>
-			<td>
+				<span class="badge" >Galop400m: <b class="text-info gallop"></b></span>
+			</td>
 		</tr>
 		
-		<tr class="finaldegree" style="display:none;">
+		<tr class="finaldegree" style="display:none;" horsecode="{{ horse.code }}" courtcode="{{ singlerace.courtcode }}" distance="{{ singlerace.distance }}" weight="{{ horse.weight }}">
 			<td colspan="3" style="text-align:center; border:0px; font-size:xxx-large;">
-				<span class="badge badge-pill badge-info"><b>1.23.45</b></span>
+				<span class="badge badge-pill badge-info"><b class="degreeinfo"></b></span>
 			</td>
 		</tr>
 		
 		
 		<tr class="loadingrow" style="display:none;">
-=======
-		<tr>
->>>>>>> f6a03e7978be2b84dfe858732b1f9116689f594a
 			<td colspan="3" style="text-align:center; border:0px;">
 				<div class="spinner-grow text-info"></div>
 				<div class="spinner-grow text-info"></div>
 				<div class="spinner-grow text-info"></div>
-<<<<<<< HEAD
-				<div class="spinner-grow text-info"></div>
-=======
->>>>>>> f6a03e7978be2b84dfe858732b1f9116689f594a
 			</td>
 		</tr>
 		

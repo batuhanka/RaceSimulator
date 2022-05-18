@@ -91,10 +91,8 @@ def horsepower(request):
     horsecode           = request.GET.get("horsecode")
     courtcode           = request.GET.get("courtcode")
     distance            = request.GET.get("distance")
-    #weight              = request.GET.get("weight")
     horse_power_list    = CONT.get_horse_power(horsecode)
     avg_speed           = CONT.get_horse_avg_speed(horse_power_list, courtcode)
-    #avg_speed           = avg_speed / float(weight)
     if avg_speed != 0:
         avg_degree      = CONT.convert_to_degree(float(distance) / float(avg_speed))
     else:
@@ -106,10 +104,8 @@ def horsespeed(request):
     horsecode           = request.GET.get("horsecode")
     courtcode           = request.GET.get("courtcode")
     distance            = request.GET.get("distance")
-    #weight              = request.GET.get("weight")
     horse_power_list    = CONT.get_horse_power(horsecode)
     prize_avg_speed     = CONT.get_horse_prize_avg_speed(horse_power_list, courtcode)
-    #prize_avg_speed     = prize_avg_speed / float(weight)
     if prize_avg_speed != 0:
         prize_avg_degree    = CONT.convert_to_degree(float(distance) / float(prize_avg_speed))
     else:
@@ -118,12 +114,9 @@ def horsespeed(request):
 
 
 def gallop(request):
-    #horsecode   = request.GET.get("horsecode")
-    #courtcode   = request.GET.get("courtcode")
-    #distance    = request.GET.get("distance")
-    #weight      = request.GET.get("weight")
     horsename   = request.GET.get("horsename")
-    gallop_avg  = CONT.get_gallop_info(horsename)
+    kgs         = request.GET.get("kgs")
+    gallop_avg  = CONT.get_gallop_info(horsename, kgs)
     return HttpResponse(json.dumps({'gallop_avg_degree': gallop_avg}), "application/json")
 
 def last800(request):

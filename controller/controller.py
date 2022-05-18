@@ -404,24 +404,27 @@ def get_horse_prize_avg_speed(horse_power_list, courtcode):
 
     return prize_avg_speed
 
-def get_gallop_info(horsename):
+def get_gallop_info(horsename, kgs):
+    today   = datetime.today()
     url     = 'https://www.tjk.org/TR/YarisSever/Query/Data/IdmanIstatistikleri?QueryParameter_ATADI='+horsename.replace(" ","+")
     details = requests.get(url)
     source  = BeautifulSoup(details.content,"lxml")
     table   = source.find("table", {"id":"queryTable"}).find("tbody")
     rows    = table.find_all("tr")
+    gallop  = []
     
-    gallop = []
     try:
         for row in rows:
             if 'hidable' not in row['class']:
                 columns = row.find_all("td")
-                degree  = columns[8].text.strip()
-                minutes = degree.split(".")[0]
-                seconds = degree.split(".")[1]
-                mseconds= degree.split(".")[2] 
-                if(minutes == '0'): 
-                    gallop.append(float(seconds) + (float(mseconds) / 100))
+                gallopdate = datetime.strptime(columns[10].text.strip(), '%d.%m.%Y')
+                if int(kgs) > abs((today - gallopdate).days):
+                    degree  = columns[8].text.strip()
+                    minutes = degree.split(".")[0]
+                    seconds = degree.split(".")[1]
+                    mseconds= degree.split(".")[2] 
+                    if(minutes == '0'): 
+                        gallop.append(float(seconds) + (float(mseconds) / 100))
     except:
         pass
     

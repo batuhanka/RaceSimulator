@@ -110,8 +110,163 @@ $(document).ajaxStop(function() {
 $(document).on('click', ".velocities", function() {
 	
 	//Show Loading Row
-	$(this).closest("table").find("tbody tr.loadingrow").show();
+	var loadingrows 	= $(this).closest("table").find("tbody tr.loadingrow");
+	var calculations	= $(this).closest("table").find("tbody tr.calculations");
+	var finaldegreerows	= $(this).closest("table").find("tbody tr.finaldegree");
 	
+	// Calculate Year Prizes
+	$(calculations).each(function (){
+		$(loadingrows).show();
+		var prizeElement	= $(this).find("b.yearprize");
+		var horsecode		= $(this).attr('horsecode');
+		
+		$.ajax({
+        	type: "GET",
+        	async: true,
+        	url: '/yearprize/',
+        	traditional : true,
+        	data: {
+            	horsecode 	: horsecode,
+        	},
+        	success: function(data) {
+				if(data.yearprize == 0){
+					$(prizeElement).text("");
+				}else{
+					$(prizeElement).text(data.yearprize+"  ₺");
+					$(prizeElement).addClass("text-info");
+				}
+        	}
+    	});
+	});
+	
+	
+	// Calculate Gallop Seconds
+	$(calculations).each(function (){
+		$(loadingrows).show();
+		var gallopElement 	= $(this).find("b.gallop");
+		var horsename 		= $(this).attr('horsename');
+		var kgs 			= $(this).attr('kgs');
+		$.ajax({
+        	type: "GET",
+        	async: true,
+        	url: '/gallop/',
+        	traditional : true,
+        	data: {
+				horsename 	: horsename,
+				kgs 		: kgs,
+        	},
+        	success: function(data) {
+				if(data.gallop_avg_degree == 0){
+					$(gallopElement).text("");
+				}else{
+					$(gallopElement).text(data.gallop_avg_degree);
+					$(gallopElement).addClass("text-info");
+				}
+        	},
+			complete: function(){
+				$(loadingrows).hide();
+				$(calculations).show();
+			}
+    	});
+	});
+	
+	
+	// Calculate Final Degree Seconds
+	$(finaldegreerows).each(function (){
+		$(loadingrows).show();
+		var degreeElement 	= $(this).find("b.degreeinfo");
+		var horsecode 		= $(this).attr("horsecode");
+		var courtcode 		= $(this).attr("courtcode");
+		var distance 		= $(this).attr("distance");
+		var weight 			= $(this).attr("weight");
+		$.ajax({
+        	type: "GET",
+        	async: true,
+        	url: '/horsespeed/',
+        	traditional : true,
+        	data: {
+            	horsecode : horsecode,
+				courtcode : courtcode,
+				distance  : distance,
+				weight	  : weight,
+        	},
+        	success: function(data) {
+				if(data.prize_avg_degree == 0){
+					$(degreeElement).text("");
+				}else{
+					$(degreeElement).text(data.prize_avg_degree);
+				}
+        	},
+			complete: function(){
+				$(loadingrows).hide();
+				$(finaldegreerows).show();
+			}
+    	});
+	});
+	
+	
+	/*
+	// Horse Speed Calculations
+	$(this).parent().parent().find('table').find('.horsespeed').each(function (){
+		$(this).html("");
+		$(this).append('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>');
+		var thisbtn	 	= $(this);
+		var horsecode 	= $(this).attr("id");
+		var courtcode 	= $(this).attr("courtcode");
+		var distance 	= $(this).attr("distance");
+		var weight 		= $(this).attr("weight");
+		$.ajax({
+        	type: "GET",
+        	async: true,
+        	url: '/horsespeed/',
+        	traditional : true,
+        	data: {
+            	horsecode : horsecode,
+				courtcode : courtcode,
+				distance  : distance,
+				weight	  : weight,
+        	},
+        	success: function(data) {
+				if(data.prize_avg_degree == 0){
+					$(thisbtn).remove();
+				}else{
+					$(thisbtn).parent().addClass("text-info font-weight-bold h6");
+					$(thisbtn).parent().text(data.prize_avg_degree)
+				}
+        	}
+    	});
+		
+	});
+	*/
+	
+	
+	/*
+	// Horse Year Prize Calculations
+	$(this).parent().parent().find('table').find('.yearprize').each(function (){
+		$(this).html("");
+		$(this).append('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>');
+		var thisbtn	 	= $(this);
+		var horsecode 	= $(this).attr("id");
+		$.ajax({
+        	type: "GET",
+        	async: true,
+        	url: '/yearprize/',
+        	traditional : true,
+        	data: {
+            	horsecode 	: horsecode,
+        	},
+        	success: function(data) {
+				if(data.yearprize == 0){
+					$(thisbtn).remove();
+				}else{
+					$(thisbtn).parent().addClass("text-info font-weight-bold h7");
+					$(thisbtn).parent().text(data.yearprize+"  ₺")
+				}
+        	}
+    	});
+		
+	});
+	*/
 	
 	/*
 	// Show Simulation Button
