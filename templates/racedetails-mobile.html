@@ -36,16 +36,16 @@
 
 	{% for singlerace in racedetails %}
 	<div id="accordion-{{ singlerace.key }}">
-  	<div class="card" style="border-bottom-left-radius:40px; border-bottom-right-radius: 40px; margin-top:2%; font-size: larger;">
-    <div class="card-header text-white bg-{{ singlerace.courtbg }} float-left" style="font-size: large; border-bottom-left-radius:40px; border-bottom-right-radius: 40px;" id="{{ singlerace.key }}-header">
+  	<div class="card" style="border-bottom-left-radius:40px; border-bottom-right-radius: 40px; margin-top:2%; font-size: x-large;">
+    <div class="card-header text-white bg-{{ singlerace.courtbg }} float-left" style="font-size: x-large; border-bottom-left-radius:40px; border-bottom-right-radius: 40px;" id="{{ singlerace.key }}-header">
         <button class="btn text-white bg-{{ singlerace.courtbg }}" data-toggle="collapse" data-target="#collapse{{ singlerace.key }}" aria-expanded="true" aria-controls="collapse{{ singlerace.key }}">
-          <span class="label label-{{ singlerace.courtbg }} float-left" style="text-decoration: underline; font-size: larger;"><b>{{ singlerace.racenumber }}. KOŞU : {{ singlerace.time }}</span><br>
-          <span class="label label-{{ singlerace.courtbg }} float-left" style="font-size: larger;"><b>{{ singlerace.summary }}</span><br>
-          <span class="label label-{{ singlerace.courtbg }} float-left" style="font-size: larger;"><b>{{ singlerace.racename }}</b></span> 
+          <span class="label label-{{ singlerace.courtbg }} float-left" style="text-decoration: underline; font-size: x-large;"><b>{{ singlerace.racenumber }}. KOŞU : {{ singlerace.time }}</b></span><br>
+          <span class="label label-{{ singlerace.courtbg }} float-left" style="font-size: x-large;"><b>{{ singlerace.summary }}</b></span><br>
+          <span class="label label-{{ singlerace.courtbg }} float-left" style="font-size: x-large;"><b>{{ singlerace.racename }}</b></span> 
         </button>
         <button style="display:none; margin-right: 1%;" type="button" class="btn btn-info showracelist float-right" ><span class="fa-solid fa-list"></span><b> Koşu Bilgileri</b></button>
         <button style="display:none; margin-right: 1%;" type="button" class="btn btn-danger simulation float-right"><span class="fa-solid fa-flag-checkered fa-shake"></span><b> Simulasyon</b></button>
-        <button type="button" class="btn btn-{{ singlerace.courtbg }} velocities float-right" style="margin-right: 1%; font-size: larger;"><span class="fa-solid fa-calculator fa-beat-fade"></span><b> Hesapla</b></button>
+        <button type="button" class="btn btn-{{ singlerace.courtbg }} velocities float-right" style="margin-right: 1%;"><span class="fa-solid fa-calculator fa-beat-fade"></span><b> Hesapla</b></button>
         <span class="label text-{{ singlerace.courtbg }} label-{{ singlerace.courtbg }} float-right courtcode">{{ singlerace.courtcode }}</span>
         <div><span raceid="{{ singlerace.key }}" racedate="{{ singlerace.date }}" cityinfo="{{ weather.cityinfo }}" citycode="{{ weather.citycode }}"  class="label text-white label-{{ singlerace.courtbg }} racerule"></span></div>
         
@@ -57,7 +57,7 @@
     {% else %}
     	<div id="collapse{{ singlerace.key }}" class="collapse" aria-labelledby="{{ singlerace.key }}-header" data-parent="#accordion-{{ singlerace.key }}">
     {% endif %}
-      <div class="card-body table-responsive">
+      <div class="card-body table-responsive" style="font-size: x-large;">
       
     <table id="horselist-{{ singlerace.key }}" class="table">
     	<thead class=thead-light>
@@ -76,10 +76,10 @@
 			<td>
 				<button type="button" class="btn btn-sm btn-outline-info" style="cursor:text; font-size: larger;"><b>{{ horse.number }}</b></button>
 				{% if horse.disabled == True %}
-       			<button type="button" class="btn btn-sm btn-outline-danger" style="cursor:text;">[K] <s>{{ horse.name }}</s></button>
+       			<button type="button" class="btn btn-sm btn-outline-danger" style="cursor:text; font-size: larger;">[K] <s>{{ horse.name }}</s></button>
        			{% endif %}
        			{% if horse.disabled == False %}
-       				<span><b>{{ horse.name }}</b>
+       				<span style="font-size: larger;"><b>{{ horse.name }}</b>
        			{% endif %}
        				<sup class="text-info"><b>{{ horse.tool }}</b></sup>
        			{% if horse.stablemate != False %}
@@ -91,31 +91,36 @@
 			{% if horse.apprantice == True %}
 			<sup class="text-info"><b>AP</b></sup>
 			{% endif %}
+			<br>
+			<span>{{ horse.lastsix }}</span>
 			</td>
 		</tr>
 		<tr>
-			<td style="border:0px;">
-			<span class="badge">{{ horse.age }}</span>
-			<span style="margin-left: 2%;">{{ horse.weight }}kg</span>
+			<td style="border:0px; font-size:larger;">
+			<span class="badge badge-pill">{{ horse.age }}</span>
+			<span>{{ horse.weight }}kg</span>
       		{% if horse.weightex != 0 %}
       			<sup class="text-info"><b>+{{ horse.weightex }}</b></sup> 
       		{% endif %}
-      		<span style="margin-left: 2%;"><b>HP:</b>{{ horse.handycap }}</span> <br>
+      		<br>
+      		<span class="badge">HP:  </span><span>{{ horse.handycap }}</span>
+      		<span class="badge">KGS: </span><span>{{ horse.kgs }}</span>
 			</td>
-			<td style="text-align:end; border:0px;">
-				<span>{{ horse.lastsix }}</span>
-				<span style="margin-left: 2%;"><b>KGS:</b>{{ horse.kgs }}</span>
+			<td style="text-align:end; border:0px; font-size:larger;">
+<!-- 				<span>{{ horse.lastsix }}</span> -->
+				<span class="badge">{% if horse.agf1 %} AGF1: </span><span class="text-info"><b>%{{ horse.agf1 }}</b> {% endif %}</span> <br>
+				<span class="badge">{% if horse.agf2 %} AGF2: </span><span class="text-info"><b>%{{ horse.agf2 }}</b> {% endif %}</span>
 			</td>
 		</tr>
 		<tr>
-			<td colspan="2" style="border:0px;" class="parent" horsecode="{{ horse.code }}">
-				<span class="badge">Baba:{{ horse.fathername }}</span> <br>
-				<span class="badge">Anne:{{ horse.mothername }}</span> <br>
+			<td colspan="2" style="border:0px; font-size:larger;" class="parent" horsecode="{{ horse.code }}">
+				<span class="badge badge-pill">Baba: {{ horse.fathername }}</span> <br>
+				<span class="badge badge-pill">Anne: {{ horse.mothername }}</span> <br>
 				
 			</td>
 			<td style="text-align:end; border:0px;">
-				<span class="badge">{{ horse.owner }}</span> <br>
-       			<span class="badge">Ant:{{ horse.trainer }}</span> 
+				<span>{{ horse.owner }}</span> <br>
+       			<span class="badge">Ant: </span><span>{{ horse.trainer }}</span> 
 			</td>
 		</tr>
 		{% endif %}
