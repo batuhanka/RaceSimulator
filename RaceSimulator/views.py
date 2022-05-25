@@ -86,6 +86,22 @@ def fixture(request):
         return render(request, "racedetails-mobile.html", {'currenttime': currenttime, 'nextracetime': nextracetime, 'weather': weather_info, 'cityname': cityname, 'racedetails' : all_races, 'allhorses' : all_horses })
     else:
         return render(request, "racedetails.html", {'currenttime': currenttime, 'nextracetime': nextracetime, 'weather': weather_info, 'cityname': cityname, 'racedetails' : all_races, 'allhorses' : all_horses })
+    
+def degreepredict(request):
+    horsecode       = request.GET.get("horsecode")
+    courtcode       = request.GET.get("courtcode")
+    curr_temperature= request.GET.get("temperature")
+    curr_humidity   = request.GET.get("humidity")
+    curr_grassrate  = request.GET.get("grassrate")
+    curr_dirtstate  = request.GET.get("dirtstate")
+    curr_distance   = request.GET.get("distance")
+    curr_weight     = request.GET.get("weight")
+    curr_handycap   = request.GET.get("handycap")
+    curr_kgs        = request.GET.get("kgs")
+    curr_last20     = request.GET.get("last20")
+    
+    degree_predict  = CONT.get_degree_predict(horsecode, courtcode, curr_temperature, curr_humidity, curr_grassrate, curr_distance, curr_weight, curr_handycap, curr_kgs, curr_last20, curr_dirtstate)
+    return HttpResponse(json.dumps({'degree_predict': degree_predict}), "application/json")
 
 def horsepower(request):
     horsecode           = request.GET.get("horsecode")

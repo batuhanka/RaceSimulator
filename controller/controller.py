@@ -11,6 +11,8 @@ from datetime import datetime
 import statistics
 from PIL import Image
 from _io import BytesIO
+import pandas as pd
+from sklearn.linear_model import LinearRegression
 
 citycodemap = {1:'Adana', 2:'İzmir', 3:'İstanbul', 4:'Bursa', 5:'Ankara', 6:'Şanlıurfa', 7:'Elazığ', 8:'Diyarbakır', 9:'Kocaeli', 10:'Antalya'}
 
@@ -163,8 +165,6 @@ def get_all_horses(racedeatils):
     result = []
     for one in racedeatils:
         racecode    = one['KOD']
-        ## groupinfo   = one['GRUP_TR'].lower()
-        ## horsetype   = groupinfo.split(" ")[-1] ## it returns as type ingilizler or araplar
         for horse in one['atlar']:
             item            = HorseInfo()
             item.racecode   = racecode
@@ -188,17 +188,10 @@ def get_all_horses(racedeatils):
             item.trainercode= horse['ANTRENORKODU']
             item.handycap   = horse['HANDIKAP']
             item.kgs        = horse['KGS']
+            item.last20     = horse['SON20']
             item.jerseyimg  = horse['FORMA'].replace("medya", "medya-cdn")
             #item.jerseybg   = find_jersey_bg_hex(horse['FORMA'].replace("medya", "medya-cdn")) 
             item.disabled   = horse['KOSMAZ']
-            
-            
-            #if(horsetype == "i̇ngilizler"):
-            #    pedigree_text = get_pedigree_info(horse['AD'].replace(" ","+").lower(), horse['BABA'].split(" (")[0], horse['ANNE'].split(" (")[0])
-            #if(pedigree_text != ""):
-            #    dpvalue      = pedigree_text.split("DP = ")[1].split(" ")[0]
-            #    divalue      = pedigree_text.split("DI = ")[1].split(" ")[0]
-            #    cdvalue      = pedigree_text.split("CD = ")[1].split(" ")[0]
             
             try: 
                 item.apprantice = horse['APRANTIFLG']
@@ -247,6 +240,7 @@ def get_all_horses_single_race(horses, racecode):
             item.trainercode= horse['ANTRENORKODU']
             item.handycap   = horse['HANDIKAP']
             item.kgs        = horse['KGS']
+            item.last20     = horse['SON20']
             item.jerseyimg  = horse['FORMA'].replace("medya", "medya-cdn")
             item.disabled   = horse['KOSMAZ']
             item.stablemate = horse['EKURI']
@@ -346,6 +340,247 @@ def get_last_800(horsecode, courtcode):
     
     return result
     
+def get_degree_predict(horsecode, courtcode, curr_temperature, curr_humidity, curr_grassrate, curr_distance, curr_weight, curr_handycap, curr_kgs, curr_last20, curr_dirtstate):
+    
+    race_count  = 0
+    increment   = 1
+    
+    #### first increment check for old horses
+    ## for all races 
+    horse_details_url   = 'https://www.tjk.org/TR/YarisSever/Query/ConnectedPage/AtKosuBilgileri?QueryParameter_AtId='+horsecode
+    horsedetails    = requests.get(horse_details_url)
+    source          = BeautifulSoup(horsedetails.content,"lxml")
+    allraces        = source.find("table", {"id": "queryTable"})
+    for item in allraces.find_all("tr"):
+        columns = item.find_all("td")
+        if(len(columns) == 21):
+            pass
+        else:
+            race_count = item.text.strip().split("Toplam ")[1].split(" ")[0]
+        
+    if int(race_count) > 50:
+        increment = int(race_count) / 50
+    else:
+        pass
+    
+    kinetic     = []
+    dirtmap     = {'':4, 'Sulu': 1, 'Islak': 2, 'Nemli': 3, 'Normal': 4}
+    
+    for index in range(math.ceil(increment)):
+    
+        details_url     = 'https://www.tjk.org/TR/YarisSever/Query/ConnectedPage/AtKosuBilgileri?QueryParameter_AtId='+horsecode+'&PageNumber='+str(index)
+        horsedetails    = requests.get(details_url)
+        source          = BeautifulSoup(horsedetails.content,"lxml")
+        allraces        = source.find("table", {"id": "queryTable"})
+        
+        
+        for item in allraces.find_all("tr"):
+            columns = item.find_all("td")
+            if(len(columns) == 21):
+                if(columns[4].text.strip() != ""):
+                    try:
+                        racedate    = convert_race_date(columns[0].text.strip())
+                        raceyear    = columns[0].text.strip().split(".")[2]
+                        racecity    = find_weather_location(columns[1].text.strip())
+                        url         = 'https://ebayi.tjk.org/s/d/sonuclar/%s/full/%s.json' %(racedate, racecity)
+                        races       = requests.get(url).json()
+                        weather     = races['hava']
+                        temperature = weather['SICAKLIK']
+                        humidity    = weather['NEM']
+                        dirtstate   = dirtmap[weather['KUM_TR']]
+                        grassrate   = 3.3 if weather['CIMPISTAGIRLIGI'] == 0 else weather['CIMPISTAGIRLIGI']
+                        raceno      = columns[12].span.text.strip()
+                        for race in races['kosular']:
+                            if(int(race['NO']) ==  int(raceno)):
+                                distance= race['MESAFE']
+                                for horse in race['atlar']:
+                                    if(horse['KOD'] == horsecode):
+                                        if(int(horse['SONUC']) < 6 and horse['KOSMAZ'] == False):
+                                        #if(horse['KOSMAZ'] == False):
+                                            weight      = float(horse['KILO']) + float(horse['FAZLAKILO']) - float(horse['APRANTIKILOINDIRIMI'])
+                                            # if(horse['GECCIKIS_BOY'] == ''):
+                                            #     latestart = 0
+                                            # else:
+                                            #     latestart   = str(horse['GECCIKIS_BOY']).split()[0]
+                                            degree      = horse['DERECE']
+                                            jockeyrate  = find_jockey_rate(horse['JOKEYKODU'], raceyear)
+                                            handycap    = 0 if horse['HANDIKAP'] == '' else horse['HANDIKAP']
+                                            kgs         = 0 if horse['KGS'] == '' else horse['KGS']
+                                            last20      = horse['SON20']
+                                            
+                                            velocity        = (float(distance) / convert_to_second(degree))
+                                            kinetic_energy  = weight * velocity * velocity / 2
+                                            kinetic.append(kinetic_energy) 
+                                            
+                                            
+                                        
+                    except:
+                        pass
+      
+    total = 0
+    for item in kinetic:
+        total = total + item
+    
+    avg_kinetic_energy  = total / len(kinetic)
+    velocity_sqrt       = math.sqrt(avg_kinetic_energy * 2 / float(curr_weight))
+    predicted           = convert_to_degree(float(curr_distance) / velocity_sqrt)
+    return predicted
+    
+              
+    
+#### REGRESSION ANALYSIS CALCULATIONS    
+# def get_degree_predict(horsecode, courtcode, curr_temperature, curr_humidity, curr_grassrate, curr_distance, curr_weight, curr_handycap, curr_kgs, curr_last20, curr_dirtstate):
+#
+#     race_count  = 0
+#     increment   = 1
+#
+#     #### first increment check for old horses
+#     ## for all races 
+#     horse_details_url   = 'https://www.tjk.org/TR/YarisSever/Query/ConnectedPage/AtKosuBilgileri?QueryParameter_AtId='+horsecode
+#     horsedetails    = requests.get(horse_details_url)
+#     source          = BeautifulSoup(horsedetails.content,"lxml")
+#     allraces        = source.find("table", {"id": "queryTable"})
+#     for item in allraces.find_all("tr"):
+#         columns = item.find_all("td")
+#         if(len(columns) == 21):
+#             pass
+#         else:
+#             race_count = item.text.strip().split("Toplam ")[1].split(" ")[0]
+#
+#     if int(race_count) > 50:
+#         increment = int(race_count) / 50
+#     else:
+#         pass
+#
+#     temperatures= []
+#     humidities  = []
+#     grassrates  = []
+#     distances   = [] 
+#     degrees     = []
+#     weights     = []
+#     handycaps   = []
+#     kgscounts   = []
+#     lasttwenties= []
+#     jockeyrates = []
+#     dirtstatus  = []
+#     dirtmap     = {'':4, 'Sulu': 1, 'Islak': 2, 'Nemli': 3, 'Normal': 4}
+#
+#     for index in range(math.ceil(increment)):
+#
+#         details_url     = 'https://www.tjk.org/TR/YarisSever/Query/ConnectedPage/AtKosuBilgileri?QueryParameter_AtId='+horsecode+'&PageNumber='+str(index)
+#         horsedetails    = requests.get(details_url)
+#         source          = BeautifulSoup(horsedetails.content,"lxml")
+#         allraces        = source.find("table", {"id": "queryTable"})
+#
+#
+#         for item in allraces.find_all("tr"):
+#             columns = item.find_all("td")
+#             if(len(columns) == 21):
+#                 if(columns[4].text.strip() != ""):
+#                     try:
+#                         racedate    = convert_race_date(columns[0].text.strip())
+#                         raceyear    = columns[0].text.strip().split(".")[2]
+#                         racecity    = find_weather_location(columns[1].text.strip())
+#                         url         = 'https://ebayi.tjk.org/s/d/sonuclar/%s/full/%s.json' %(racedate, racecity)
+#                         races       = requests.get(url).json()
+#                         weather     = races['hava']
+#                         temperature = weather['SICAKLIK']
+#                         humidity    = weather['NEM']
+#                         dirtstate   = dirtmap[weather['KUM_TR']]
+#                         grassrate   = 3.3 if weather['CIMPISTAGIRLIGI'] == 0 else weather['CIMPISTAGIRLIGI']
+#                         raceno      = columns[12].span.text.strip()
+#                         for race in races['kosular']:
+#                             if(int(race['NO']) ==  int(raceno)):
+#                                 distance= race['MESAFE']
+#                                 for horse in race['atlar']:
+#                                     if(horse['KOD'] == horsecode):
+#                                         if(int(horse['SONUC']) < 6 and horse['KOSMAZ'] == False):
+#                                         #if(horse['KOSMAZ'] == False):
+#                                             weight      = float(horse['KILO']) + float(horse['FAZLAKILO']) - float(horse['APRANTIKILOINDIRIMI'])
+#                                             # if(horse['GECCIKIS_BOY'] == ''):
+#                                             #     latestart = 0
+#                                             # else:
+#                                             #     latestart   = str(horse['GECCIKIS_BOY']).split()[0]
+#                                             degree      = horse['DERECE']
+#                                             jockeyrate  = find_jockey_rate(horse['JOKEYKODU'], raceyear)
+#                                             handycap    = 0 if horse['HANDIKAP'] == '' else horse['HANDIKAP']
+#                                             kgs         = 0 if horse['KGS'] == '' else horse['KGS']
+#                                             last20      = horse['SON20']
+#
+#                                             temperatures.append(temperature)
+#                                             humidities.append(humidity)
+#                                             grassrates.append(grassrate)
+#                                             distances.append(int(distance))
+#                                             weights.append(float(weight))
+#                                             handycaps.append(int(handycap))
+#                                             kgscounts.append(int(kgs))
+#                                             lasttwenties.append(int(last20))
+#                                             jockeyrates.append(float(jockeyrate))
+#                                             dirtstatus.append(dirtstate)
+#                                             degrees.append(convert_to_second(degree))
+#
+#                     except:
+#                         pass
+#
+#
+#
+#     if(len(distances) > 0):
+#
+#
+#         # print(temperatures)
+#         # print(humidities)
+#         # print(grassrates)
+#         # print(distances)
+#         # print(weights)
+#         # print(handycaps)
+#         # print(kgscounts)
+#         # print(lasttwenties)
+#         # print(jockeyrates)
+#         # print(dirtstatus)
+#         # print(degrees)
+#         # print("======================")
+#
+#
+#         racedata = {    #'Temperature'   : temperatures,
+#                         #'Humidity'      : humidities,
+#                         #'GrassRate'     : grassrates,
+#                         'Distance'      : distances,
+#                         #'Weight'        : weights,
+#                         #'Handycap'      : handycaps,
+#                         #'KGS'           : kgscounts,
+#                         #'LastTwenty'    : lasttwenties,
+#                         #'JockeyRate'    : jockeyrates,
+#                         #'DirtStatus'    : dirtstatus,
+#                         'Degree'        : degrees,    
+#                     }
+#
+#         df = pd.DataFrame(racedata)
+#         features    = df.iloc[:,:-1]
+#         result      = df.iloc[:,-1]
+#         reg         = LinearRegression()
+#         model       = reg.fit(features, result)
+#
+#         # Generate a prediction
+#         example = pd.DataFrame([{
+#             #'Temperature'   : int(curr_temperature), 
+#             #'Humidity'      : int(curr_humidity),
+#             #'GrassRate'     : float(curr_grassrate),
+#             'Distance'      : int(curr_distance),
+#             #'Weight'        : float(curr_weight),
+#             #'Handycap'      : int(curr_handycap),
+#             #'KGS'           : int(curr_kgs),
+#             #'LastTwenty'    : int(curr_last20),
+#             #'JockeyRate'    : find_jockey_rate(377, 2022),
+#             #'DirtStatus'    : dirtmap[curr_dirtstate]
+#         }])
+#         prediction = model.predict(example)
+#         #reg_score = reg.score(features, result)
+#         print("HORSECODE : "+horsecode+" "+convert_to_degree(prediction)+" "+str(reg.score(features, result)))
+#         return convert_to_degree(prediction)
+#
+#     else:
+#         return 0
+
 def get_horse_avg_speed(horse_power_list, courtcode):
     
     samples = []
@@ -669,6 +904,19 @@ def find_weather_location(value):
     
     return value.upper()
 
+def find_jockey_rate(jockeycode, year):
+    url     = "https://www.tjk.org/TR/YarisSever/Query/Data/JokeyIstatistikleri?QueryParameter_JokeyId="+str(jockeycode)+"&QueryParameter_YIL="+str(year)
+    details = requests.get(url)
+    source  = BeautifulSoup(details.content,"lxml")
+    table   = source.find("table", {"id": "queryTable"})
+    rate1   = table.find("tbody").find("tr").find("td", {"class": "sorgu-JokeyIstatistikleri-derece1yuzde"}).text.strip()
+    rate2   = table.find("tbody").find("tr").find("td", {"class": "sorgu-JokeyIstatistikleri-derece2yuzde"}).text.strip()
+    rate3   = table.find("tbody").find("tr").find("td", {"class": "sorgu-JokeyIstatistikleri-derece3yuzde"}).text.strip()
+    rate4   = table.find("tbody").find("tr").find("td", {"class": "sorgu-JokeyIstatistikleri-derece4yuzde"}).text.strip()
+    rate5   = table.find("tbody").find("tr").find("td", {"class": "sorgu-JokeyIstatistikleri-derece5yuzde"}).text.strip()
+    avg     = int( int(rate1)*5 + int(rate2)*4 + int(rate3)*3 + int(rate4)*2 + int(rate5)*1 ) / 15 
+    return round(avg)
+
 def convert_to_degree(seconds):
     seconds = seconds % (24 * 3600)
     seconds %= 3600
@@ -677,8 +925,25 @@ def convert_to_degree(seconds):
     microsec = seconds % 1 * 100
     return "%d.%02d.%02d" % (minutes, seconds, microsec)
 
+def convert_to_second(degree):
+    temp = degree.split(".")
+    if len(temp) == 2:
+        print(degree)
+        return float(degree)
+    else:
+        minutes     = 0 if degree.split(".")[0] == '' else degree.split(".")[0] 
+        seconds     = degree.split(".")[1]
+        mseconds    = degree.split(".")[2]
+        return (float(minutes) * 60) + (float(seconds)) + (float(mseconds) / 100)
+
 def convert_date_for_request(datestr):
     day     = datestr.split("/")[0]
     month   = datestr.split("/")[1]
     year    = datestr.split("/")[2]
+    return year+month+day
+
+def convert_race_date(datestr):
+    day     = datestr.split(".")[0]
+    month   = datestr.split(".")[1]
+    year    = datestr.split(".")[2]
     return year+month+day

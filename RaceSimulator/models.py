@@ -43,6 +43,7 @@ class HorseInfo(models.Model):
     trainercode = models.IntegerField();
     handycap    = models.IntegerField();
     kgs         = models.IntegerField();
+    last20      = models.IntegerField();
     jerseyimg   = models.CharField(max_length=200)
     jerseybg    = models.CharField(max_length=200)
     disabled    = models.BooleanField()

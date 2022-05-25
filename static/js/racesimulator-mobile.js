@@ -91,7 +91,7 @@ $(document).ready(function(){
 	
 }); // document ready end
 
-/*
+
 var datatable;
 $(document).ajaxStop(function() {
 	try{
@@ -105,7 +105,7 @@ $(document).ajaxStop(function() {
 		});
 	}catch(exp){	}
 });
-*/
+
 
 $(document).on('click', ".velocities", function() {
 	
@@ -113,10 +113,10 @@ $(document).on('click', ".velocities", function() {
 	var loadingrows 	= $(this).closest("table").find("tbody tr.loadingrow");
 	var calculations	= $(this).closest("table").find("tbody tr.calculations");
 	var finaldegreerows	= $(this).closest("table").find("tbody tr.finaldegree");
+	$(loadingrows).show();
 	
 	// Calculate Year Prizes
 	$(calculations).each(function (){
-		$(loadingrows).show();
 		var prizeElement	= $(this).find("b.yearprize");
 		var horsecode		= $(this).attr('horsecode');
 		
@@ -142,7 +142,6 @@ $(document).on('click', ".velocities", function() {
 	
 	// Calculate Gallop Seconds
 	$(calculations).each(function (){
-		$(loadingrows).show();
 		var gallopElement 	= $(this).find("b.gallop");
 		var horsename 		= $(this).attr('horsename');
 		var kgs 			= $(this).attr('kgs');
@@ -164,14 +163,67 @@ $(document).on('click', ".velocities", function() {
 				}
         	},
 			complete: function(){
-				$(loadingrows).hide();
+				//$(loadingrows).hide();
 				$(calculations).show();
 			}
     	});
 	});
 	
 	
-	// Calculate Final Degree Seconds
+	// Calculate Final Degree Seconds From Regression Analysis
+	$(finaldegreerows).each(function (){
+		var degreeElement 	= $(this).find("b.degreeinfo");
+		var horsecode 		= $(this).attr("horsecode");
+		var courtcode 		= $(this).attr("courtcode");
+		var temperature		= $(this).attr("temperature")
+    	var humidity   		= $(this).attr("humidity")
+    	var grassrate  		= $(this).attr("grassrate")
+    	var dirtstate  		= $(this).attr("dirtstate")
+    	var distance   		= $(this).attr("distance")
+    	var weight     		= $(this).attr("weight")
+    	var handycap   		= $(this).attr("handycap")
+    	var kgs        		= $(this).attr("kgs")
+    	var last20     		= $(this).attr("last20")
+		$.ajax({
+        	type: "GET",
+        	async: true,
+        	url: '/degreepredict/',
+        	traditional : true,
+        	data: {
+            	horsecode 	: horsecode,
+				courtcode 	: courtcode,
+				temperature : temperature,
+				humidity	: humidity,
+				grassrate	: grassrate,
+				dirtstate	: dirtstate,
+				distance  	: distance,
+				weight	  	: weight,
+				handycap	: handycap,
+				kgs			: kgs,
+				last20		: last20
+        	},
+        	success: function(data) {
+				if(data.degree_predict == 0){
+					$(degreeElement).text("");
+				}else{
+					$(degreeElement).text(data.degree_predict);
+					$(loadingrows).hide();
+					$(finaldegreerows).show();
+				}
+				
+        	},
+			complete: function(){
+				//$(loadingrows).hide();
+				//$(finaldegreerows).show();
+			}
+    	});
+
+	});
+	
+	
+	
+	/*
+	// OLD FUNCTION --- Calculate Final Degree Seconds 
 	$(finaldegreerows).each(function (){
 		$(loadingrows).show();
 		var degreeElement 	= $(this).find("b.degreeinfo");
@@ -203,6 +255,7 @@ $(document).on('click', ".velocities", function() {
 			}
     	});
 	});
+	
 	
 	
 	/*

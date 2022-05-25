@@ -84,7 +84,7 @@
        			{% endif %}
        				<sup class="text-info"><b>{{ horse.tool }}</b></sup>
        			{% if horse.stablemate != False %}
-       				<img src="https://medya-cdn.tjk.org/imageftp/Img/e{{ horse.stablemate }}.gif"></span>
+       				<img src="https://medya-cdn.tjk.org/imageftp/Img/e{{ horse.stablemate }}.gif" height="30"></span>
        			{% endif %}
      		</td>
      		
@@ -142,9 +142,9 @@
 			</td>
 		</tr>
 		
-		<tr class="finaldegree" style="display:none;" horsecode="{{ horse.code }}" courtcode="{{ singlerace.courtcode }}" distance="{{ singlerace.distance }}" weight="{{ horse.weight }}">
-			<td colspan="3" style="text-align:center; border:0px; font-size:xxx-large;">
-				<span class="badge badge-pill badge-info"><b class="degreeinfo"></b></span>
+		<tr class="finaldegree" style="display:none;" horsecode="{{ horse.code }}" courtcode="{{ singlerace.courtcode }}" temperature="{{ weather.temperature }}" humidity="{{ weather.humidity }}" grassrate="{{ weather.grassrate }}" dirtstate="{{ weather.sandstatus }}" distance="{{ singlerace.distance }}" weight="{{ horse.weight }}" handycap="{{ horse.handycap }}" kgs="{{ horse.kgs }}" last20="{{ horse.last20 }}">
+			<td colspan="3" style="text-align:center; border:0px; font-size:larger;">
+				<span class="badge badge-pill badge-info" style="font-size: larger;"><b class="degreeinfo"></b></span>
 			</td>
 		</tr>
 		
