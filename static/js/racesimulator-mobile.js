@@ -1,11 +1,5 @@
 $(document).ready(function(){
 	
-	try{
-		var activeitem = $('.collapse.show')[0];	
-		var scrollPos =  $($(activeitem).parent().parent()).offset().top - 10;
-		$('html, body').animate({ scrollTop: scrollPos }, 2000);
-	}catch(exp){}
-
 	
 	$(".racerule").each(function(){
 		var thisspan	= $(this);
@@ -94,6 +88,14 @@ $(document).ready(function(){
 
 var datatable;
 $(document).ajaxStop(function() {
+	
+	try{
+		var activeitem = $('.collapse.show')[0];	
+		var scrollPos =  $($(activeitem).parent().parent()).offset().top - 10;
+		$('html, body').animate({ scrollTop: scrollPos }, 2000);
+	}catch(exp){}
+	
+	/*
 	try{
   		$(datatable).DataTable().destroy();
 		$(datatable).DataTable(tableOptions2);
@@ -104,6 +106,7 @@ $(document).ajaxStop(function() {
 			$(this).prop('disabled', false);
 		});
 	}catch(exp){	}
+	*/
 });
 
 
