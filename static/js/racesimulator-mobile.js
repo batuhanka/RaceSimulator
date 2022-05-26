@@ -88,13 +88,13 @@ $(document).ready(function(){
 let flags = [];
 $(document).ajaxStop(function() {
 	
-	
+	/*
 	try{
 		var activeitem = $('.collapse.show')[0];	
 		var scrollPos =  $($(activeitem).parent().parent()).offset().top - 10;
 		$('html, body').animate({ scrollTop: scrollPos }, 2000);
 	}catch(exp){}
-	
+	*/
 	
 	/*
 	try{
@@ -214,7 +214,7 @@ $(document).on('click', ".velocities", function() {
         	},
 			complete: function() {
 				if(flags.length == 0){ // all calculations are completed
-					sortfordegree(tbody);
+					sortmytable(tbody, "degree");
 					$(orderbtn).show();
 				}
 			},
@@ -225,37 +225,127 @@ $(document).on('click', ".velocities", function() {
 }); // END OF VELOCITIES	
 	
 
+$(document).on('click', ".sortfordegree", function() {
+	var tbody = $(this).closest("table").find("tbody");
+	sortmytable(tbody, "degree");
+});
 
-function sortfordegree(tbody){
+$(document).on('click', ".sortforagf", function() {
+	var tbody = $(this).closest("table").find("tbody");
+	sortmytable(tbody, "agf");
+});
+
+$(document).on('click', ".sortfornumber", function() {
+	var tbody = $(this).closest("table").find("tbody");
+	sortmytable(tbody, "number");
+});
+
+$(document).on('click', ".sortforgallop", function() {
+	var tbody = $(this).closest("table").find("tbody");
+	sortmytable(tbody, "gallop");
+});
+
+$(document).on('click', ".sortforyearprize", function() {
+	var tbody = $(this).closest("table").find("tbody");
+	sortmytable(tbody, "yearprize");
+});
+
+function sortmytable(tbody, sortoption){
 	
-	var allrows 		= $(tbody).find("tr");
-	var sorted 		 	= []
-	var ordered_rows 	= []
+	if(sortoption == "degree"){
 	
-	for(i=4; i<allrows.length; i=i+6){
-		var degree = $(allrows[i]).find("b.degreeinfo").text();
-		sorted.push(degree);
-	}
+		var allrows 		= $(tbody).find("tr");
+		var sorted 		 	= []
+		var ordered_rows 	= []
 	
-	sorted.sort();
-	
-	for(var i=0; i<sorted.length; i++){
-		for(var j=4; j<allrows.length; j=j+6){
-			
-			if(sorted[i] == $(allrows[j]).find("b.degreeinfo").text()){
+		for(i=4; i<allrows.length; i=i+6){
+			var degree = $(allrows[i]).find("b.degreeinfo").text();
+			sorted.push(degree);
+		}
+		
+		sorted.sort();
+		
+		for(var i=0; i<sorted.length; i++){
+			for(var j=4; j<allrows.length; j=j+6){
 				
-				ordered_rows.push($(allrows[j]).prev().prev().prev().prev());
-				ordered_rows.push($(allrows[j]).prev().prev().prev());
-				ordered_rows.push($(allrows[j]).prev().prev());
-				ordered_rows.push($(allrows[j]).prev());
-				ordered_rows.push($(allrows[j]));
-				ordered_rows.push($(allrows[j]).next());
-								
+				if(sorted[i] == $(allrows[j]).find("b.degreeinfo").text()){
+					
+					ordered_rows.push($(allrows[j]).prev().prev().prev().prev());
+					ordered_rows.push($(allrows[j]).prev().prev().prev());
+					ordered_rows.push($(allrows[j]).prev().prev());
+					ordered_rows.push($(allrows[j]).prev());
+					ordered_rows.push($(allrows[j]));
+					ordered_rows.push($(allrows[j]).next());
+									
+				}
 			}
 		}
-	}
-	$(tbody).empty();
-	$(tbody).append(ordered_rows);	
+		$(tbody).empty();
+		$(tbody).append(ordered_rows);	
+	
+	} // end of degree sort
+	
+	if(sortoption == "agf"){
+		
+		var allrows 		= $(tbody).find("tr");
+		var sorted 		 	= []
+		var ordered_rows 	= []
+		
+		for(i=1; i<allrows.length; i=i+6){
+			var spans 	= $($(allrows[i]).find("td")[2]).find("span");
+			var agf1val	= $(spans[1]).text().substring(1);
+			var agf2val	= $(spans[3]).text().substring(1);
+			
+			if(agf1val != "" && agf2val == ""){
+				sorted.push(agf1val);
+			}
+			if(agf1val != "" && agf2val != ""){
+				sorted.push(agf2val);
+			}
+			if(agf1val == "" && agf2val != ""){
+				sorted.push(agf2val);
+			}
+		}
+		
+		sorted.sort(function(a,b) { return b - a;});
+		
+		for(var i=0; i<sorted.length; i++){
+			for(var j=1; j<allrows.length; j=j+6){
+				
+				var spans 	= $($(allrows[j]).find("td")[2]).find("span");
+				var agf1val	= $(spans[1]).text().substring(1);
+				var agf2val	= $(spans[3]).text().substring(1);
+				
+				if(sorted[i] == agf1val || sorted[i] == agf2val){
+					
+					ordered_rows.push($(allrows[j]).prev().prev());
+					ordered_rows.push($(allrows[j]).prev());
+					ordered_rows.push($(allrows[j]));
+					ordered_rows.push($(allrows[j]).next());
+					ordered_rows.push($(allrows[j]).next().next());
+					ordered_rows.push($(allrows[j]).next().next().next());
+									
+				}
+			}
+		}
+		$(tbody).empty();
+		$(tbody).append(ordered_rows);
+		
+		
+	} // end of agf sort
+	
+	if(sortoption == "number"){
+		
+	} // end of number sort
+	
+	if(sortoption == "gallop"){
+		
+	} // end of gallop sort
+	
+	if(sortoption == "yearprize"){
+		
+	} // end of yearprize sort
+	
 	
 }
 

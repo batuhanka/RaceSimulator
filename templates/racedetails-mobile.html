@@ -67,13 +67,15 @@
     			<span class="fa-solid fa-calculator fa-beat-fade"></span><b> Hesapla</b>
     		</button>
     		
-    		<button type="button" class="btn btn-info dropdown-toggle" id="sort-{{ singlerace.key }}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="font-size:larger; display:none;">
+    		<button type="button" class="btn btn-info dropdown-toggle" id="sort-{{ singlerace.key }}" data-toggle="dropdown" aria-haspopup="true" aria-expabnded="false" style="font-size:larger;">
     			<span class="fa-solid fa-sort fa-beat-fade"></span><b> Sırala</b>
     		</button>
     		<div class="dropdown-menu bg-info" aria-labelledby="sort-{{ singlerace.key }}" style="font-size:larger; text-align:center;">
-    			<a class="dropdown-item sortfordegree" 	href="#"><b>Derece</b></a>
-    			<a class="dropdown-item sortforagf" 	href="#"><b>AGF</b></a>
-   	 			<a class="dropdown-item sortfornumber" 	href="#"><b>Numara</b></a>
+    			<button class="dropdown-item text-white sortfordegree" 		type="button"><b>Derece</b></button>
+    			<button class="dropdown-item text-white sortforagf" 		type="button"><b>AGF</b></button>
+    			<button class="dropdown-item text-white sortfornumber" 		type="button"><b>Numara</b></button>
+    			<button class="dropdown-item text-white sortforgallop" 		type="button"><b>Galop</b></button>
+    			<button class="dropdown-item text-white sortforyearprize" 	type="button"><b>Yıllık Kazanç</b></button>
   			</div>
         	</th>
         </tr>
