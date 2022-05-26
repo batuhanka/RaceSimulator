@@ -66,6 +66,15 @@
     		<button type="button" class="btn btn-info velocities" style="font-size:larger;">
     			<span class="fa-solid fa-calculator fa-beat-fade"></span><b> Hesapla</b>
     		</button>
+    		
+    		<button type="button" class="btn btn-info dropdown-toggle" id="sort-{{ singlerace.key }}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="font-size:larger; display:none;">
+    			<span class="fa-solid fa-sort fa-beat-fade"></span><b> Sırala</b>
+    		</button>
+    		<div class="dropdown-menu bg-info" aria-labelledby="sort-{{ singlerace.key }}" style="font-size:larger; text-align:center;">
+    			<a class="dropdown-item sortfordegree" 	href="#"><b>Derece</b></a>
+    			<a class="dropdown-item sortforagf" 	href="#"><b>AGF</b></a>
+   	 			<a class="dropdown-item sortfornumber" 	href="#"><b>Numara</b></a>
+  			</div>
         	</th>
         </tr>
     	</thead>
@@ -156,7 +165,6 @@
 				<div class="spinner-grow text-info"></div>
 			</td>
 		</tr>
-		
 		{% endif %}
       	{% endfor %}
 		</tbody>
