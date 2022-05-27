@@ -113,11 +113,13 @@ $(document).ajaxStop(function() {
 
 $(document).on('click', ".velocities", function() {
 	
+	$(this).prop('disabled',true);
 	var orderbtn		= $(this).next();
 	var tbody 			= $(this).closest("table").find("tbody");
 	var loadingrows 	= $(this).closest("table").find("tbody tr.loadingrow");
 	var calculations	= $(this).closest("table").find("tbody tr.calculations");
 	var finaldegreerows	= $(this).closest("table").find("tbody tr.finaldegree");
+	var orderbuttons	= $(this).closest("table").find("thead div button");
 	$(loadingrows).show();
 	
 	// Calculate Year Prizes
@@ -207,7 +209,11 @@ $(document).on('click', ".velocities", function() {
 				last20		: last20
         	},
         	success: function(data) {
-				$(degreeElement).text(data.degree_predict);
+				if(data.degree_predict == 0){
+					$(degreeElement).text("");
+				}else{
+					$(degreeElement).text(data.degree_predict);
+				}
 				$(degreeElement).parent().parent().parent().next().hide();
 				$(degreeElement).parent().parent().parent().show();
 				flags.pop();
@@ -215,6 +221,10 @@ $(document).on('click', ".velocities", function() {
 			complete: function() {
 				if(flags.length == 0){ // all calculations are completed
 					sortmytable(tbody, "degree");
+					$(orderbuttons[0]).parent().prev().empty();
+					$(orderbuttons[0]).parent().prev().append('<span class="fa-solid fa-sort fa-beat-fade"></span><b> Derece Sırala</b>');
+					$(orderbuttons).each(function(){ $($(this).children()[0]).removeClass("sortDisplay").addClass("sorthide");	});
+					$($(orderbuttons[0]).children()[0]).removeClass("sorthide").addClass("sortDisplay");
 					$(orderbtn).show();
 				}
 			},
@@ -227,26 +237,46 @@ $(document).on('click', ".velocities", function() {
 
 $(document).on('click', ".sortfordegree", function() {
 	var tbody = $(this).closest("table").find("tbody");
+	$($(tbody).prev().find("button")[1]).empty();
+	$($(tbody).prev().find("button")[1]).append('<span class="fa-solid fa-sort fa-beat-fade"></span><b> Derece Sırala</b>');
+	$($(tbody).prev().find("div button")).each(function(){ $($(this).children()[0]).removeClass("sortDisplay").addClass("sorthide");	});
+	$($(this).children()[0]).removeClass("sorthide").addClass("sortDisplay");
 	sortmytable(tbody, "degree");
 });
 
 $(document).on('click', ".sortforagf", function() {
 	var tbody = $(this).closest("table").find("tbody");
+	$($(tbody).prev().find("button")[1]).empty();
+	$($(tbody).prev().find("button")[1]).append('<span class="fa-solid fa-sort fa-beat-fade"></span><b> AGF Sırala</b>');
+	$($(tbody).prev().find("div button")).each(function(){ $($(this).children()[0]).removeClass("sortDisplay").addClass("sorthide");	});
+	$($(this).children()[0]).removeClass("sorthide").addClass("sortDisplay");
 	sortmytable(tbody, "agf");
 });
 
 $(document).on('click', ".sortfornumber", function() {
 	var tbody = $(this).closest("table").find("tbody");
+	$($(tbody).prev().find("button")[1]).empty();
+	$($(tbody).prev().find("button")[1]).append('<span class="fa-solid fa-sort fa-beat-fade"></span><b> Numara Sırala</b>');
+	$($(tbody).prev().find("div button")).each(function(){ $($(this).children()[0]).removeClass("sortDisplay").addClass("sorthide");	});
+	$($(this).children()[0]).removeClass("sorthide").addClass("sortDisplay");
 	sortmytable(tbody, "number");
 });
 
 $(document).on('click', ".sortforgallop", function() {
 	var tbody = $(this).closest("table").find("tbody");
+	$($(tbody).prev().find("button")[1]).empty();
+	$($(tbody).prev().find("button")[1]).append('<span class="fa-solid fa-sort fa-beat-fade"></span><b> Galop Sırala</b>');
+	$($(tbody).prev().find("div button")).each(function(){ $($(this).children()[0]).removeClass("sortDisplay").addClass("sorthide");	});
+	$($(this).children()[0]).removeClass("sorthide").addClass("sortDisplay");
 	sortmytable(tbody, "gallop");
 });
 
 $(document).on('click', ".sortforyearprize", function() {
 	var tbody = $(this).closest("table").find("tbody");
+	$($(tbody).prev().find("button")[1]).empty();
+	$($(tbody).prev().find("button")[1]).append('<span class="fa-solid fa-sort fa-beat-fade"></span><b> YK Sırala</b>');
+	$($(tbody).prev().find("div button")).each(function(){ $($(this).children()[0]).removeClass("sortDisplay").addClass("sorthide");	});
+	$($(this).children()[0]).removeClass("sorthide").addClass("sortDisplay");
 	sortmytable(tbody, "yearprize");
 });
 
@@ -257,13 +287,29 @@ function sortmytable(tbody, sortoption){
 		var allrows 		= $(tbody).find("tr");
 		var sorted 		 	= []
 		var ordered_rows 	= []
+		
 	
 		for(i=4; i<allrows.length; i=i+6){
 			var degree = $(allrows[i]).find("b.degreeinfo").text();
 			sorted.push(degree);
 		}
 		
-		sorted.sort();
+		sorted.sort(function(a,b) { 
+			
+			if (a === b) {
+        		return 0;
+    		}
+
+			// nulls sort after anything else
+    		else if (a === '') {
+        		return 1;
+    		}
+    		else if (b === '') {
+        		return -1;
+    		}
+
+			return a < b ? -1 : 1;
+		});
 		
 		for(var i=0; i<sorted.length; i++){
 			for(var j=4; j<allrows.length; j=j+6){
@@ -280,8 +326,11 @@ function sortmytable(tbody, sortoption){
 				}
 			}
 		}
-		$(tbody).empty();
-		$(tbody).append(ordered_rows);	
+		
+		if(ordered_rows.length > 0){
+			$(tbody).empty();
+			$(tbody).append(ordered_rows);
+		}
 	
 	} // end of degree sort
 	
@@ -307,7 +356,7 @@ function sortmytable(tbody, sortoption){
 			}
 		}
 		
-		sorted.sort(function(a,b) { return b - a;});
+		sorted.sort(function(a,b){ return b - a; });
 		
 		for(var i=0; i<sorted.length; i++){
 			for(var j=1; j<allrows.length; j=j+6){
@@ -318,31 +367,171 @@ function sortmytable(tbody, sortoption){
 				
 				if(sorted[i] == agf1val || sorted[i] == agf2val){
 					
-					ordered_rows.push($(allrows[j]).prev().prev());
 					ordered_rows.push($(allrows[j]).prev());
 					ordered_rows.push($(allrows[j]));
 					ordered_rows.push($(allrows[j]).next());
 					ordered_rows.push($(allrows[j]).next().next());
 					ordered_rows.push($(allrows[j]).next().next().next());
+					ordered_rows.push($(allrows[j]).next().next().next().next());
 									
 				}
 			}
 		}
-		$(tbody).empty();
-		$(tbody).append(ordered_rows);
+		
+		if(ordered_rows.length > 0){
+			$(tbody).empty();
+			$(tbody).append(ordered_rows);
+		}
 		
 		
 	} // end of agf sort
 	
 	if(sortoption == "number"){
 		
+		var allrows 		= $(tbody).find("tr");
+		var sorted 		 	= []
+		var ordered_rows 	= []
+		
+		for(i=0; i<allrows.length; i=i+6){
+			var number 	= $(allrows[i]).find("td button").text();
+			sorted.push(number);
+		}
+		
+		sorted.sort(function(a,b){ return a - b; });
+		
+		for(var i=0; i<sorted.length; i++){
+			for(var j=0; j<allrows.length; j=j+6){
+				
+				var number 	= $(allrows[j]).find("td button").text();
+				if(sorted[i] == number){
+					
+					ordered_rows.push($(allrows[j]));
+					ordered_rows.push($(allrows[j]).next());
+					ordered_rows.push($(allrows[j]).next().next());
+					ordered_rows.push($(allrows[j]).next().next().next());
+					ordered_rows.push($(allrows[j]).next().next().next().next());
+					ordered_rows.push($(allrows[j]).next().next().next().next().next());
+									
+				}
+			}
+		}
+		
+		if(ordered_rows.length > 0){
+			$(tbody).empty();
+			$(tbody).append(ordered_rows);
+		}
+		
+		
 	} // end of number sort
 	
 	if(sortoption == "gallop"){
 		
+		var allrows 		= $(tbody).find("tr");
+		var sorted 		 	= []
+		var ordered_rows 	= []
+		
+	
+		for(i=3; i<allrows.length; i=i+6){
+			var gallop = $(allrows[i]).find("b.gallop").text();
+			sorted.push(gallop);
+		}
+		
+		sorted.sort(function(a,b) { 
+			
+			if (a === b) {
+        		return 0;
+    		}
+
+			// nulls sort after anything else
+    		else if (a === '') {
+        		return 1;
+    		}
+    		else if (b === '') {
+        		return -1;
+    		}
+
+			return a < b ? -1 : 1;
+		});
+		
+		for(var i=0; i<sorted.length; i++){
+			for(var j=3; j<allrows.length; j=j+6){
+				
+				if(sorted[i] == $(allrows[j]).find("b.gallop").text()){
+					
+					
+					ordered_rows.push($(allrows[j]).prev().prev().prev());
+					ordered_rows.push($(allrows[j]).prev().prev());
+					ordered_rows.push($(allrows[j]).prev());
+					ordered_rows.push($(allrows[j]));
+					ordered_rows.push($(allrows[j]).next());
+					ordered_rows.push($(allrows[j]).next().next());
+									
+				}
+			}
+		}
+		
+		if(ordered_rows.length > 0){
+			$(tbody).empty();
+			$(tbody).append(ordered_rows);
+		}
+		
+		
+		
 	} // end of gallop sort
 	
 	if(sortoption == "yearprize"){
+		
+		var allrows 		= $(tbody).find("tr");
+		var sorted 		 	= []
+		var ordered_rows 	= []
+		
+	
+		for(i=3; i<allrows.length; i=i+6){
+			var yearprize = $(allrows[i]).find("b.yearprize").text();
+			yearprize = yearprize.split("  ₺")[0];
+			sorted.push(yearprize);
+		}
+		
+		sorted.sort(function(a,b) { 
+			
+			if (a === b) {
+        		return 0;
+    		}
+
+			// nulls sort after anything else
+    		else if (a === '') {
+        		return 1;
+    		}
+    		else if (b === '') {
+        		return -1;
+    		}
+
+			return b - a;
+			
+		});
+		
+		for(var i=0; i<sorted.length; i++){
+			for(var j=3; j<allrows.length; j=j+6){
+				
+				if(sorted[i]+"  ₺" == $(allrows[j]).find("b.yearprize").text()){
+					
+					
+					ordered_rows.push($(allrows[j]).prev().prev().prev());
+					ordered_rows.push($(allrows[j]).prev().prev());
+					ordered_rows.push($(allrows[j]).prev());
+					ordered_rows.push($(allrows[j]));
+					ordered_rows.push($(allrows[j]).next());
+					ordered_rows.push($(allrows[j]).next().next());
+									
+				}
+			}
+		}
+		
+		if(ordered_rows.length > 0){
+			$(tbody).empty();
+			$(tbody).append(ordered_rows);
+		}
+		
 		
 	} // end of yearprize sort
 	

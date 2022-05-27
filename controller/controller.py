@@ -342,90 +342,92 @@ def get_last_800(horsecode, courtcode):
     
 def get_degree_predict(horsecode, courtcode, curr_temperature, curr_humidity, curr_grassrate, curr_distance, curr_weight, curr_handycap, curr_kgs, curr_last20, curr_dirtstate):
     
-    race_count  = 0
-    increment   = 1
-    
-    #### first increment check for old horses
-    ## for all races 
-    horse_details_url   = 'https://www.tjk.org/TR/YarisSever/Query/ConnectedPage/AtKosuBilgileri?QueryParameter_AtId='+horsecode
-    horsedetails    = requests.get(horse_details_url)
-    source          = BeautifulSoup(horsedetails.content,"lxml")
-    allraces        = source.find("table", {"id": "queryTable"})
-    for item in allraces.find_all("tr"):
-        columns = item.find_all("td")
-        if(len(columns) == 21):
-            pass
-        else:
-            race_count = item.text.strip().split("Toplam ")[1].split(" ")[0]
-        
-    if int(race_count) > 50:
-        increment = int(race_count) / 50
-    else:
-        pass
+    # race_count  = 0
+    # increment   = 1
+    #
+    # #### first increment check for old horses
+    # ## for all races 
+    # horse_details_url   = 'https://www.tjk.org/TR/YarisSever/Query/ConnectedPage/AtKosuBilgileri?QueryParameter_AtId='+horsecode
+    # horsedetails    = requests.get(horse_details_url)
+    # source          = BeautifulSoup(horsedetails.content,"lxml")
+    # allraces        = source.find("table", {"id": "queryTable"})
+    # for item in allraces.find_all("tr"):
+    #     columns = item.find_all("td")
+    #     if(len(columns) == 21):
+    #         pass
+    #     else:
+    #         race_count = item.text.strip().split("Toplam ")[1].split(" ")[0]
+    #
+    # if int(race_count) > 50:
+    #     increment = int(race_count) / 50
+    # else:
+    #     pass
     
     kinetic     = []
     dirtmap     = {'':4, 'Sulu': 1, 'Islak': 2, 'Nemli': 3, 'Normal': 4}
     
-    for index in range(math.ceil(increment)):
+    # for index in range(math.ceil(increment)):
     
-        details_url     = 'https://www.tjk.org/TR/YarisSever/Query/ConnectedPage/AtKosuBilgileri?QueryParameter_AtId='+horsecode+'&PageNumber='+str(index)
-        horsedetails    = requests.get(details_url)
-        source          = BeautifulSoup(horsedetails.content,"lxml")
-        allraces        = source.find("table", {"id": "queryTable"})
-        
-        
-        for item in allraces.find_all("tr"):
-            columns = item.find_all("td")
-            if(len(columns) == 21):
-                if(columns[4].text.strip() != ""):
-                    try:
-                        racedate    = convert_race_date(columns[0].text.strip())
-                        raceyear    = columns[0].text.strip().split(".")[2]
-                        racecity    = find_weather_location(columns[1].text.strip())
-                        url         = 'https://ebayi.tjk.org/s/d/sonuclar/%s/full/%s.json' %(racedate, racecity)
-                        races       = requests.get(url).json()
-                        weather     = races['hava']
-                        temperature = weather['SICAKLIK']
-                        humidity    = weather['NEM']
-                        dirtstate   = dirtmap[weather['KUM_TR']]
-                        grassrate   = 3.3 if weather['CIMPISTAGIRLIGI'] == 0 else weather['CIMPISTAGIRLIGI']
-                        raceno      = columns[12].span.text.strip()
-                        for race in races['kosular']:
-                            if(int(race['NO']) ==  int(raceno)):
-                                distance= race['MESAFE']
-                                for horse in race['atlar']:
-                                    if(horse['KOD'] == horsecode):
-                                        if(int(horse['SONUC']) < 6 and horse['KOSMAZ'] == False):
-                                        #if(horse['KOSMAZ'] == False):
-                                            weight      = float(horse['KILO']) + float(horse['FAZLAKILO']) - float(horse['APRANTIKILOINDIRIMI'])
-                                            # if(horse['GECCIKIS_BOY'] == ''):
-                                            #     latestart = 0
-                                            # else:
-                                            #     latestart   = str(horse['GECCIKIS_BOY']).split()[0]
-                                            degree      = horse['DERECE']
-                                            jockeyrate  = find_jockey_rate(horse['JOKEYKODU'], raceyear)
-                                            handycap    = 0 if horse['HANDIKAP'] == '' else horse['HANDIKAP']
-                                            kgs         = 0 if horse['KGS'] == '' else horse['KGS']
-                                            last20      = horse['SON20']
-                                            
-                                            velocity        = (float(distance) / convert_to_second(degree))
-                                            kinetic_energy  = weight * velocity * velocity / 2
-                                            kinetic.append(kinetic_energy) 
-                                            
-                                            
+    details_url     = 'https://www.tjk.org/TR/YarisSever/Query/ConnectedPage/AtKosuBilgileri?QueryParameter_AtId='+horsecode
+    horsedetails    = requests.get(details_url)
+    source          = BeautifulSoup(horsedetails.content,"lxml")
+    allraces        = source.find("table", {"id": "queryTable"})
+    
+    
+    for item in allraces.find_all("tr"):
+        columns = item.find_all("td")
+        if(len(columns) == 21):
+            if(columns[4].text.strip() != ""):
+                try:
+                    racedate    = convert_race_date(columns[0].text.strip())
+                    raceyear    = columns[0].text.strip().split(".")[2]
+                    racecity    = find_weather_location(columns[1].text.strip())
+                    url         = 'https://ebayi.tjk.org/s/d/sonuclar/%s/full/%s.json' %(racedate, racecity)
+                    races       = requests.get(url).json()
+                    weather     = races['hava']
+                    temperature = weather['SICAKLIK']
+                    humidity    = weather['NEM']
+                    dirtstate   = dirtmap[weather['KUM_TR']]
+                    grassrate   = 3.3 if weather['CIMPISTAGIRLIGI'] == 0 else weather['CIMPISTAGIRLIGI']
+                    raceno      = columns[12].span.text.strip()
+                    for race in races['kosular']:
+                        if(int(race['NO']) ==  int(raceno)):
+                            distance= race['MESAFE']
+                            for horse in race['atlar']:
+                                if(horse['KOD'] == horsecode):
+                                    if(int(horse['SONUC']) < 6 and horse['KOSMAZ'] == False):
+                                    #if(horse['KOSMAZ'] == False):
+                                        weight      = float(horse['KILO']) + float(horse['FAZLAKILO']) - float(horse['APRANTIKILOINDIRIMI'])
+                                        # if(horse['GECCIKIS_BOY'] == ''):
+                                        #     latestart = 0
+                                        # else:
+                                        #     latestart   = str(horse['GECCIKIS_BOY']).split()[0]
+                                        degree      = horse['DERECE']
+                                        jockeyrate  = find_jockey_rate(horse['JOKEYKODU'], raceyear)
+                                        handycap    = 0 if horse['HANDIKAP'] == '' else horse['HANDIKAP']
+                                        kgs         = 0 if horse['KGS'] == '' else horse['KGS']
+                                        last20      = horse['SON20']
                                         
-                    except:
-                        pass
-      
-    total = 0
-    for item in kinetic:
-        total = total + item
+                                        velocity        = (float(distance) / convert_to_second(degree))
+                                        kinetic_energy  = weight * velocity * velocity / 2
+                                        kinetic.append(kinetic_energy) 
+                                        
+                                        
+                                    
+                except:
+                    pass
     
-    avg_kinetic_energy  = total / len(kinetic)
-    velocity_sqrt       = math.sqrt(avg_kinetic_energy * 2 / float(curr_weight))
-    predicted           = convert_to_degree(float(curr_distance) / velocity_sqrt)
-    return predicted
+    if(len(kinetic) > 0): 
+        total = 0
+        for item in kinetic:
+            total = total + item
     
+        avg_kinetic_energy  = total / len(kinetic)
+        velocity_sqrt       = math.sqrt(avg_kinetic_energy * 2 / float(curr_weight))
+        predicted           = convert_to_degree(float(curr_distance) / velocity_sqrt)
+        return predicted
+    else:
+        return 0
               
     
 #### REGRESSION ANALYSIS CALCULATIONS    
