@@ -238,7 +238,7 @@ $(document).on('click', ".velocities", function() {
 $(document).on('click', ".sortfornumber", function() {
 	var tbody = $(this).closest("table").find("tbody");
 	$($(tbody).prev().find("button")[1]).empty();
-	$($(tbody).prev().find("button")[1]).append('<span class="fa-solid fa-sort fa-beat-fade"></span><b> Numara Sırala</b>');
+	$($(tbody).prev().find("button")[1]).append('<span class="fa-solid fa-sort fa-beat-fade"></span><b> Numara</b>');
 	$($(tbody).prev().find("div button")).each(function(){ $($(this).children()[0]).removeClass("sortDisplay").addClass("sorthide");	});
 	$($(this).children()[0]).removeClass("sorthide").addClass("sortDisplay");
 	sortmytable(tbody, "number");
@@ -247,7 +247,7 @@ $(document).on('click', ".sortfornumber", function() {
 $(document).on('click', ".sortforagf", function() {
 	var tbody = $(this).closest("table").find("tbody");
 	$($(tbody).prev().find("button")[1]).empty();
-	$($(tbody).prev().find("button")[1]).append('<span class="fa-solid fa-sort fa-beat-fade"></span><b> AGF Sırala</b>');
+	$($(tbody).prev().find("button")[1]).append('<span class="fa-solid fa-sort fa-beat-fade"></span><b> AGF</b>');
 	$($(tbody).prev().find("div button")).each(function(){ $($(this).children()[0]).removeClass("sortDisplay").addClass("sorthide");	});
 	$($(this).children()[0]).removeClass("sorthide").addClass("sortDisplay");
 	sortmytable(tbody, "agf");
@@ -256,7 +256,7 @@ $(document).on('click', ".sortforagf", function() {
 $(document).on('click', ".sortforhp", function() {
 	var tbody = $(this).closest("table").find("tbody");
 	$($(tbody).prev().find("button")[1]).empty();
-	$($(tbody).prev().find("button")[1]).append('<span class="fa-solid fa-sort fa-beat-fade"></span><b> HP Sırala</b>');
+	$($(tbody).prev().find("button")[1]).append('<span class="fa-solid fa-sort fa-beat-fade"></span><b> HP</b>');
 	$($(tbody).prev().find("div button")).each(function(){ $($(this).children()[0]).removeClass("sortDisplay").addClass("sorthide");	});
 	$($(this).children()[0]).removeClass("sorthide").addClass("sortDisplay");
 	sortmytable(tbody, "hp");
@@ -265,7 +265,7 @@ $(document).on('click', ".sortforhp", function() {
 $(document).on('click', ".sortforkgs", function() {
 	var tbody = $(this).closest("table").find("tbody");
 	$($(tbody).prev().find("button")[1]).empty();
-	$($(tbody).prev().find("button")[1]).append('<span class="fa-solid fa-sort fa-beat-fade"></span><b> KGS Sırala</b>');
+	$($(tbody).prev().find("button")[1]).append('<span class="fa-solid fa-sort fa-beat-fade"></span><b> KGS</b>');
 	$($(tbody).prev().find("div button")).each(function(){ $($(this).children()[0]).removeClass("sortDisplay").addClass("sorthide");	});
 	$($(this).children()[0]).removeClass("sorthide").addClass("sortDisplay");
 	sortmytable(tbody, "kgs");
@@ -275,7 +275,7 @@ $(document).on('click', ".sortforkgs", function() {
 $(document).on('click', ".sortforgallop", function() {
 	var tbody = $(this).closest("table").find("tbody");
 	$($(tbody).prev().find("button")[1]).empty();
-	$($(tbody).prev().find("button")[1]).append('<span class="fa-solid fa-sort fa-beat-fade"></span><b> Galop Sırala</b>');
+	$($(tbody).prev().find("button")[1]).append('<span class="fa-solid fa-sort fa-beat-fade"></span><b> Galop</b>');
 	$($(tbody).prev().find("div button")).each(function(){ $($(this).children()[0]).removeClass("sortDisplay").addClass("sorthide");	});
 	$($(this).children()[0]).removeClass("sorthide").addClass("sortDisplay");
 	sortmytable(tbody, "gallop");
@@ -284,7 +284,7 @@ $(document).on('click', ".sortforgallop", function() {
 $(document).on('click', ".sortforyearprize", function() {
 	var tbody = $(this).closest("table").find("tbody");
 	$($(tbody).prev().find("button")[1]).empty();
-	$($(tbody).prev().find("button")[1]).append('<span class="fa-solid fa-sort fa-beat-fade"></span><b> YK Sırala</b>');
+	$($(tbody).prev().find("button")[1]).append('<span class="fa-solid fa-sort fa-beat-fade"></span><b> Yıllık Kazanç</b>');
 	$($(tbody).prev().find("div button")).each(function(){ $($(this).children()[0]).removeClass("sortDisplay").addClass("sorthide");	});
 	$($(this).children()[0]).removeClass("sorthide").addClass("sortDisplay");
 	sortmytable(tbody, "yearprize");
@@ -293,7 +293,7 @@ $(document).on('click', ".sortforyearprize", function() {
 $(document).on('click', ".sortfordegree", function() {
 	var tbody = $(this).closest("table").find("tbody");
 	$($(tbody).prev().find("button")[1]).empty();
-	$($(tbody).prev().find("button")[1]).append('<span class="fa-solid fa-sort fa-beat-fade"></span><b> Derece Sırala</b>');
+	$($(tbody).prev().find("button")[1]).append('<span class="fa-solid fa-sort fa-beat-fade"></span><b> Derece</b>');
 	$($(tbody).prev().find("div button")).each(function(){ $($(this).children()[0]).removeClass("sortDisplay").addClass("sorthide");	});
 	$($(this).children()[0]).removeClass("sorthide").addClass("sortDisplay");
 	sortmytable(tbody, "degree");
