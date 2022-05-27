@@ -235,13 +235,13 @@ $(document).on('click', ".velocities", function() {
 }); // END OF VELOCITIES	
 	
 
-$(document).on('click', ".sortfordegree", function() {
+$(document).on('click', ".sortfornumber", function() {
 	var tbody = $(this).closest("table").find("tbody");
 	$($(tbody).prev().find("button")[1]).empty();
-	$($(tbody).prev().find("button")[1]).append('<span class="fa-solid fa-sort fa-beat-fade"></span><b> Derece Sırala</b>');
+	$($(tbody).prev().find("button")[1]).append('<span class="fa-solid fa-sort fa-beat-fade"></span><b> Numara Sırala</b>');
 	$($(tbody).prev().find("div button")).each(function(){ $($(this).children()[0]).removeClass("sortDisplay").addClass("sorthide");	});
 	$($(this).children()[0]).removeClass("sorthide").addClass("sortDisplay");
-	sortmytable(tbody, "degree");
+	sortmytable(tbody, "number");
 });
 
 $(document).on('click', ".sortforagf", function() {
@@ -253,14 +253,24 @@ $(document).on('click', ".sortforagf", function() {
 	sortmytable(tbody, "agf");
 });
 
-$(document).on('click', ".sortfornumber", function() {
+$(document).on('click', ".sortforhp", function() {
 	var tbody = $(this).closest("table").find("tbody");
 	$($(tbody).prev().find("button")[1]).empty();
-	$($(tbody).prev().find("button")[1]).append('<span class="fa-solid fa-sort fa-beat-fade"></span><b> Numara Sırala</b>');
+	$($(tbody).prev().find("button")[1]).append('<span class="fa-solid fa-sort fa-beat-fade"></span><b> HP Sırala</b>');
 	$($(tbody).prev().find("div button")).each(function(){ $($(this).children()[0]).removeClass("sortDisplay").addClass("sorthide");	});
 	$($(this).children()[0]).removeClass("sorthide").addClass("sortDisplay");
-	sortmytable(tbody, "number");
+	sortmytable(tbody, "hp");
 });
+
+$(document).on('click', ".sortforkgs", function() {
+	var tbody = $(this).closest("table").find("tbody");
+	$($(tbody).prev().find("button")[1]).empty();
+	$($(tbody).prev().find("button")[1]).append('<span class="fa-solid fa-sort fa-beat-fade"></span><b> KGS Sırala</b>');
+	$($(tbody).prev().find("div button")).each(function(){ $($(this).children()[0]).removeClass("sortDisplay").addClass("sorthide");	});
+	$($(this).children()[0]).removeClass("sorthide").addClass("sortDisplay");
+	sortmytable(tbody, "kgs");
+});
+
 
 $(document).on('click', ".sortforgallop", function() {
 	var tbody = $(this).closest("table").find("tbody");
@@ -278,6 +288,15 @@ $(document).on('click', ".sortforyearprize", function() {
 	$($(tbody).prev().find("div button")).each(function(){ $($(this).children()[0]).removeClass("sortDisplay").addClass("sorthide");	});
 	$($(this).children()[0]).removeClass("sorthide").addClass("sortDisplay");
 	sortmytable(tbody, "yearprize");
+});
+
+$(document).on('click', ".sortfordegree", function() {
+	var tbody = $(this).closest("table").find("tbody");
+	$($(tbody).prev().find("button")[1]).empty();
+	$($(tbody).prev().find("button")[1]).append('<span class="fa-solid fa-sort fa-beat-fade"></span><b> Derece Sırala</b>');
+	$($(tbody).prev().find("div button")).each(function(){ $($(this).children()[0]).removeClass("sortDisplay").addClass("sorthide");	});
+	$($(this).children()[0]).removeClass("sorthide").addClass("sortDisplay");
+	sortmytable(tbody, "degree");
 });
 
 function sortmytable(tbody, sortoption){
@@ -385,6 +404,93 @@ function sortmytable(tbody, sortoption){
 		
 		
 	} // end of agf sort
+	
+	
+	if(sortoption == "hp"){
+		
+		var allrows 		= $(tbody).find("tr");
+		var sorted 		 	= []
+		var ordered_rows 	= []
+		
+		for(i=1; i<allrows.length; i=i+6){
+			var hpspan 	= $($(allrows[i]).find("td")[1]).find("span")[3];
+			var hpval	= $(hpspan).text();
+			sorted.push(hpval);
+		}
+		
+		sorted.sort(function(a,b){ return b - a; });
+		
+		for(var i=0; i<sorted.length; i++){
+			for(var j=1; j<allrows.length; j=j+6){
+				
+				var hpspan 	= $($(allrows[j]).find("td")[1]).find("span")[3];
+				var hpval	= $(hpspan).text();
+				
+				if(sorted[i] == hpval){
+					
+					ordered_rows.push($(allrows[j]).prev());
+					ordered_rows.push($(allrows[j]));
+					ordered_rows.push($(allrows[j]).next());
+					ordered_rows.push($(allrows[j]).next().next());
+					ordered_rows.push($(allrows[j]).next().next().next());
+					ordered_rows.push($(allrows[j]).next().next().next().next());
+									
+				}
+			}
+		}
+		
+		if(ordered_rows.length > 0){
+			$(tbody).empty();
+			$(tbody).append(ordered_rows);
+		}
+		
+		
+	} // end of hp sort
+	
+	
+	
+	if(sortoption == "kgs"){
+		
+		var allrows 		= $(tbody).find("tr");
+		var sorted 		 	= []
+		var ordered_rows 	= []
+		
+		for(i=1; i<allrows.length; i=i+6){
+			var kgsspan = $($(allrows[i]).find("td")[1]).find("span")[5];
+			var kgsval	= $(kgsspan).text();
+			sorted.push(kgsval);
+		}
+		
+		sorted.sort(function(a,b){ return a - b; });
+		
+		for(var i=0; i<sorted.length; i++){
+			for(var j=1; j<allrows.length; j=j+6){
+				
+				var kgsspan = $($(allrows[j]).find("td")[1]).find("span")[5];
+				var kgsval	= $(kgsspan).text();
+				
+				if(sorted[i] == kgsval){
+					
+					ordered_rows.push($(allrows[j]).prev());
+					ordered_rows.push($(allrows[j]));
+					ordered_rows.push($(allrows[j]).next());
+					ordered_rows.push($(allrows[j]).next().next());
+					ordered_rows.push($(allrows[j]).next().next().next());
+					ordered_rows.push($(allrows[j]).next().next().next().next());
+									
+				}
+			}
+		}
+		
+		if(ordered_rows.length > 0){
+			$(tbody).empty();
+			$(tbody).append(ordered_rows);
+		}
+		
+		
+	} // end of kgs sort
+	
+	
 	
 	if(sortoption == "number"){
 		
