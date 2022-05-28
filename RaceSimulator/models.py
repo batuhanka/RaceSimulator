@@ -78,6 +78,7 @@ class SingleRaceInfo(models.Model):
     summary     = models.CharField(max_length=200)
     betinfo     = models.CharField(max_length=200)
     rule        = models.CharField(max_length=200)
+    prize1      = models.CharField(max_length=200)
     
 class AgfInfo(models.Model):
     racenumber  = models.IntegerField();

@@ -113,6 +113,7 @@ $(document).ajaxStop(function() {
 
 $(document).on('click', ".velocities", function() {
 	
+	/*
 	$("#slider1").roundSlider({
     	handleShape: "dot",
     	width: "50",
@@ -218,36 +219,11 @@ $(document).on('click', ".velocities", function() {
 		tooltipFormat: function(args){ return "%"+args.value; }
 	});
 	
-	$("#slider9").roundSlider({
-    	handleShape: "dot",
-    	width: "50",
-    	radius: 100,
-    	value: 60,
-    	mouseScrollAction: true,
-    	step: "5",
-    	sliderType: "min-range",
-    	lineCap: "square",
-		editableTooltip: false,
-		tooltipFormat: function(args){ return "%"+args.value; }
-	});
+	*/
 	
-	$("#slider10").roundSlider({
-    	handleShape: "dot",
-    	width: "50",
-    	radius: 100,
-    	value: 60,
-    	mouseScrollAction: true,
-    	step: "5",
-    	sliderType: "min-range",
-    	lineCap: "square",
-		editableTooltip: false,
-		tooltipFormat: function(args){ return "%"+args.value; }
-	});
+	//$("#calculateModal").modal('show');
 	
 	
-	$("#calculateModal").modal('show');
-	
-	/*
 	$(this).prop('disabled',true);
 	var orderbtn		= $(this).next();
 	var tbody 			= $(this).closest("table").find("tbody");
@@ -366,7 +342,6 @@ $(document).on('click', ".velocities", function() {
     	});
 
 	});
-	*/
 
 }); // END OF VELOCITIES	
 	

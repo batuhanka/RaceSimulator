@@ -43,7 +43,7 @@
         <button class="btn text-white bg-{{ singlerace.courtbg }}" data-toggle="collapse" data-target="#collapse{{ singlerace.key }}" aria-expanded="true" aria-controls="collapse{{ singlerace.key }}">
           <span class="label label-{{ singlerace.courtbg }} left" style="text-decoration: underline;"><b>{{ singlerace.racenumber }}. KOŞU : {{ singlerace.time }} {{ singlerace.summary }} : {{ singlerace.racename }}</b></span> 
         </button>
-        <button style="display:none; margin-right: 1%;" type="button" class="btn btn-info showracelist float-right"><span class="fa-solid fa-list"></span><b> Koşu Bilgileri</b></button>
+        <button type="button" class="btn float-right text-white bg-{{ singlerace.courtbg }}"><b> {{ singlerace.prize1 }} <span class="fa-solid fa-turkish-lira-sign"></span></b></button> 
         <button style="display:none; margin-right: 1%;" type="button" class="btn btn-danger simulation float-right"><span class="fa-solid fa-flag-checkered fa-shake"></span><b> Simulasyon</b></button>
         <button type="button" class="btn btn-{{ singlerace.courtbg }} velocities float-right" style="margin-right: 1%;"><span class="fa-solid fa-calculator fa-beat-fade"></span><b> Hesapla</b></button>
         <span class="label text-{{ singlerace.courtbg }} label-{{ singlerace.courtbg }} float-right courtcode">{{ singlerace.courtcode }}</span>

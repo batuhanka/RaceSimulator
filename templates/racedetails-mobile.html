@@ -44,8 +44,7 @@
           <span class="label label-{{ singlerace.courtbg }} float-left" style="font-size: x-large;"><b>{{ singlerace.summary }}</b></span><br>
           <span class="label label-{{ singlerace.courtbg }} float-left" style="font-size: x-large;"><b>{{ singlerace.racename }}</b></span> 
         </button>
-        <button style="display:none; margin-right: 1%;" type="button" class="btn btn-info showracelist float-right" ><span class="fa-solid fa-list"></span><b> Koşu Bilgileri</b></button>
-        <button style="display:none; margin-right: 1%;" type="button" class="btn btn-danger simulation float-right"><span class="fa-solid fa-flag-checkered fa-shake"></span><b> Simulasyon</b></button>
+        <button style="font-size: x-large;" type="button" class="btn float-right text-white bg-{{ singlerace.courtbg }}"><b> {{ singlerace.prize1 }} <span class="fa-solid fa-turkish-lira-sign"></span></b></button> 
        <span class="label text-{{ singlerace.courtbg }} label-{{ singlerace.courtbg }} float-right courtcode">{{ singlerace.courtcode }}</span>
         <div><span raceid="{{ singlerace.key }}" racedate="{{ singlerace.date }}" cityinfo="{{ weather.cityinfo }}" citycode="{{ weather.citycode }}"  class="label text-white label-{{ singlerace.courtbg }} racerule"></span></div>
         
@@ -249,21 +248,21 @@
 
 	   <!-- Modal -->
 <div class="modal fade" id="calculateModal" tabindex="-1" role="dialog" aria-labelledby="calculateModalTitle" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered" style="max-width: 95%;" role="document">
-    <div class="modal-content">
+  <div class="modal-dialog modal-dialog-centered" style="max-width: 95%; height:100%" role="document">
+    <div class="modal-content" style="height:90%">
       <div class="modal-header text-center bg-info" style="border-bottom-left-radius:40px; border-bottom-right-radius: 40px;">
         <h1 class="modal-title text-center text-white" style="font-weight:bold;" id="calculateModalTitle">Etki Katsayısı Belirleme</h1>
         <button type="button" class="close" style="font-size:xxx-large;" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <div id="calculatemodalbody" class="modal-body">
+      <div id="calculatemodalbody" class="modal-body" style="height:100%; overflow:auto">
         
         <div class="row">
         	<div class="col-6">
         	<div class="card mb-3" style="max-width: 540px;">
   				<div class="row no-gutters">
-    			<div class="col-md-4" style="padding-top:7%; padding-left:3%;">
+    			<div class="col-md-4" style="padding-top:3%; padding-left:3%;">
       				<div id="slider1"></div>
     			</div>
     			
@@ -286,7 +285,7 @@
     			
     			<div class="col-md-8" style="padding-left:15%; text-align:center;">
       				<div class="card-body">
-        			<h1 class="card-title">Pist</h1>
+        			<h1 class="card-title">Mesafe</h1>
         			<p class="card-text" style="font-size:larger;">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
       			</div>
     			</div>
@@ -306,7 +305,7 @@
     			
     			<div class="col-md-8" style="padding-left:15%; text-align:center;">
       				<div class="card-body">
-        			<h1 class="card-title">Jokey</h1>
+        			<h1 class="card-title">Kilo</h1>
         			<p class="card-text" style="font-size:larger;">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
       			</div>
     			</div>
@@ -323,7 +322,7 @@
     			
     			<div class="col-md-8" style="padding-left:15%; text-align:center;">
       				<div class="card-body">
-        			<h1 class="card-title">KGS</h1>
+        			<h1 class="card-title">Jokey</h1>
         			<p class="card-text" style="font-size:larger;">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
       			</div>
     			</div>
@@ -343,7 +342,7 @@
     			
     			<div class="col-md-8" style="padding-left:15%; text-align:center;">
       				<div class="card-body">
-        			<h1 class="card-title">Jokey</h1>
+        			<h1 class="card-title">Handikap</h1>
         			<p class="card-text" style="font-size:larger;">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
       			</div>
     			</div>
@@ -380,7 +379,7 @@
     			
     			<div class="col-md-8" style="padding-left:15%; text-align:center;">
       				<div class="card-body">
-        			<h1 class="card-title">Jokey</h1>
+        			<h1 class="card-title">Kazanç</h1>
         			<p class="card-text" style="font-size:larger;">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
       			</div>
     			</div>
@@ -397,7 +396,7 @@
     			
     			<div class="col-md-8" style="padding-left:15%; text-align:center;">
       				<div class="card-body">
-        			<h1 class="card-title">KGS</h1>
+        			<h1 class="card-title">Pist</h1>
         			<p class="card-text" style="font-size:larger;">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
       			</div>
     			</div>
@@ -407,42 +406,6 @@
 			
   		</div>
   		
-  		<div class="row">
-        	<div class="col-6">
-        	<div class="card mb-3" style="max-width: 540px;">
-  				<div class="row no-gutters">
-    			<div class="col-md-4" style="padding-top:7%; padding-left:3%;">
-      				<div id="slider9"></div>
-    			</div>
-    			
-    			<div class="col-md-8" style="padding-left:15%; text-align:center;">
-      				<div class="card-body">
-        			<h1 class="card-title">Jokey</h1>
-        			<p class="card-text" style="font-size:larger;">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-      			</div>
-    			</div>
-    			</div>
-			</div>
-    		</div>
-        
-            <div class="col-6">
-        	<div class="card mb-3" style="max-width: 540px;">
-  				<div class="row no-gutters">
-    			<div class="col-md-4" style="padding-top:7%; padding-left:3%;">
-      				<div id="slider10"></div>
-    			</div>
-    			
-    			<div class="col-md-8" style="padding-left:15%; text-align:center;">
-      				<div class="card-body">
-        			<h1 class="card-title">KGS</h1>
-        			<p class="card-text" style="font-size:larger;">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-      			</div>
-    			</div>
-    			</div>
-			</div>
-    		</div>
-			
-  		</div>
 
       </div>
       <div class="modal-footer">

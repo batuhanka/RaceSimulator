@@ -76,6 +76,7 @@ def get_all_races(racedeatils):
         item.info       = one['CINSDETAY_TR']
         item.summary    = one['BILGI_TR']
         item.betinfo    = one['BAHISLER_TR']
+        item.prize1     = one['ikramiyeler'][0]
         result.append(item)
 
     return result
