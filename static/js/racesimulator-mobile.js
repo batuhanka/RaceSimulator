@@ -262,17 +262,6 @@ $(document).on('click', ".velocities", function() {
 				var detailrow	= $(prizeElement).closest("tr").next();
 				compare_racerule(data.yearprize, horsehp, ruletext, racetype, raceprizes, detailrow);
 					
-					/*
-					if(condition){
-						var temp = $($(prizeElement).closest("table").parent().parent().prev().find("span.racerule").text()).split(" TL")[0];
-						var last = temp.split(" ");
-						var rule = last[last.length - 1];
-					}else{
-						var temp = $($(prizeElement).closest("table").parent().parent().prev().find("span.racerule").text()).split("Puanları ")[1];
-						var rule = temp.split(" arası")[0];
-					}
-					compare_racerule(data.yearprize, horsehp, rule);
-					*/
 				}
     	});
 	});
@@ -467,7 +456,6 @@ $(document).on('click', ".sortfordegree", function() {
 });
 
 function sortmytable(tbody, sortoption){
-	
 	if(sortoption == "degree"){
 	
 		var allrows 		= $(tbody).find("tr");
@@ -528,18 +516,27 @@ function sortmytable(tbody, sortoption){
 		
 		for(i=1; i<allrows.length; i=i+6){
 			var spans 	= $($(allrows[i]).find("td")[2]).find("span");
-			var agf1val	= $(spans[1]).text().substring(1);
-			var agf2val	= $(spans[3]).text().substring(1);
+			if(spans.length == 3){  // there is only one agf value
+				if($(spans[0]).text().includes("AGF1")){
+					var agf1val = $(spans[1]).text().substring(1).trim();
+					sorted.push(agf1val);
+				}
+				if($(spans[1]).text().includes("AGF2")){
+					var agf2val = $(spans[2]).text().substring(1).trim();
+					sorted.push(agf2val);
+				}
+			}
 			
-			if(agf1val != "" && agf2val == ""){
-				sorted.push(agf1val);
+			if(spans.length == 4){  // there are two agf values
+				if($(spans[0]).text().includes("AGF1")){
+					var agf1val = $(spans[1]).text().substring(1).trim();
+				}
+				if($(spans[2]).text().includes("AGF2")){
+					var agf2val = $(spans[3]).text().substring(1).trim();
+					sorted.push(agf2val);
+				}
 			}
-			if(agf1val != "" && agf2val != ""){
-				sorted.push(agf2val);
-			}
-			if(agf1val == "" && agf2val != ""){
-				sorted.push(agf2val);
-			}
+			
 		}
 		
 		sorted.sort(function(a,b){ return b - a; });
@@ -547,9 +544,26 @@ function sortmytable(tbody, sortoption){
 		for(var i=0; i<sorted.length; i++){
 			for(var j=1; j<allrows.length; j=j+6){
 				
-				var spans 	= $($(allrows[j]).find("td")[2]).find("span");
-				var agf1val	= $(spans[1]).text().substring(1);
-				var agf2val	= $(spans[3]).text().substring(1);
+				var spans = $($(allrows[j]).find("td")[2]).find("span");
+				
+				if(spans.length == 3){  // there is only one agf value
+					if($(spans[0]).text().includes("AGF1")){
+						var agf1val = $(spans[1]).text().substring(1).trim();
+					}
+					if($(spans[1]).text().includes("AGF2")){
+						var agf2val = $(spans[2]).text().substring(1).trim();
+					}
+				}
+			
+				if(spans.length == 4){  // there are two agf values
+					if($(spans[0]).text().includes("AGF1")){
+						var agf1val = $(spans[1]).text().substring(1).trim();
+					}
+					if($(spans[2]).text().includes("AGF2")){
+						var agf2val = $(spans[3]).text().substring(1).trim();
+					}
+				}
+				
 				
 				if(sorted[i] == agf1val || sorted[i] == agf2val){
 					
