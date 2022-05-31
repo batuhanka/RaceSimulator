@@ -114,7 +114,7 @@ $(document).ajaxStop(function() {
 
 $(document).on('click', ".velocities", function() {
 	
-	/*
+	
 	$("#slider1").roundSlider({
     	handleShape: "dot",
     	width: "50",
@@ -220,9 +220,9 @@ $(document).on('click', ".velocities", function() {
 		tooltipFormat: function(args){ return "%"+args.value; }
 	});
 	
-	*/
 	
-	//$("#calculateModal").modal('show');
+	
+	$("#calculateModal").modal('show');
 	
 	
 	$(this).prop('disabled',true);
@@ -365,11 +365,9 @@ function compare_racerule(yearprize, horsehp, racerule, racetype, raceprizes, de
 	
 	var temp 		= racerule.split(" ");
 	var prize1 		= parseFloat($($(raceprizes).children()[0]).text().trim().replace(".",""));
-	//var prize2 		= parseFloat($($(raceprizes).children()[1]).text().trim().replace(".",""));
-	//var prize3 		= parseFloat($($(raceprizes).children()[2]).text().trim().replace(".",""));
-	//var prize4 		= parseFloat($($(raceprizes).children()[3]).text().trim().replace(".",""));
-	//var prize5 		= parseFloat($($(raceprizes).children()[4]).text().trim().replace(".",""));
-	var yearprize	= parseFloat(yearprize.replace(".",""));
+	if(yearprize != ""){
+		var yearprize	= parseFloat(yearprize.replace(".",""));
+	}
 	
 	if(racetype.includes("ŞARTLI")){
 		var prizemax 	= parseFloat(temp[4].replace(".",""));
