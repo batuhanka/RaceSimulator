@@ -68,12 +68,15 @@
     	<thead class=thead-light>
     	<tr>
     		<th colspan="3" style="text-align:center;">  
+    		<button type="button" class="btn btn-info settings" style="font-size:xx-large;">
+    			<span class="fa-solid fa-gear"></span><b></b>
+    		</button>
     		<button type="button" class="btn btn-info velocities" style="font-size:xx-large;">
     			<span class="fa-solid fa-calculator fa-beat-fade"></span><b> Hesapla</b>
     		</button>
     		
     		<button type="button" class="btn btn-info dropdown-toggle" id="sort-{{ singlerace.key }}" data-toggle="dropdown" aria-haspopup="true" aria-expabnded="false" style="font-size:xx-large;">
-    			<span class="fa-solid fa-sort fa-beat-fade"></span><b> Sırala</b>
+    			<span class="fa-solid fa-sort"></span><b> Sırala</b>
     		</button>
     		<div class="dropdown-menu bg-info" aria-labelledby="sort-{{ singlerace.key }}" style="font-size:xx-large; text-align:left;">
     			<button class="dropdown-item text-white sortfornumber" 		type="button"><span class="fa fa-check sorthide"></span> <b>Numara</b></button>
@@ -257,7 +260,7 @@
     <div class="modal-content">
       <div class="modal-header text-center bg-info" style="border-bottom-left-radius:40px; border-bottom-right-radius: 40px;">
         <h1 class="modal-title text-center text-white" style="font-weight:bold;" id="calculateModalTitle">Etki Katsayısı Belirleme</h1>
-        <button type="button" class="close" style="font-size:xxx-large;" data-dismiss="modal" aria-label="Close">
+        <button type="button" class="btn btn-lg close" style="font-size:xxx-large;" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
@@ -271,10 +274,10 @@
       				<div id="slider1"></div>
     			</div>
     			
-    			<div class="col-md-8" style="padding-left:15%; text-align:center;">
+    			<div class="col-md-8" style="padding-left:15%;">
       				<div class="card-body">
         			<h1 class="card-title">Derece</h1>
-        			<p class="card-text" style="font-size:larger;">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+        			<p class="card-text" style="font-size:larger;">.</p>
       			</div>
     			</div>
     			</div>
@@ -288,7 +291,7 @@
       				<div id="slider2"></div>
     			</div>
     			
-    			<div class="col-md-8" style="padding-left:15%; text-align:center;">
+    			<div class="col-md-8" style="padding-left:15%;">
       				<div class="card-body">
         			<h1 class="card-title">Mesafe</h1>
         			<p class="card-text" style="font-size:larger;">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
@@ -308,7 +311,7 @@
       				<div id="slider3"></div>
     			</div>
     			
-    			<div class="col-md-8" style="padding-left:15%; text-align:center;">
+    			<div class="col-md-8" style="padding-left:15%;">
       				<div class="card-body">
         			<h1 class="card-title">Kilo</h1>
         			<p class="card-text" style="font-size:larger;">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
@@ -325,7 +328,7 @@
       				<div id="slider4"></div>
     			</div>
     			
-    			<div class="col-md-8" style="padding-left:15%; text-align:center;">
+    			<div class="col-md-8" style="padding-left:15%;">
       				<div class="card-body">
         			<h1 class="card-title">Jokey</h1>
         			<p class="card-text" style="font-size:larger;">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
@@ -345,7 +348,7 @@
       				<div id="slider5"></div>
     			</div>
     			
-    			<div class="col-md-8" style="padding-left:15%; text-align:center;">
+    			<div class="col-md-8" style="padding-left:15%;">
       				<div class="card-body">
         			<h1 class="card-title">Handikap</h1>
         			<p class="card-text" style="font-size:larger;">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
@@ -362,7 +365,7 @@
       				<div id="slider6"></div>
     			</div>
     			
-    			<div class="col-md-8" style="padding-left:15%; text-align:center;">
+    			<div class="col-md-8" style="padding-left:15%;">
       				<div class="card-body">
         			<h1 class="card-title">KGS</h1>
         			<p class="card-text" style="font-size:larger;">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
@@ -382,7 +385,7 @@
       				<div id="slider7"></div>
     			</div>
     			
-    			<div class="col-md-8" style="padding-left:15%; text-align:center;">
+    			<div class="col-md-8" style="padding-left:15%;">
       				<div class="card-body">
         			<h1 class="card-title">Kazanç</h1>
         			<p class="card-text" style="font-size:larger;">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
@@ -399,7 +402,7 @@
       				<div id="slider8"></div>
     			</div>
     			
-    			<div class="col-md-8" style="padding-left:15%; text-align:center;">
+    			<div class="col-md-8" style="padding-left:15%;">
       				<div class="card-body">
         			<h1 class="card-title">Pist</h1>
         			<p class="card-text" style="font-size:larger;">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
@@ -414,8 +417,8 @@
 
       </div>
       <div class="modal-footer justify-content-between">
-        	<button id="calculatesclose" type="button" class="btn btn-info" style="font-size:xx-large;" data-dismiss="modal">Sisteme Güven</button>
-        	<button id="customcalculate" type="button" class="btn btn-info" style="font-size:xx-large;" data-dismiss="modal">Hesapla</button>
+        	<button id="closecalculate" 	type="button" class="btn btn-info" style="font-size:xx-large;" data-dismiss="modal"><b>Sisteme Güven</b></button>
+        	<button id="customcalculate" 	type="button" class="btn btn-info" style="font-size:xx-large;"><b>Hesapla</b></button>
       </div>
     </div>
   </div>

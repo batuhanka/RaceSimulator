@@ -111,17 +111,37 @@ $(document).ajaxStop(function() {
 	*/
 });
 
+$(document).on('click', "#customcalculate", function() {
+	var value1 = $("#slider1").roundSlider("getValue");
+	var value2 = $("#slider2").roundSlider("getValue");
+	var value3 = $("#slider3").roundSlider("getValue");
+	var value4 = $("#slider4").roundSlider("getValue");
+	var value5 = $("#slider5").roundSlider("getValue");
+	var value6 = $("#slider6").roundSlider("getValue");
+	var value7 = $("#slider7").roundSlider("getValue");
+	var value8 = $("#slider8").roundSlider("getValue");
+	
+	console.log(value1, value2, value3, value4 , value5 , value6 , value7 , value8)
+	
+	var total  = value1 + value2 + value3 + value4 + value5 + value6 + value7 + value8;
+	if(total != 100){
+		console.log("tüm etki değerlerinin toplamı 100 olmalıdır.")
+	}
+	
+});
 
-$(document).on('click', ".velocities", function() {
+$(document).on('click', "#closecalculate", function() {
 	
-	
-	$("#slider1").roundSlider({
+});
+
+$(document).on('click', ".settings", function() {
+$("#slider1").roundSlider({
     	handleShape: "dot",
     	width: "50",
     	radius: 100,
-    	value: 60,
+    	value: 12.5,
     	mouseScrollAction: true,
-    	step: "5",
+    	step: "0.5",
     	sliderType: "min-range",
     	lineCap: "square",
 		editableTooltip: false,
@@ -132,9 +152,9 @@ $(document).on('click', ".velocities", function() {
     	handleShape: "dot",
     	width: "50",
     	radius: 100,
-    	value: 60,
+    	value: 12.5,
     	mouseScrollAction: true,
-    	step: "5",
+    	step: "0.5",
     	sliderType: "min-range",
     	lineCap: "square",
 		editableTooltip: false,
@@ -145,9 +165,9 @@ $(document).on('click', ".velocities", function() {
     	handleShape: "dot",
     	width: "50",
     	radius: 100,
-    	value: 60,
+    	value: 12.5,
     	mouseScrollAction: true,
-    	step: "5",
+    	step: "0.5",
     	sliderType: "min-range",
     	lineCap: "square",
 		editableTooltip: false,
@@ -158,9 +178,9 @@ $(document).on('click', ".velocities", function() {
     	handleShape: "dot",
     	width: "50",
     	radius: 100,
-    	value: 60,
+    	value: 12.5,
     	mouseScrollAction: true,
-    	step: "5",
+    	step: "0.5",
     	sliderType: "min-range",
     	lineCap: "square",
 		editableTooltip: false,
@@ -171,9 +191,9 @@ $(document).on('click', ".velocities", function() {
     	handleShape: "dot",
     	width: "50",
     	radius: 100,
-    	value: 60,
+    	value: 12.5,
     	mouseScrollAction: true,
-    	step: "5",
+    	step: "0.5",
     	sliderType: "min-range",
     	lineCap: "square",
 		editableTooltip: false,
@@ -185,9 +205,9 @@ $(document).on('click', ".velocities", function() {
     	handleShape: "dot",
     	width: "50",
     	radius: 100,
-    	value: 60,
+    	value: 12.5,
     	mouseScrollAction: true,
-    	step: "5",
+    	step: "0.5",
     	sliderType: "min-range",
     	lineCap: "square",
 		editableTooltip: false,
@@ -198,9 +218,9 @@ $(document).on('click', ".velocities", function() {
     	handleShape: "dot",
     	width: "50",
     	radius: 100,
-    	value: 60,
+    	value: 12.5,
     	mouseScrollAction: true,
-    	step: "5",
+    	step: "0.5",
     	sliderType: "min-range",
     	lineCap: "square",
 		editableTooltip: false,
@@ -211,19 +231,21 @@ $(document).on('click', ".velocities", function() {
     	handleShape: "dot",
     	width: "50",
     	radius: 100,
-    	value: 60,
+    	value: 12.5,
     	mouseScrollAction: true,
-    	step: "5",
+    	step: "0.5",
     	sliderType: "min-range",
     	lineCap: "square",
 		editableTooltip: false,
 		tooltipFormat: function(args){ return "%"+args.value; }
 	});
 	
-	
-	
 	$("#calculateModal").modal('show');
-	
+
+});
+
+
+$(document).on('click', ".velocities", function() {
 	
 	$(this).prop('disabled',true);
 	var orderbtn		= $(this).next();

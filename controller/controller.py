@@ -387,7 +387,7 @@ def get_degree_predict(horsecode, courtcode, curr_temperature, curr_humidity, cu
                             pist    = race['PIST']
                             for horse in race['atlar']:
                                 if(horse['KOD'] == horsecode):
-                                    if(int(horse['SONUC']) < 6 and horse['KOSMAZ'] == False and pist == "cim"):
+                                    if(int(horse['SONUC']) < 6 and horse['KOSMAZ'] == False and pist == courtcode):
                                         startno         = horse['START']
                                         weight          = float(horse['KILO']) + float(horse['FAZLAKILO']) - float(horse['APRANTIKILOINDIRIMI'])
                                         degree          = horse['DERECE']
@@ -411,40 +411,6 @@ def get_degree_predict(horsecode, courtcode, curr_temperature, curr_humidity, cu
                     pass
                 
     if(len(kinetic) > 0):
-    
-        # racedata = {    'Temperature'   : temperatures,
-        #                 'Humidity'      : humidities,
-        #                 'GrassRate'     : grassrates,
-        #                 'DirtStatus'    : dirtstatus,
-        #                 'Distance'      : distances,
-        #                 'Weight'        : weights,
-        #                 'KGS'           : kgscounts,
-        #                 'JockeyRate'    : jockeyrates,
-        #                 'StartNo'       : starts,
-        #                 'Energy'        : kinetic,
-        # }
-        #
-        # df = pd.DataFrame(racedata)
-        # features    = df.iloc[:,:-1]
-        # result      = df.iloc[:,-1]
-        # reg         = LinearRegression()
-        # model       = reg.fit(features, result)
-        #
-        # # Generate a prediction
-        # example = pd.DataFrame([{
-        #     'Temperature'   : int(curr_temperature),
-        #     'Humidity'      : int(curr_humidity),
-        #     'GrassRate'     : float(curr_grassrate),
-        #     'DirtStatus'    : dirtmap[curr_dirtstate],
-        #     'Distance'      : int(curr_distance),
-        #     'Weight'        : float(curr_weight),
-        #     'KGS'           : int(curr_kgs),
-        #     'JockeyRate'    : find_jockey_rate(curr_jockeycode, raceyear),
-        #     'StartNo'       : int(curr_startno),
-        # }])
-        # prediction      = model.predict(example)
-        # velocity_sqrt   = math.sqrt(float(prediction) * 2 / float(curr_weight))
-        # return convert_to_degree(float(curr_distance) / float(velocity_sqrt))
     
         total = 0
         for item in kinetic:
