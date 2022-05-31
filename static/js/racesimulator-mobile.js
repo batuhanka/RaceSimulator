@@ -85,7 +85,8 @@ $(document).ready(function(){
 	
 }); // document ready end
 
-let flags = [];
+let flags 		= [];
+let detailflags = [];
 $(document).ajaxStop(function() {
 	
 	/*
@@ -253,7 +254,26 @@ $(document).on('click', ".velocities", function() {
 					$(prizeElement).text(data.yearprize+"  ₺");
 					$(prizeElement).addClass("text-info");
 				}
-        	}
+				
+				var horsehp		= $($(prizeElement).closest("tr").prev().prev().find("span")[3]).text();
+				var ruletext	= $(prizeElement).closest("table").parent().parent().prev().find("span.racerule").text();
+				var racetype	= $($(prizeElement).closest("table").parent().parent().prev().find("button").children()[2]).text().split(",")[0];
+				var raceprizes	= $($(prizeElement).closest("table").parent().parent().prev().children())[1];
+				var detailrow	= $(prizeElement).closest("tr").next();
+				compare_racerule(data.yearprize, horsehp, ruletext, racetype, raceprizes, detailrow);
+					
+					/*
+					if(condition){
+						var temp = $($(prizeElement).closest("table").parent().parent().prev().find("span.racerule").text()).split(" TL")[0];
+						var last = temp.split(" ");
+						var rule = last[last.length - 1];
+					}else{
+						var temp = $($(prizeElement).closest("table").parent().parent().prev().find("span.racerule").text()).split("Puanları ")[1];
+						var rule = temp.split(" arası")[0];
+					}
+					compare_racerule(data.yearprize, horsehp, rule);
+					*/
+				}
     	});
 	});
 	
@@ -292,15 +312,18 @@ $(document).on('click', ".velocities", function() {
 		var degreeElement 	= $(this).find("b.degreeinfo");
 		var horsecode 		= $(this).attr("horsecode");
 		var courtcode 		= $(this).attr("courtcode");
-		var temperature		= $(this).attr("temperature")
-    	var humidity   		= $(this).attr("humidity")
-    	var grassrate  		= $(this).attr("grassrate")
-    	var dirtstate  		= $(this).attr("dirtstate")
-    	var distance   		= $(this).attr("distance")
-    	var weight     		= $(this).attr("weight")
-    	var handycap   		= $(this).attr("handycap")
-    	var kgs        		= $(this).attr("kgs")
-    	var last20     		= $(this).attr("last20")
+		var temperature		= $(this).attr("temperature");
+    	var humidity   		= $(this).attr("humidity");
+    	var grassrate  		= $(this).attr("grassrate");
+    	var dirtstate  		= $(this).attr("dirtstate");
+    	var distance   		= $(this).attr("distance");
+    	var weight     		= $(this).attr("weight");
+    	var handycap   		= $(this).attr("handycap");
+    	var kgs        		= $(this).attr("kgs");
+    	var last20     		= $(this).attr("last20");
+		var jockeycode 		= $(this).attr("jockeycode");
+		var startno 		= $(this).attr("startno");
+	
 		$.ajax({
         	type: "GET",
         	async: true,
@@ -317,7 +340,9 @@ $(document).on('click', ".velocities", function() {
 				weight	  	: weight,
 				handycap	: handycap,
 				kgs			: kgs,
-				last20		: last20
+				last20		: last20,
+				jockeycode	: jockeycode,
+				startno		: startno,
         	},
         	success: function(data) {
 				if(data.degree_predict == 0){
@@ -341,10 +366,41 @@ $(document).on('click', ".velocities", function() {
 			},
     	});
 
-	});
+	}); // END OF FINAL DEGREE CALCULATIONS
+	
 
 }); // END OF VELOCITIES	
 	
+
+function compare_racerule(yearprize, horsehp, racerule, racetype, raceprizes, detailrow){
+	
+	var temp 		= racerule.split(" ");
+	var prize1 		= parseFloat($($(raceprizes).children()[0]).text().trim().replace(".",""));
+	//var prize2 		= parseFloat($($(raceprizes).children()[1]).text().trim().replace(".",""));
+	//var prize3 		= parseFloat($($(raceprizes).children()[2]).text().trim().replace(".",""));
+	//var prize4 		= parseFloat($($(raceprizes).children()[3]).text().trim().replace(".",""));
+	//var prize5 		= parseFloat($($(raceprizes).children()[4]).text().trim().replace(".",""));
+	var yearprize	= parseFloat(yearprize.replace(".",""));
+	
+	if(racetype.includes("ŞARTLI")){
+		var prizemax 	= parseFloat(temp[4].replace(".",""));
+		if( (yearprize + prize1) > prizemax ){
+			$($(detailrow).children()[0]).prepend('<span class="badge badge-pill badge-warning"" style="float:left; font-size:larger;"><b>Kazanırsa tekrar bu grupta koşamaz.</b></span>');
+		}
+	}
+	
+	if(racetype.includes("Handikap")){
+		var racehp = parseInt(temp[3]);
+		var horsehp= parseInt(horsehp);
+		if( (horsehp + 3) > racehp ){
+			$($(detailrow).children()[0]).append('<span class="badge badge-pill badge-warning"" style="float:left; font-size:larger;"><b>Kazanırsa tekrar bu grupta koşamaz.</b></span>');
+		}
+		
+	}
+
+
+}
+
 
 $(document).on('click', ".sortfornumber", function() {
 	var tbody = $(this).closest("table").find("tbody");
