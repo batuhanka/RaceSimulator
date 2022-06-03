@@ -244,6 +244,38 @@ $("#slider1").roundSlider({
 
 });
 
+$(document).on('click', ".rivalanalysis", function() {
+	
+	var infoElement = $(this);
+	$(infoElement).html('<i class="fa-solid fa-cog fa-spin"></i> <i class="fa-solid fa-cog fa-spin"></i> <i class="fa-solid fa-cog fa-spin"></i>');
+	var parentrow 	= $(this).parent().parent();
+	var horsecode 	= $(parentrow).attr('horsecode');
+	var racecode 	= $(parentrow).attr('racecode');
+	var cityname 	= $(parentrow).attr('cityname');
+	var dateinfo 	= $(parentrow).attr('dateinfo');
+	
+	$.ajax({
+        	type: "GET",
+        	async: true,
+        	url: '/rivalstats/',
+        	traditional : true,
+        	data: {
+            	horsecode 	: horsecode,
+				racecode 	: racecode,
+				cityname	: cityname,
+				dateinfo	: dateinfo,
+        	},
+        	success: function(data) {
+				$(infoElement).empty();
+				for (var i=0; i<data.rival_stats.length; i++){
+					$(infoElement).append('<span class="badge" style="float:left;">'+data.rival_stats[i]+'</span><br>');
+				}
+			}
+			
+    	});
+	
+});
+
 
 $(document).on('click', ".velocities", function() {
 	
@@ -253,8 +285,10 @@ $(document).on('click', ".velocities", function() {
 	var loadingrows 	= $(this).closest("table").find("tbody tr.loadingrow");
 	var calculations	= $(this).closest("table").find("tbody tr.calculations");
 	var finaldegreerows	= $(this).closest("table").find("tbody tr.finaldegree");
+	var rivalspans		= $(this).closest("table").find("tbody tr.finaldegree span.rivalanalysis")
 	var orderbuttons	= $(this).closest("table").find("thead div button");
 	$(loadingrows).show();
+	
 	
 	// Calculate Year Prizes
 	$(calculations).each(function (){
@@ -316,13 +350,15 @@ $(document).on('click', ".velocities", function() {
 		});
 	});
 	
-	
 	// Calculate Final Degree Seconds From Regression Analysis
 	$(finaldegreerows).each(function (){
 		flags.push($(this));
 		var degreeElement 	= $(this).find("b.degreeinfo");
 		var horsecode 		= $(this).attr("horsecode");
 		var courtcode 		= $(this).attr("courtcode");
+		var racecode 		= $(this).attr("racecode");
+		var cityname 		= $(this).attr("cityname");
+		var dateinfo 		= $(this).attr("dateinfo");
 		var temperature		= $(this).attr("temperature");
     	var humidity   		= $(this).attr("humidity");
     	var grassrate  		= $(this).attr("grassrate");
@@ -343,6 +379,9 @@ $(document).on('click', ".velocities", function() {
         	data: {
             	horsecode 	: horsecode,
 				courtcode 	: courtcode,
+				racecode	: racecode,
+				cityname	: cityname,
+				dateinfo	: dateinfo,
 				temperature : temperature,
 				humidity	: humidity,
 				grassrate	: grassrate,
@@ -362,10 +401,14 @@ $(document).on('click', ".velocities", function() {
 					$(degreeElement).text(data.degree_predict);
 				}
 				$(degreeElement).parent().parent().parent().next().hide();
-				$(degreeElement).parent().parent().parent().show();
+				$(degreeElement).parent().parent().show();
 				flags.pop();
         	},
+			error: function(){
+				console.log("error")
+			},
 			complete: function() {
+				
 				if(flags.length == 0){ // all calculations are completed
 					sortmytable(tbody, "degree");
 					$(orderbuttons[0]).parent().prev().empty();
@@ -374,11 +417,51 @@ $(document).on('click', ".velocities", function() {
 					$($(orderbuttons[0]).children()[0]).removeClass("sorthide").addClass("sortDisplay");
 					$(orderbtn).show();
 				}
+				
 			},
     	});
 
 	}); // END OF FINAL DEGREE CALCULATIONS
 	
+	
+	/*
+	// Calculate Rival Information
+	$(rivalbuttons).each(function (){
+	
+		
+		var rivalinfoElement = $(this);
+		$(this).empty();
+		$(this).prop('disabled', true);
+		$(this).append('<i class="fa-solid fa-cog fa-spin"></i>');
+		var parentrow 	= $(this).parent().parent();
+		var horsecode 	= $(parentrow).attr('horsecode');
+		var racecode 	= $(parentrow).attr('racecode');
+		var cityname 	= $(parentrow).attr('cityname');
+		var dateinfo 	= $(parentrow).attr('dateinfo');
+		
+		$.ajax({
+	        	type: "GET",
+	        	async: true,
+	        	url: '/rivalstats/',
+	        	traditional : true,
+	        	data: {
+	            	horsecode 	: horsecode,
+					racecode 	: racecode,
+					cityname	: cityname,
+					dateinfo	: dateinfo,
+	        	},
+	        	success: function(data) {
+		
+					for (var i=0; i<data.rival_stats.length; i++){
+						$(rivalinfoElement).parent().append('<br><span class="badge" style="float:left; font-size: x-large;">'+data.rival_stats[i]+'</span>');
+					}
+					$(rivalinfoElement).remove();
+				}
+				
+	    	});		
+	
+	}); // END OF RIVAL INFO
+	*/
 
 }); // END OF VELOCITIES	
 	
@@ -394,7 +477,7 @@ function compare_racerule(yearprize, horsehp, racerule, racetype, raceprizes, de
 	if(racetype.includes("ŞARTLI")){
 		var prizemax 	= parseFloat(temp[4].replace(".",""));
 		if( (yearprize + prize1) > prizemax ){
-			$($(detailrow).children()[0]).prepend('<span class="badge badge-pill badge-warning"" style="float:left; font-size:larger;"><b>Kazanırsa tekrar bu grupta koşamaz.</b></span>');
+			$($(detailrow).children()[0]).prepend('<span class="badge" style="float:left; font-size:x-large;">Kazanırsa tekrar <span class="badge badge-pill badge-warning">'+racetype+'</span> koşamaz.</span>');
 		}
 	}
 	
@@ -402,11 +485,10 @@ function compare_racerule(yearprize, horsehp, racerule, racetype, raceprizes, de
 		var racehp = parseInt(temp[3]);
 		var horsehp= parseInt(horsehp);
 		if( (horsehp + 3) > racehp ){
-			$($(detailrow).children()[0]).append('<span class="badge badge-pill badge-warning"" style="float:left; font-size:larger;"><b>Kazanırsa tekrar bu grupta koşamaz.</b></span>');
+			$($(detailrow).children()[0]).prepend('<span class="badge" style="float:left; font-size:larger;">Kazanırsa tekrar <span class="badge badge-pill badge-warning">'+racetype+'</span> koşamaz.</span>');
 		}
 		
 	}
-
 
 }
 

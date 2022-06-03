@@ -11,8 +11,6 @@ from datetime import datetime
 import statistics
 from PIL import Image
 from _io import BytesIO
-import pandas as pd
-from sklearn.linear_model import LinearRegression
 
 citycodemap = {1:'Adana', 2:'İzmir', 3:'İstanbul', 4:'Bursa', 5:'Ankara', 6:'Şanlıurfa', 7:'Elazığ', 8:'Diyarbakır', 9:'Kocaeli', 10:'Antalya'}
 
@@ -649,6 +647,98 @@ def get_rival_info(horsecode, racecode, cityname, dateinfo):
     return occur   
 
 
+def get_rival_stats(horsecode, racecode, cityname, dateinfo):
+    
+    url     = '''https://ebayi.tjk.org/s/d/program/%s/full/%s.json''' %(dateinfo, cityname)
+    program = requests.get(url).json()
+    rivals  = []
+
+    for race in program['kosular']:
+        if race['KOD'] == racecode:
+            for horse in race['atlar']:
+                if horse['KOD'] != horsecode:
+                    rivals.append(horse['KOD'])
+    
+    occur = {}
+    for item in rivals:
+        occur[item]         = ''
+        occur[item+'-win']  = 0
+        occur[item+'-loss'] = 0
+
+    details_url         = 'https://www.tjk.org/TR/YarisSever/Query/ConnectedPage/AtKosuBilgileri?&QueryParameter_AtId='+horsecode
+    horsedetails        = requests.get(details_url)
+    source              = BeautifulSoup(horsedetails.content,"lxml")
+    allraces            = source.find("table", {"id": "queryTable"})
+    
+    
+    for item in allraces.find_all("tr"):
+        columns = item.find_all("td")
+        if(len(columns) == 21):
+            race_url    = 'https://www.tjk.org' + columns[0].a['href']
+            race_url    = race_url.replace('Page','Sehir')
+            race_id     = race_url.split("#")[1]
+            race_url    = race_url.split("#")[0]
+            cityname    = columns[1].text.strip();
+            race_url    = race_url+'&SehirId='+str(get_city_code(cityname))+'&SehirAdi='+cityname
+            racediv     = 'kosubilgisi-'+race_id
+    
+            races       = requests.get(race_url)
+            source2     = BeautifulSoup(races.content,"lxml")
+            tbody       = source2.find("div", {"id": race_id}).find("div", {"id" : racediv}).find("tbody")
+    
+            rows        = tbody.find_all("tr")
+            source      = columns[4].text.strip()
+            target      = 0
+            for row in rows:
+                columns     = row.find_all("td")
+                strlink     = columns[2].a['href']
+                start       = strlink.split("AtId=")[1]
+                rivalid     = start.split("&Era")[0]
+                rivalname   = columns[2].a.text.strip().split("(")[0]
+                target      = columns[1].text.strip()
+    
+                if rivalid in rivals:
+                    occur[rivalid] = rivalname
+                    if(source < target):
+                        if(occur[rivalid+'-loss'] != 0):
+                            occur[rivalid+'-loss'] = int(occur[rivalid+'-loss']) + 1
+                        else:
+                            occur[rivalid+'-loss'] = 1
+                            
+                    if(source > target):
+                        if(occur[rivalid+'-win'] != 0):
+                            occur[rivalid+'-win'] = int(occur[rivalid+'-win']) + 1
+                        else:
+                            occur[rivalid+'-win'] = 1
+      
+    remove_list     = []
+    display_list    = []
+    for key, value in occur.items():
+        if value == '' or value == 0:
+            remove_list.append(key)
+    
+    for removal in remove_list:
+        occur.pop(removal)
+    
+    for key in occur.keys():
+        if "-" not in key:
+            display_list.append(key)
+    
+    resultmsg = []
+    for item in display_list:
+        message = ""
+        if (item+'-win' not in occur.keys()) and (item+'-loss' in occur.keys()):
+            message = occur[item]+': <span class="badge badge-pill badge-success" style="font-size:larger">'+str(occur[item+'-loss'])+'</span> kez geçmiştir.'
+        
+        if (item+'-win' in occur.keys()) and (item+'-loss' not in occur.keys()):
+            message = occur[item]+': <span class="badge badge-pill badge-danger" style="font-size:larger">'+str(occur[item+'-win'])+'</span> kez geçilmiştir.'
+            
+        if (item+'-win' in occur.keys()) and (item+'-loss' in occur.keys()):
+            message = occur[item]+': <span class="badge badge-pill badge-success" style="font-size:larger">'+str(occur[item+'-loss'])+'</span> kez geçmiş, <span class="badge badge-pill badge-danger" style="font-size:larger">'+str(occur[item+'-win'])+'</span> kez geçilmiştir.'
+         
+        resultmsg.append(message) 
+    
+    return resultmsg
 
 
 def get_horse_power(horsecode):
