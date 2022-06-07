@@ -247,6 +247,7 @@ $("#slider1").roundSlider({
 $(document).on('click', ".rivalanalysis", function() {
 	
 	var infoElement = $(this);
+	$(infoElement).prop('disabled',true);
 	$(infoElement).html('<i class="fa-solid fa-cog fa-spin"></i> <i class="fa-solid fa-cog fa-spin"></i> <i class="fa-solid fa-cog fa-spin"></i>');
 	var parentrow 	= $(this).parent().parent();
 	var horsecode 	= $(parentrow).attr('horsecode');
