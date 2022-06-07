@@ -468,14 +468,13 @@ $(document).on('click', ".velocities", function() {
 
 function compare_racerule(yearprize, horsehp, racerule, racetype, raceprizes, detailrow){
 	
-	var temp 		= racerule.split(" ");
+	var prizemax    = parseFloat(racerule.split("kazançları ")[1].split(" TL`yi aşmayan")[0].replace(".",""));
 	var prize1 		= parseFloat($($(raceprizes).children()[0]).text().trim().replace(".",""));
 	if(yearprize != ""){
 		var yearprize	= parseFloat(yearprize.replace(".",""));
 	}
 	
-	if(racetype.includes("ŞARTLI")){
-		var prizemax 	= parseFloat(temp[4].replace(".",""));
+	if(racetype.includes("ŞARTLI") || racetype.includes("KV")){
 		if( (yearprize + prize1) > prizemax ){
 			$($(detailrow).children()[0]).prepend('<span class="badge" style="float:left; font-size:x-large;">Kazanırsa tekrar <span class="badge badge-pill badge-warning">'+racetype+'</span> koşamaz.</span>');
 		}
