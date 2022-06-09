@@ -90,10 +90,7 @@ def fixture(request):
 def degreepredict(request):
     horsecode       = request.GET.get("horsecode")
     courtcode       = request.GET.get("courtcode")
-    racecode        = request.GET.get("racecode")
     horsename       = request.GET.get("horsename")
-    cityname        = request.GET.get("cityname")
-    dateinfo        = request.GET.get("dateinfo")
     curr_temperature= request.GET.get("temperature")
     curr_humidity   = request.GET.get("humidity")
     curr_grassrate  = request.GET.get("grassrate")
@@ -107,10 +104,8 @@ def degreepredict(request):
     curr_startno    = request.GET.get("startno")
     last_gallop     = CONT.get_gallop_info(horsename, curr_kgs)
     degree_predict  = CONT.get_degree_predict(horsecode, courtcode, curr_temperature, curr_humidity, curr_grassrate, curr_distance, curr_weight, curr_handycap, curr_kgs, curr_last20, curr_dirtstate, curr_jockeycode, curr_startno, last_gallop)
-    #rival_stats     = CONT.get_rival_stats(horsecode, racecode, cityname, dateinfo)
     context = {
         'degree_predict': degree_predict,
-    #    'rival_stats'   : rival_stats,
     }
     data = json.dumps(context, indent=4, sort_keys=True, default=str)
     return HttpResponse(data, "application/json")
