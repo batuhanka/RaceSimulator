@@ -343,7 +343,7 @@ def get_last_800(horsecode, courtcode):
     
     return result
     
-def get_degree_predict(horsecode, courtcode, curr_temperature, curr_humidity, curr_grassrate, curr_distance, curr_weight, curr_handycap, curr_kgs, curr_last20, curr_dirtstate, curr_jockeycode, curr_startno):
+def get_degree_predict(horsecode, courtcode, curr_temperature, curr_humidity, curr_grassrate, curr_distance, curr_weight, curr_handycap, curr_kgs, curr_last20, curr_dirtstate, curr_jockeycode, curr_startno, last_gallop):
     
     temperatures= []
     humidities  = []
@@ -417,7 +417,11 @@ def get_degree_predict(horsecode, courtcode, curr_temperature, curr_humidity, cu
         avg_kinetic_energy  = total / len(kinetic)
         velocity_sqrt       = math.sqrt(float(avg_kinetic_energy) * 2 / float(curr_weight))
         predicted           = convert_to_degree(float(curr_distance) / float(velocity_sqrt))
-        return predicted
+        if float(last_gallop) > 0 and float(convert_to_second(predicted)) > 0:
+            temp1   = 400 / float(last_gallop)
+            temp2   = float(curr_distance) / convert_to_second(predicted)
+            result  = float(curr_distance) / ((temp1 + temp2) / 2)
+            return convert_to_degree(result)
     else:
         return 0
 

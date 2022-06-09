@@ -249,6 +249,7 @@ $(document).on('click', ".rivalanalysis", function() {
 	var infoElement = $(this);
 	$(infoElement).prop('disabled',true);
 	$(infoElement).html('<i class="fa-solid fa-cog fa-spin"></i> <i class="fa-solid fa-cog fa-spin"></i> <i class="fa-solid fa-cog fa-spin"></i>');
+	$(infoElement).addClass("disabled");
 	var parentrow 	= $(this).parent().parent();
 	var horsecode 	= $(parentrow).attr('horsecode');
 	var racecode 	= $(parentrow).attr('racecode');
@@ -356,6 +357,7 @@ $(document).on('click', ".velocities", function() {
 		flags.push($(this));
 		var degreeElement 	= $(this).find("b.degreeinfo");
 		var horsecode 		= $(this).attr("horsecode");
+		var horsename 		= $(this).attr("horsename");
 		var courtcode 		= $(this).attr("courtcode");
 		var racecode 		= $(this).attr("racecode");
 		var cityname 		= $(this).attr("cityname");
@@ -371,7 +373,7 @@ $(document).on('click', ".velocities", function() {
     	var last20     		= $(this).attr("last20");
 		var jockeycode 		= $(this).attr("jockeycode");
 		var startno 		= $(this).attr("startno");
-	
+		
 		$.ajax({
         	type: "GET",
         	async: true,
@@ -379,6 +381,7 @@ $(document).on('click', ".velocities", function() {
         	traditional : true,
         	data: {
             	horsecode 	: horsecode,
+				horsename	: horsename,
 				courtcode 	: courtcode,
 				racecode	: racecode,
 				cityname	: cityname,
@@ -469,6 +472,7 @@ $(document).on('click', ".velocities", function() {
 
 function compare_racerule(yearprize, horsehp, racerule, racetype, raceprizes, detailrow){
 	
+	try{
 	var prizemax    = parseFloat(racerule.split("kazançları ")[1].split(" TL`yi aşmayan")[0].replace(".",""));
 	var prize1 		= parseFloat($($(raceprizes).children()[0]).text().trim().replace(".",""));
 	if(yearprize != ""){
@@ -489,6 +493,7 @@ function compare_racerule(yearprize, horsehp, racerule, racetype, raceprizes, de
 		}
 		
 	}
+	}catch{ }
 
 }
 
