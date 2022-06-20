@@ -14,7 +14,6 @@
 	<link href="{% static 'css/racedetails.css'%}"     		type="text/css"     rel="stylesheet">
 
     <script src="{% static 'js/jquery-3.5.1.min.js' %}" 	type="text/javascript" charset="utf-8"></script>
-    <script src="{% static 'js/popper.js' %}" 				type="text/javascript" charset="utf-8"></script>
     <script src="{% static 'js/bootstrap.min.js' %}" 		type="text/javascript" charset="utf-8"></script>
     <script src="{% static 'js/bootstrap-toggle.min.js' %}" type="text/javascript" charset="utf-8"></script>
     <script src="{% static 'js/datatables.min.js' %}" 		type="text/javascript" charset="utf-8"></script>
@@ -25,7 +24,6 @@
 
 </head>
 
-<!-- <body style="background:linear-gradient(to left, #870000, #bbb500);"> -->
 <body style="background-image:url('/static/img/nal.jpg'); opacity:0.95;">
 
 	<div class="container" style="max-width: 95%;">
@@ -33,7 +31,6 @@
 	<br>
 	<br>
 
-	
     <div class="page-header" style="text-align: center;">
         <h1><span class="badge badge-pill badge-light">{{ weather.location }}</span></h1>
     </div>
@@ -182,9 +179,11 @@
 		
 		<tr class="loadingrow" style="display:none;">
 			<td colspan="3" style="text-align:center; border:0px;">
-				<div class="spinner-grow text-info"></div>
-				<div class="spinner-grow text-info"></div>
-				<div class="spinner-grow text-info"></div>
+				<span class="text-info">
+					<i class="fa-solid fa-cog fa-spin"></i>
+					<i class="fa-solid fa-cog fa-spin"></i>
+					<i class="fa-solid fa-cog fa-spin"></i>
+				</span>
 			</td>
 		</tr>
 		{% endif %}
@@ -200,7 +199,7 @@
       </div>
     </div>
   	</div>
-	</div> <!--  end of accordion -->
+	</div>  <!-- end of accordion -->
 	{% endfor %}
 
 

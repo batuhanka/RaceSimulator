@@ -2,33 +2,96 @@
 <html lang="en" class="no-js">
 {% load static %}
 	<head>
-		<meta charset="UTF-8" />
-		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<title>Race Simulator</title>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>Yarış Simulasyonu</title>
 		<link  	href="{% static 'img/favicon.png' %}" 			type="image/png" 	rel="icon"/>
-		<link href="{% static 'css/normalize.css' %}" 			type="text/css" 	rel="stylesheet"/>
- 		<link href="{% static 'css/demo.css' %}" 				type="text/css" 	rel="stylesheet"/> 
-		<link href="{% static 'css/component.css' %}" 			type="text/css" 	rel="stylesheet"/>
+
 		<link href="{% static 'css/jquery-ui.min.css' %}" 		type="text/css" 	rel="stylesheet"/>
 		<link href="{% static 'css/fontawesome-all.min.css' %}"	type="text/css" 	rel="stylesheet"/>
-		<link href="{% static 'css/bootstrap.min.css' %}" 		type="text/css" 	rel="stylesheet">
+		<link href="{% static 'css/bootstrap.min.css' %}" 		type="text/css" 	rel="stylesheet"/>
+		<link href="{% static 'css/customindex.css' %}" 		type="text/css" 	rel="stylesheet"/>
 		
-
 		<script src="{% static 'js/jquery-3.5.1.min.js' %}" 	type="text/javascript" charset="utf-8"></script>
 		<script src="{% static 'js/jquery-ui.min.js' %}" 		type="text/javascript" charset="utf-8"></script>
     	<script src="{% static 'js/bootstrap.min.js' %}" 		type="text/javascript" charset="utf-8"></script>
-		<script src="{% static 'js/modernizr.custom.js' %}"		type="text/javascript" charset="utf-8"></script>
-		<script src="{% static 'js/moment.js' %}" 				type="text/javascript" charset="utf-8"></script>
-		<script src="{% static 'js/datetimepicker.min.js' %}" 	type="text/javascript" charset="utf-8"></script>
-		<script src="{% static 'js/indexpage.js' %}"			type="text/javascript" charset="utf-8"></script>
-		<script src="{% static 'js/fontawesome-all.min.js' %}"	type="text/javascript" charset="utf-8"></script>
-		
+    	<script src="{% static 'js/fontawesome-all.min.js' %}"	type="text/javascript" charset="utf-8"></script>
+    	<script src="{% static 'js/indexpage.js' %}"			type="text/javascript" charset="utf-8"></script>
+
 
 	</head>
-	<body style="background: linear-gradient(to left, #870000, #bbb500);">
-		<div class="container" >
-			<!-- Top Navigation -->
+	<body style="background-image:url('/static/img/nal.jpg');">
+	
+		<div class="container h-100">
+		<div class="d-flex justify-content-center h-100">
+			<div class="user_card">
+				<div class="d-flex justify-content-center">
+					<div class="brand_logo_container">
+						<img src="{% static 'img/favicon.png' %}" class="brand_logo" alt="Logo">
+					</div>
+				</div>
+				<div id="loginform" class="d-flex justify-content-center form_container">
+					<form>
+						<div class="input-group mb-3">
+							<div class="input-group-append">
+								<span class="input-group-text"><i class="fas fa-user"></i></span>
+							</div>
+							<input type="text" name="" class="form-control input_user" value="" placeholder="kullanıcı adı">
+						</div>
+						<div class="input-group mb-2">
+							<div class="input-group-append">
+								<span class="input-group-text"><i class="fas fa-key"></i></span>
+							</div>
+							<input type="password" name="" class="form-control input_pass" value="" placeholder="şifre">
+						</div>
+						<div class="form-group">
+							<div class="custom-control custom-checkbox">
+								<input type="checkbox" class="custom-control-input" id="customControlInline">
+								<label class="custom-control-label" for="customControlInline">Beni Hatırla</label>
+								<a class="float-right text-info" href="#"><b>Şifremi Unuttum<b></a>
+							</div>
+						</div>
+						<div class="d-flex justify-content-center mt-3 login_container">
+				 			<button type="button" name="button" class="btn btn-info"><b>GİRİŞ<b></button>
+				   		</div>
+				   
+				   		<hr style="border-top: 3px dashed #999;">
+				   
+				   		<div class="input-group mb-3">
+				   			<div class="input-group-append">
+								<span class="input-group-text"><i id="prevdate" class="fa-solid fa-angle-left" style="cursor:pointer"></i></span>
+							</div>
+				 			<input id="programdate" type='text' class="form-control" style="font-weight:bolder; background:transparent; text-align:center;" data-provide="datepicker">
+				 			<div class="input-group-append">
+								<span class="input-group-text"><i id="nextdate" class="fa-solid fa-angle-right" style="cursor:pointer"></i></span>
+							</div>
+				   		</div>
+				   		
+				   		<div id="loadraces" class="justify-content-center input-group mb-3" style="display:none;">
+				   			<span class="text-info">
+				   				<i class="fa-solid fa-cog fa-spin"></i> <i class="fa-solid fa-cog fa-spin"></i> <i class="fa-solid fa-cog fa-spin"></i>
+				   			</span>
+				   		</div>
+				   		
+				   		<div id="races" class="d-flex justify-content-center input-group mb-3">
+				   			
+				 			{% for race in races %}
+							<button type="button" class="btn btn-outline-info racefixture" style="margin:3%" id="{{ race.raceid }}" sehir="{{ race.key }}"><b>{{ race.key }}</b></button>
+							{% endfor %}
+				   		</div>
+				   
+					</form>
+				</div>
+				
+			</div>
+		</div>
+	</div>
+			
+	
+	
+	
+		<!-- <div class="container" >
+			Top Navigation
 			<header>
 				<h1 style="color:black">Race Simulator</h1>
 			</header>
@@ -63,7 +126,7 @@
 
 			<div id="slider"></div>
 			
-			<!--
+			
 			<section class="color-3" style="height:50%; border-radius: 50px; margin: 1%">
 				<nav class="cl-effect-21" id="cl-effect-21">
 					
@@ -76,8 +139,8 @@
 
 				</nav>
 			</section>
-			--> 
+			 
 			
-		</div><!-- /container -->
+		</div>/container -->
 	</body>
 </html>
