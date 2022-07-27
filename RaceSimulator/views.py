@@ -56,7 +56,7 @@ def fixture(request):
     weather_info        = CONT.get_weather_info(weatherdetails)
     all_races           = CONT.get_all_races(racedetails)
     all_horses          = CONT.get_all_horses(racedetails)
-    
+    all_rules           = CONT.get_all_rules()
     try:
         resultsurl          = '''https://ebayi.tjk.org/s/d/sonuclar/%s/full/%s.json''' %(date_for_request, cityname)
         results             = requests.get(resultsurl).json()
@@ -83,7 +83,7 @@ def fixture(request):
     
     
     if mobile == "true":
-        return render(request, "racedetails-mobile.html", {'currenttime': currenttime, 'nextracetime': nextracetime, 'weather': weather_info, 'cityname': cityname, 'racedetails' : all_races, 'allhorses' : all_horses })
+        return render(request, "racedetails-mobile.html", {'currenttime': currenttime, 'nextracetime': nextracetime, 'weather': weather_info, 'cityname': cityname, 'racedetails' : all_races, 'allhorses' : all_horses, 'allrules': json.dumps(all_rules) })
     else:
         return render(request, "racedetails.html", {'currenttime': currenttime, 'nextracetime': nextracetime, 'weather': weather_info, 'cityname': cityname, 'racedetails' : all_races, 'allhorses' : all_horses })
 
