@@ -532,7 +532,7 @@ function compare_racerule(yearprize, horsehp, racerule, racetype, prize1, detail
 		msg = find_other_race(yearprize, prize1, rulemap, horsetype)
 		var racehp = rulemap[racetext]
 		
-		if( (parseInt(horsehp) + 5) >= racehp ){
+		if( (parseInt(horsehp) + 3) >= racehp ){
 			msg += '<br> ve <span class="badge badge-pill badge-warning">'+racetype+'</span>'
 		}
 		
