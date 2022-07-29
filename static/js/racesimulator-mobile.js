@@ -539,7 +539,6 @@ function compare_racerule(yearprize, horsehp, racerule, racetype, prize1, detail
 		if(msg != ""){
 			$($(detailrow).children()[0]).prepend('<span class="badge" style="float:left; font-size:large; display:contents;">Kazanırsa <br>'+msg+' koşamaz.</span><br>');
 		}
-		
 	}
 	
 	
@@ -548,7 +547,7 @@ function compare_racerule(yearprize, horsehp, racerule, racetype, prize1, detail
 		var prizemax = rulemap[racetext+horsetype+citytype]
 		console.log("RACE PRIZE : "+prizemax)
 		if( (yearprize + prize1) > prizemax ){
-			$($(detailrow).children()[0]).prepend('<span class="badge" style="float:left; font-size:x-large;">Kazanırsa <span class="badge badge-pill badge-warning">'+racetype+'</span> koşamaz.</span>');
+			$($(detailrow).children()[0]).prepend('<div class="col-sm">Kazanırsa <span class="badge badge-pill badge-warning">'+racetype+'</span> koşamaz.</div>');
 		}
 	}
 	
