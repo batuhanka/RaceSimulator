@@ -412,9 +412,7 @@ $(document).on('click', ".velocities", function() {
 				$(degreeElement).parent().parent().show();
 				flags.pop();
         	},
-			error: function(){
-				console.log("error")
-			},
+			error: function(){	},
 			complete: function() {
 				
 				if(flags.length == 0){ // all calculations are completed
@@ -438,7 +436,10 @@ function calculate_race_type(text){
 	
 	if(text.includes("ŞARTLI")){
 		var level = text.split(" ")[1];
-		return "S"+level+"-"
+		if(level.includes("/")){
+			level = level.split("/")[0];
+		}
+		return "S"+level;
 	}
 	if(text.includes("KV")){
 		var level = text.split("-")[1];
@@ -483,30 +484,26 @@ function calculate_horse_type(text){
 }
 
 
-function find_other_race(yearprize, prize1, rulemap, horsetype){
+function find_other_race(yearprize, prize1, rulemap, horsetype, citytype){
 	
-	var msg = "";
+	var msg 		= "";
 	var targetprize = yearprize + prize1;
+	var targetkey	= "";
 	
 	for (const [index, [key, value]] of Object.entries(Object.entries(rulemap))){
-		if( (key.includes("S") || key.includes("KV")) && (targetprize < value) && key.includes(horsetype)){
-			
-			if( (horsetype == "-A-" && targetprize > 66500) || (horsetype == "-B-" && targetprize > 71000)){
-			
-				var violateKey	= Object.keys(rulemap)[index - 1];
-				var racetype 	= violateKey.split("-")[0];
-				var raceregion	= violateKey.split("-")[2];
-				
-				racetype 		= racetype.replace("S","ŞARTLI ");
-				raceregion		= raceregion.replace("BATI","İzmir,Adana,Antalya,Kocaeli ve Bursa")
-				raceregion		= raceregion.replace("ANKIST","Ankara ve İstanbul")
-				raceregion		= raceregion.replace("DOGU","Diyarbakır,Urfa ve Elazığ")
-				
-				msg = raceregion+"'da <span class='badge badge-pill badge-warning'>"+racetype+"</span>";
-				break;
-			
-			}
+		if( key.includes(citytype) && key.includes(horsetype) && (targetprize > value)){
+				targetkey = key;
 		}
+	}
+	
+	if(targetkey != ""){
+		var racetype 	= targetkey.split("-")[0];
+		var raceregion	= targetkey.split("-")[2];
+		racetype 		= racetype.replace("S","ŞARTLI ");
+		raceregion		= raceregion.replace("BATI","İzmir,Adana,Antalya,Kocaeli ve Bursa");
+		raceregion		= raceregion.replace("ANKIST","Ankara ve İstanbul");
+		raceregion		= raceregion.replace("DOGU","Diyarbakır,Urfa ve Elazığ");
+		msg = raceregion+"'da <span class='badge badge-pill badge-warning'>"+racetype+"</span>";
 	}
 	
 	return msg;
@@ -529,7 +526,7 @@ function compare_racerule(yearprize, horsehp, racerule, racetype, prize1, detail
 	
 	if(racetype.includes("Handikap")){
 		
-		msg = find_other_race(yearprize, prize1, rulemap, horsetype)
+		msg = find_other_race(yearprize, prize1, rulemap, horsetype, citytype)
 		var racehp = rulemap[racetext]
 		
 		if( (parseInt(horsehp) + 3) >= racehp ){
@@ -544,13 +541,11 @@ function compare_racerule(yearprize, horsehp, racerule, racetype, prize1, detail
 	
 	if(racetype.includes("ŞARTLI") || racetype.includes("KV")){
 		
-		var prizemax = rulemap[racetext+horsetype+citytype]
-		console.log("RACE PRIZE : "+prizemax)
+		var prizemax = rulemap[racetext+horsetype+citytype];
 		if( (yearprize + prize1) > prizemax ){
-			$($(detailrow).children()[0]).prepend('<div class="col-sm" style="font-weight:bold;">Kazanırsa <span class="badge badge-pill badge-warning">'+racetype+' koşamaz.</span></div>');
+			$($(detailrow).children()[0]).prepend('<div class="col-sm" style="font-weight:bold;">Kazanırsa <span class="badge badge-pill badge-warning">'+racetype+'</span> koşamaz.</div>');
 		}
 	}
-	
 	
 	
 

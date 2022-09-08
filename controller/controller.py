@@ -9,8 +9,8 @@ from bs4 import BeautifulSoup
 import math
 from datetime import datetime
 import statistics
-from PIL import Image
 from _io import BytesIO
+from PIL.Image import Image
 
 
 citycodemap = {1:'Adana', 2:'İzmir', 3:'İstanbul', 4:'Bursa', 5:'Ankara', 6:'Şanlıurfa', 7:'Elazığ', 8:'Diyarbakır', 9:'Kocaeli', 10:'Antalya'}
@@ -28,58 +28,52 @@ def get_all_rules():
                'H13-H1':45,             'H13-H2':40,    'H13-H3':35,
                'H14-H1':55,             'H14-H2':50,    'H14-H3':45,
                'H15-H1':65,             'H15-H2':60,    'H15-H3':55,
-               'H16-H1':77,             'H16-H2':70,    'H16-H3':65,
+               'H16-H1':75,             'H16-H2':70,    'H16-H3':65,
                'H17-H1':88,             'H17-H2':83,    'H17-H3':75,
                'H21-H1':93,             'H21-H2':88, 
                'H22-H1':98,             'H22-H2':93,  
                'H24-H1':105, 
                
                'S2-A-DOGU'      :66500,
-               'S2-A-BATI'      :97000,
-               'S2-A-ANKIST'    :109000,
-               
-               'S3-A-DOGU'      :98500,      
-               'S3-A-BATI'      :141000,
-               'S3-A-ANKIST'    :163000,
-               
-               'S4-A-DOGU'      :155500,      
-               'S4-A-BATI'      :220000,
-               'S4-A-ANKIST'    :258000,
-                
+               'S3-A-DOGU'      :98500,
+               'S4-A-DOGU'      :155500,
                'S5-A-DOGU'      :203000,
-               'S5-A-BATI'      :288500,
-               'S5-A-ANKIST'    :337500,
-                   
                'KV6-A-DOGU'     :302500,
+               'KV7-A-DOGU'     :358500,
+               
+               'S2-A-BATI'      :97000,
+               'S3-A-BATI'      :141000,
+               'S4-A-BATI'      :220000,
+               'S5-A-BATI'      :288500,
                'KV6-A-BATI'     :430000,
+               'KV7-A-BATI'     :511000,
+               
+               'S2-A-ANKIST'    :109000,
+               'S3-A-ANKIST'    :163000,
+               'S4-A-ANKIST'    :258000,
+               'S5-A-ANKIST'    :337500,
                'KV6-A-ANKIST'   :506000,
-                
-               'KV7-A-DOGU'     :358500,   
-               'KV7-A-BATI'     :511000,    
-               'KV7-A-ANKIST'   :598000,  
-                  
+               'KV7-A-ANKIST'   :598000,
+               
                'S2-B-DOGU'      :71000,
-               'S2-B-BATI'      :99500,
-               'S2-B-ANKIST'    :118500,
-               
-               'S3-B-DOGU'      :123000,  
-               'S3-B-BATI'      :175500,
-               'S3-B-ANKIST'    :204000,
-               
+               'S3-B-DOGU'      :123000,
                'S4-B-DOGU'      :194500,
-               'S4-B-BATI'      :275000,
-               'S4-B-ANKIST'    :322500,
-               
-               'S5-B-DOGU'      :253500,
-               'S5-B-BATI'      :360000,
-               'S5-B-ANKIST'    :422000,
-               
+               'S5-B-DOGU'      :253500, 
                'KV6-B-DOGU'     :336500,
-               'KV6-B-BATI'     :477500,
-               'KV6-B-ANKIST'   :562500,
-               
                'KV7-B-DOGU'     :398000,
+                
+               'S2-B-BATI'      :99500,
+               'S3-B-BATI'      :175500,
+               'S4-B-BATI'      :275000,
+               'S5-B-BATI'      :360000,
+               'KV6-B-BATI'     :477500,
                'KV7-B-BATI'     :567500,
+               
+               'S2-B-ANKIST'    :118500,
+               'S3-B-ANKIST'    :204000,
+               'S4-B-ANKIST'    :322500,
+               'S5-B-ANKIST'    :422000,
+               'KV6-B-ANKIST'   :562500,
                'KV7-B-ANKIST'   :665000,
                     
                }
