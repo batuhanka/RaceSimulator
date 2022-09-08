@@ -192,11 +192,12 @@ def yearprize(request):
         firstrow    = records[0]
         columns     = firstrow.find_all("td")
         recordstr   = columns[0].text.strip()
+        detailstr   = columns[8].text.strip()
         recordtype  = columns[13].text.strip()
         recorddate  = datetime.strptime(recordstr, '%d.%m.%Y')
         today       = datetime.today()
         
-        if( abs((today - recorddate).days) > 0):
+        if( abs((today - recorddate).days) > 0 and detailstr == "Kayıt"):
             nextrecord      = str(abs((today - recorddate).days))+" gün sonra "
             nextrecordtype  = recordtype
            
