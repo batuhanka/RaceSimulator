@@ -295,6 +295,7 @@ $(document).on('click', ".velocities", function() {
 	// Calculate Year Prizes
 	$(calculations).each(function (){
 		var prizeElement	= $(this).find("b.yearprize");
+		var recordElement	= $(this).find("b.nextrecord");
 		var horsecode		= $(this).attr('horsecode');
 		
 		$.ajax({
@@ -311,6 +312,13 @@ $(document).on('click', ".velocities", function() {
 				}else{
 					$(prizeElement).text(data.yearprize+"  ₺");
 					$(prizeElement).addClass("text-info");
+				}
+				
+				if(data.nextrecord == ""){
+					$(recordElement).parent().hide();
+				}else{
+					$(recordElement).html("<span class='badge badge-pill badge-warning' style='font-size:large;'>"+data.nextrecord+" "+data.nextrecordtype+"</span>");
+					$(recordElement).addClass("text-info");
 				}
 				
 				var horsehp		= $($(prizeElement).closest("tr").prev().prev().find("span")[3]).text();

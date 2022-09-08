@@ -178,17 +178,37 @@ def statsinfo(request):
     return HttpResponse(data, "application/json")
 
 def yearprize(request):
-    horsecode   = request.GET.get("horsecode")
-    yearprize   = 0
+    horsecode       = request.GET.get("horsecode")
+    yearprize       = 0
+    nextrecord      = ""
+    nextrecordtype  = ""
     try:
-        url         = 'https://www.tjk.org/TR/YarisSever/Query/ConnectedPage/AtKosuBilgileri?1=1&QueryParameter_AtId='+horsecode
+        url         = 'https://www.tjk.org/TR/YarisSever/Query/ConnectedPage/AtKosuBilgileri?&QueryParameter_Kosmaz=on&Sort=&OldQueryParameter_AtId='+horsecode
         response    = requests.get(url)
         source      = BeautifulSoup(response.content, "lxml")
         prizes      = source.find("div", {"class": "grid_10 alpha omega kunye"}).find("table").find("tbody").find_all("tr")
         yearprize   = prizes[4].find_all("td")[7].text.split(" t")[0]
+        records     = source.find("table", {"id": "queryTable"}).find("tbody").find_all("tr")
+        firstrow    = records[0]
+        columns     = firstrow.find_all("td")
+        recordstr   = columns[0].text.strip()
+        recordtype  = columns[13].text.strip()
+        recorddate  = datetime.strptime(recordstr, '%d.%m.%Y')
+        today       = datetime.today()
+        
+        if( abs((today - recorddate).days) > 0):
+            nextrecord      = str(abs((today - recorddate).days))+" gün sonra "
+            nextrecordtype  = recordtype
+           
     except:
         pass
-    return HttpResponse(json.dumps({'yearprize': yearprize}), "application/json")
+    context = {
+        'yearprize'     : yearprize,
+        'nextrecord'    : nextrecord,
+        'nextrecordtype': nextrecordtype,
+    }
+    data = json.dumps(context, indent=4, sort_keys=True, default=str)
+    return HttpResponse(data, "application/json")
 
 
 def horsetype(request):
