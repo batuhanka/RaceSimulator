@@ -22,8 +22,6 @@ $(document).ready(function(){
 		$("#races").empty();
 		$("#loadraces").show();
 		var programdate = $('#programdate').datepicker('getDate');
-		//var mobile		= $("#mobilecheck").is(':checked');
-		var mobile		= true;
 		$.ajax({
         	type: "GET",
         	async: true,
@@ -31,7 +29,6 @@ $(document).ready(function(){
         	traditional : true,
         	data: {
             	programdate : programdate,
-				mobile		: mobile,
         	},
         	success: function(data) {
 				
@@ -53,7 +50,6 @@ $(document).ready(function(){
 		$("#races").empty();
 		$("#loadraces").show();
 		var programdate = $('#programdate').datepicker('getDate');
-		var mobile		= $("#mobilecheck").is(':checked');
 		$.ajax({
         	type: "GET",
         	async: true,
@@ -61,7 +57,6 @@ $(document).ready(function(){
         	traditional : true,
         	data: {
             	programdate : programdate,
-				mobile		: mobile,
         	},
         	success: function(data) {
 				$("#loadraces").hide();
