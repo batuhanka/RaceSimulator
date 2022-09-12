@@ -361,9 +361,11 @@ $(document).on('click', ".velocities", function() {
         	}
     	}).done(function (){
 			$(calculations).show();
+			$(loadingrows).hide();
 		});
 	});
 	
+	/*
 	// Calculate Final Degree Seconds From Regression Analysis
 	$(finaldegreerows).each(function (){
 		flags.push($(this));
@@ -436,6 +438,7 @@ $(document).on('click', ".velocities", function() {
     	});
 
 	}); // END OF FINAL DEGREE CALCULATIONS
+	*/
 
 }); // END OF VELOCITIES	
 
