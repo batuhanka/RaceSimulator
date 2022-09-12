@@ -364,7 +364,6 @@ $(document).on('click', ".velocities", function() {
 		});
 	});
 	
-	/*
 	// Calculate Final Degree Seconds From Regression Analysis
 	$(finaldegreerows).each(function (){
 		flags.push($(this));
@@ -437,7 +436,6 @@ $(document).on('click', ".velocities", function() {
     	});
 
 	}); // END OF FINAL DEGREE CALCULATIONS
-	*/
 
 }); // END OF VELOCITIES	
 
@@ -543,7 +541,7 @@ function compare_racerule(yearprize, horsehp, racerule, racetype, prize1, detail
 	}
 	
 	if(msg != ""){
-		$($(detailrow).children()[0]).prepend('<div style="font-weight:bold;">Kazanırsa '+msg+' koşamaz.</div>');
+		$($(detailrow).children()[0]).prepend('<div style="font-weight:bold; text-align:start;">Kazanırsa '+msg+' koşamaz.</div>');
 	}
 	
 }
