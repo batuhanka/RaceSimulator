@@ -171,19 +171,19 @@
 			</td>
 		</tr>
 		
-		{% if horse.result == 0 %}
+		
 		<tr class="finaldegree" horsecode="{{ horse.code }}" horsename="{{ horse.name }}" courtcode="{{ singlerace.courtcode }}" racecode="{{ horse.racecode }}" cityname="{{ weather.cityname }}" dateinfo="{{ singlerace.daterequest }}" temperature="{{ weather.temperature }}" humidity="{{ weather.humidity }}" grassrate="{{ weather.grassrate }}" dirtstate="{{ weather.sandstatus }}" distance="{{ singlerace.distance }}" weight="{{ horse.weight }}" handycap="{{ horse.handycap }}" kgs="{{ horse.kgs }}" last20="{{ horse.last20 }}" jockeycode="{{ horse.jockeycode }}" startno="{{ horse.startno }}">          
 			<td colspan="2" style="text-align:left; border:0px;">
-				<br>
+				<!-- <br>
 				<span class="btn btn-outline-dark rivalanalysis" style="text-align:left; float:left; font-size:larger;">
     				<span class="fa-solid fa-flag-checkered fa-flip"></span><b> Rakip Analizi</b>
-    			</span>
+    			</span> -->
 			</td>
 			<td style="text-align:end; display:none; font-size:larger; border:0px;">
 				<span class="badge badge-pill badge-info" style="font-size: xx-large; float:right;"><b class="degreeinfo"></b></span>
 			</td>
 		</tr>
-		{% endif %}
+		
 		
 		<tr class="loadingrow" style="display:none;">
 			<td colspan="3" style="text-align:center; border:0px;">
