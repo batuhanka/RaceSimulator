@@ -364,6 +364,7 @@ $(document).on('click', ".velocities", function() {
 		});
 	});
 	
+	/*
 	// Calculate Final Degree Seconds From Regression Analysis
 	$(finaldegreerows).each(function (){
 		flags.push($(this));
@@ -436,7 +437,7 @@ $(document).on('click', ".velocities", function() {
     	});
 
 	}); // END OF FINAL DEGREE CALCULATIONS
-	
+	*/
 
 }); // END OF VELOCITIES	
 
@@ -532,31 +533,19 @@ function compare_racerule(yearprize, horsehp, racerule, racetype, prize1, detail
 		var yearprize	= parseFloat(yearprize.replace(".",""));
 	}
 	
-	if(racetype.includes("Handikap")){
+	
 		
-		msg = find_other_race(yearprize, prize1, rulemap, horsetype, citytype)
-		var racehp = rulemap[racetext]
-		
-		if( (parseInt(horsehp) + 3) >= racehp ){
-			msg += ' ve <span class="badge badge-pill badge-warning" style="font-weight:bold;">'+racetype+'</span>'
-		}
-		
-		if(msg != ""){
-			$($(detailrow).children()[0]).prepend('<div style="font-weight:bold;">Kazanırsa '+msg+' koşamaz.</div>');
-		}
+	msg = find_other_race(yearprize, prize1, rulemap, horsetype, citytype)
+	var racehp = rulemap[racetext]
+	
+	if( parseInt(horsehp) >= racehp ){
+		msg += ' ve <span class="badge badge-pill badge-warning" style="font-weight:bold;">'+racetype+'</span>'
 	}
 	
-	
-	if(racetype.includes("ŞARTLI") || racetype.includes("KV")){
-		
-		var prizemax = rulemap[racetext+horsetype+citytype];
-		if( (yearprize + prize1) > prizemax ){
-			$($(detailrow).children()[0]).prepend('<div class="col-sm" style="font-weight:bold;">Kazanırsa <span class="badge badge-pill badge-warning">'+racetype+'</span> koşamaz.</div>');
-		}
+	if(msg != ""){
+		$($(detailrow).children()[0]).prepend('<div style="font-weight:bold;">Kazanırsa '+msg+' koşamaz.</div>');
 	}
 	
-	
-
 }
 
 

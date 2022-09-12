@@ -76,8 +76,7 @@ $(document).ready(function(){
 	
     $(document).on('click', ".racefixture", function() {
 		var programdate = $('#programdate').datepicker('getDate');
-		var mobile		= $("#mobilecheck").is(':checked');
-		window.location = "/fixture/?mobile=true&programdate="+programdate+"&cityname="+$(this).attr("sehir");
+		window.location = "/fixture/?programdate="+programdate+"&cityname="+$(this).attr("sehir");
 	});
 	
 

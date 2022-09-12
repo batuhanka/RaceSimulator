@@ -42,7 +42,6 @@ def prgchange(request):
 
 def fixture(request):
     programdate         = request.GET.get("programdate")
-    mobile              = request.GET.get("mobile")
     temp                = str(programdate).split()
     daterequest         = temp[0]+temp[1]+temp[2]+temp[3]
     prgdate             = datetime.strptime(daterequest, '%a%b%d%Y')
@@ -80,12 +79,7 @@ def fixture(request):
         currenttime     = prgdate.strftime("%H:%M")
         nextracetime    = (prgdate + timedelta(minutes=30)).strftime("%H:%M")
     
-    
-    
-    if mobile == "true":
-        return render(request, "racedetails-mobile.html", {'currenttime': currenttime, 'nextracetime': nextracetime, 'weather': weather_info, 'cityname': cityname, 'racedetails' : all_races, 'allhorses' : all_horses, 'allrules': json.dumps(all_rules) })
-    else:
-        return render(request, "racedetails.html", {'currenttime': currenttime, 'nextracetime': nextracetime, 'weather': weather_info, 'cityname': cityname, 'racedetails' : all_races, 'allhorses' : all_horses })
+    return render(request, "racedetails-mobile.html", {'currenttime': currenttime, 'nextracetime': nextracetime, 'weather': weather_info, 'cityname': cityname, 'racedetails' : all_races, 'allhorses' : all_horses, 'allrules': json.dumps(all_rules) })
 
 def degreepredict(request):
     horsecode       = request.GET.get("horsecode")

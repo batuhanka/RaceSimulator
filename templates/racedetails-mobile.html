@@ -99,9 +99,12 @@
 		<tbody>
 		{% for horse in allhorses %}
      	{% if horse.racecode  == singlerace.key %}
+     	
      	<tr>
      		<td colspan="2" style="vertical-align:middle;">
-				<button type="button" class="btn btn-sm btn-outline-info" style="cursor:text; font-size: larger;"><b>{{ horse.number }}</b></button>
+				<button type="button" class="btn btn-sm btn-outline-info" style="cursor:text; font-size: larger;">
+					<b>{{ horse.number }}</b>
+				</button>
 				{% if horse.disabled == True %}
        			<button type="button" class="btn btn-sm btn-outline-danger" style="cursor:text; font-size: larger;">[Koşmaz] <s>{{ horse.name }}</s></button>
        			{% endif %}
@@ -123,7 +126,6 @@
 				<span>{{ horse.lastsix }}</span>
 			</td>
      	</tr>
-     	
      	
 		<tr>
 			<td style="border:0px; width:5%; vertical-align:middle;"> 
@@ -169,6 +171,7 @@
 			</td>
 		</tr>
 		
+		{% if horse.result == 0 %}
 		<tr class="finaldegree" horsecode="{{ horse.code }}" horsename="{{ horse.name }}" courtcode="{{ singlerace.courtcode }}" racecode="{{ horse.racecode }}" cityname="{{ weather.cityname }}" dateinfo="{{ singlerace.daterequest }}" temperature="{{ weather.temperature }}" humidity="{{ weather.humidity }}" grassrate="{{ weather.grassrate }}" dirtstate="{{ weather.sandstatus }}" distance="{{ singlerace.distance }}" weight="{{ horse.weight }}" handycap="{{ horse.handycap }}" kgs="{{ horse.kgs }}" last20="{{ horse.last20 }}" jockeycode="{{ horse.jockeycode }}" startno="{{ horse.startno }}">          
 			<td colspan="2" style="text-align:left; border:0px;">
 				<br>
@@ -180,8 +183,7 @@
 				<span class="badge badge-pill badge-info" style="font-size: xx-large; float:right;"><b class="degreeinfo"></b></span>
 			</td>
 		</tr>
-		
-		
+		{% endif %}
 		
 		<tr class="loadingrow" style="display:none;">
 			<td colspan="3" style="text-align:center; border:0px;">
