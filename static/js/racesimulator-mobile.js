@@ -1,6 +1,5 @@
 $(document).ready(function(){
 	
-	
 	$(".racerule").each(function(){
 		var thisspan	= $(this);
 		var raceid 		= $(this).attr("raceid");
@@ -26,8 +25,6 @@ $(document).ready(function(){
 		
 		
 	});
-	
-	
 	
 	$(".parent").each(function(){
 		var thistd 		= $(this);
@@ -82,6 +79,84 @@ $(document).ready(function(){
     	});
 	});
 	
+	$(".table tbody tr.loadingrow").each(function(){
+		$(this).show();
+	});
+	
+	$(".table tbody tr.calculations").each(function(){
+		
+		$(this).show();
+		var thisrow = $(this);
+		
+		var prizeElement	= $(this).find("b.yearprize");
+		var recordElement	= $(this).find("b.nextrecord");
+		var horsecode		= $(this).attr('horsecode');
+		
+		var gallopElement 	= $(this).find("b.gallop");
+		var horsename 		= $(this).attr('horsename');
+		var kgs 			= $(this).attr('kgs');
+		
+		$.ajax({
+        	type: "GET",
+        	async: true,
+        	url: '/yearprize/',
+        	traditional : true,
+        	data: {
+            	horsecode 	: horsecode,
+        	},
+        	success: function(data) {
+				if(data.yearprize == 0){
+					$(prizeElement).text("");
+				}else{
+					$(prizeElement).text(data.yearprize+"  ₺");
+					$(prizeElement).addClass("text-info");
+				}
+				
+				if(data.nextrecord == ""){
+					$(recordElement).parent().hide();
+				}else{
+					$(recordElement).html("<span class='badge badge-pill badge-warning' style='font-size:large;'>"+data.nextrecord+" "+data.nextrecordtype+"</span>");
+					$(recordElement).addClass("text-info");
+				}
+				
+				var horsehp		= $($(prizeElement).closest("tr").prev().prev().find("span")[3]).text();
+				//var ruletext	= $(prizeElement).closest("table").parent().parent().prev().find("div").find("span.racerule").text();
+				var temp		= $($(prizeElement).closest("table").parent().parent().prev().find("button").children()[2]).text();
+				var racetype	= temp.split(",")[0];
+				var horsetext	= temp.split(",")[1];
+				var raceprizes	= $($(prizeElement).closest("table").parent().parent().prev().children())[0];
+				var prize1		= parseFloat($($(raceprizes).children()[0]).text().trim().replace(".",""));
+				var detailrow	= $(prizeElement).closest("tr").next();
+				var cityname	= $("#citynameinput").val();
+				compare_racerule(data.yearprize, horsehp, racetype, prize1, detailrow, horsetext, cityname);
+					
+				}
+    	});
+		
+		
+		$.ajax({
+        	type: "GET",
+        	async: true,
+        	url: '/gallop/',
+        	traditional : true,
+        	data: {
+				horsename 	: horsename,
+				kgs 		: kgs,
+        	},
+        	success: function(data) {
+				if(data.gallop_avg_degree == 0){
+					$(gallopElement).text("");
+				}else{
+					$(gallopElement).text(data.gallop_avg_degree);
+					$(gallopElement).addClass("text-info");
+				}
+        	}
+    	}).done(function (){
+			$(thisrow).next().next().hide();   /// hide .loadingrows
+		});
+		
+
+	});
 	
 }); // document ready end
 
@@ -278,6 +353,7 @@ $(document).on('click', ".rivalanalysis", function() {
 	
 });
 
+/* COMMENTED CALCULATE METHOD
 
 $(document).on('click', ".velocities", function() {
 	
@@ -330,7 +406,7 @@ $(document).on('click', ".velocities", function() {
 				var prize1		= parseFloat($($(raceprizes).children()[0]).text().trim().replace(".",""));
 				var detailrow	= $(prizeElement).closest("tr").next();
 				var cityname	= $("#citynameinput").val();
-				compare_racerule(data.yearprize, horsehp, ruletext, racetype, prize1, detailrow, horsetext, cityname);
+				compare_racerule(data.yearprize, horsehp, racetype, prize1, detailrow, horsetext, cityname);
 					
 				}
     	});
@@ -365,7 +441,7 @@ $(document).on('click', ".velocities", function() {
 		});
 	});
 	
-	/*
+	
 	// Calculate Final Degree Seconds From Regression Analysis
 	$(finaldegreerows).each(function (){
 		flags.push($(this));
@@ -438,9 +514,11 @@ $(document).on('click', ".velocities", function() {
     	});
 
 	}); // END OF FINAL DEGREE CALCULATIONS
-	*/
+	
 
 }); // END OF VELOCITIES	
+*/
+
 
 function calculate_race_type(text){
 	
@@ -520,7 +598,7 @@ function find_other_race(yearprize, prize1, rulemap, horsetype, citytype){
 	
 }
 
-function compare_racerule(yearprize, horsehp, racerule, racetype, prize1, detailrow, horsetext, cityname){
+function compare_racerule(yearprize, horsehp, racetype, prize1, detailrow, horsetext, cityname){
 	
 	try{
 		var rulemap		= JSON.parse($("#allrules").val());
