@@ -1,5 +1,9 @@
 $(document).ready(function(){
 	
+	$(".table tbody").each(function(){
+		sortmytable(this, "number");
+	});
+	
 	$(".racerule").each(function(){
 		var thisspan	= $(this);
 		var raceid 		= $(this).attr("raceid");
@@ -921,7 +925,17 @@ function sortmytable(tbody, sortoption){
 			sorted.push(number);
 		}
 		
-		sorted.sort(function(a,b){ return a - b; });
+		sorted.sort(function(a,b){
+			if(a.includes("-")){
+				return 1;
+			}
+			else if(b.includes("-")){
+				return -1;
+			}
+			else{
+				return a - b;
+			} 
+		});
 		
 		for(var i=0; i<sorted.length; i++){
 			for(var j=0; j<allrows.length; j=j+6){

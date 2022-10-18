@@ -50,7 +50,6 @@ class HorseInfo(models.Model):
     apprantice  = models.BooleanField()
     stablemate  = models.CharField(max_length=200)
     bestdegree  = models.CharField(max_length=200)
-    ganyan      = models.CharField(max_length=200)
     lastsix     = models.CharField(max_length=200)
     tool        = models.CharField(max_length=200)
     yearprize   = models.CharField(max_length=200)
@@ -60,6 +59,9 @@ class HorseInfo(models.Model):
     divalue     = models.CharField(max_length=200)
     cdvalue     = models.CharField(max_length=200)
     result      = models.IntegerField(default=0);
+    ganyan      = models.CharField(max_length=200)
+    degree      = models.CharField(max_length=200)
+    diff        = models.CharField(max_length=200)
     
 class SingleRaceInfo(models.Model):
     no          = models.IntegerField();
@@ -83,6 +85,7 @@ class SingleRaceInfo(models.Model):
     prize3      = models.CharField(max_length=200)
     prize4      = models.CharField(max_length=200)
     prize5      = models.CharField(max_length=200)
+    completed   = models.BooleanField()
     
 class AgfInfo(models.Model):
     racenumber  = models.IntegerField();

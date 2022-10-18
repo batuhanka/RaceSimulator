@@ -160,6 +160,7 @@ def get_all_races(racedeatils):
         item.prize3     = one['ikramiyeler'][2]
         item.prize4     = one['ikramiyeler'][3]
         item.prize5     = one['ikramiyeler'][4]
+        item.completed  = False
         result.append(item)
 
     return result
@@ -283,7 +284,6 @@ def get_all_horses(racedeatils):
                 pass
             item.stablemate = horse['EKURI']
             item.bestdegree = horse['ENIYIDERECE']
-            item.ganyan     = horse['GANYAN']
             item.lastsix    = horse['SON6'].replace("K","").replace("C","")
             item.tool       = horse['TAKI']
             try:
@@ -294,6 +294,10 @@ def get_all_horses(racedeatils):
                 item.agf2   = horse['AGF2']
             except:
                 pass
+            
+            item.ganyan     = ""
+            item.degree     = ""
+            item.diff       = ""
             
             result.append(item)
 

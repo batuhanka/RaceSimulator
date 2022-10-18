@@ -61,6 +61,8 @@ def fixture(request):
         results             = requests.get(resultsurl).json()
         resultdetails       = results['kosular']
         for result in resultdetails:
+            racecode = result['KOD']
+            is_race_completed(racecode, all_races)
             horseorders = result['atlar']
             for horse in horseorders:
                 for item in all_horses:
@@ -69,6 +71,9 @@ def fixture(request):
                             item.result = 1000
                         else:
                             item.result = horse['SONUC']
+                            item.ganyan = horse['GANYAN']
+                            item.degree = horse['DERECE']
+                            item.diff   = horse['FARK']
     except:
         pass
     
@@ -80,6 +85,11 @@ def fixture(request):
         nextracetime    = (prgdate + timedelta(minutes=30)).strftime("%H:%M")
     
     return render(request, "racedetails-mobile.html", {'currenttime': currenttime, 'nextracetime': nextracetime, 'weather': weather_info, 'cityname': cityname, 'racedetails' : all_races, 'allhorses' : all_horses, 'allrules': json.dumps(all_rules) })
+
+def is_race_completed(racecode, allraces):
+    for race in allraces:
+        if race.key == racecode:
+            race.completed = True
 
 def degreepredict(request):
     horsecode       = request.GET.get("horsecode")
