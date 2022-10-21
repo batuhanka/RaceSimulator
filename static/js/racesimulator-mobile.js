@@ -89,15 +89,31 @@ $(document).ready(function(){
     	});
 	});
 	
+	$(".jockeyrates").each(function(){
+		var jockeycode 	= $(this).attr('jockeycode');
+		var thisspan	= $(this);
+		$.ajax({
+        	type: "GET",
+        	async: true,
+        	url: '/jockeyrate/',
+        	traditional : true,
+        	data: {
+            	jockeycode 	: jockeycode,
+        	},
+        	success: function(data) {
+				$(thisspan).text("%"+data.jockeyrate);
+				$(thisspan).show();
+			}
+		});
+	});
+	
 	$(".table tbody tr.loadingrow").each(function(){
 		$(this).show();
 	});
 	
 	$(".table tbody tr.calculations").each(function(){
 		
-		$(this).show();
-		var thisrow = $(this);
-		
+		var thisrow 		= $(this);
 		var prizeElement	= $(this).find("b.yearprize");
 		var recordElement	= $(this).find("b.nextrecord");
 		var horsecode		= $(this).attr('horsecode');
@@ -138,6 +154,7 @@ $(document).ready(function(){
 				var detailrow	= $(prizeElement).closest("tr").next();
 				var cityname	= $("#citynameinput").val();
 				compare_racerule(data.yearprize, horsehp, racetype, prize1, detailrow, horsetext, cityname);
+				$(thisrow).show();
 				}
     	});
 		

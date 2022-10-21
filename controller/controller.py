@@ -915,7 +915,8 @@ def find_jockey_rate(jockeycode, year):
     rate4   = source.find("td", {"class": "sorgu-JokeyIstatistikleri-derece4yuzde"}).text.strip()
     rate5   = source.find("td", {"class": "sorgu-JokeyIstatistikleri-derece5yuzde"}).text.strip()
     avg     = int( int(rate1)*5 + int(rate2)*4 + int(rate3)*3 + int(rate4)*2 + int(rate5)*1 ) / 15 
-    return round(avg)
+    #return round(avg)
+    return "{:0.2f}".format(avg)
 
 def convert_to_degree(seconds):
     seconds = seconds % (24 * 3600)

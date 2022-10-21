@@ -240,6 +240,12 @@ def horsetype(request):
     data = json.dumps(context, indent=4, sort_keys=True, default=str)
     return HttpResponse(data, "application/json")
 
+def jockeyrate(request):
+    jockeycode  = request.GET.get("jockeycode")
+    year        = datetime.now().strftime("%Y")
+    jockeyrate  = CONT.find_jockey_rate(jockeycode, year)
+    return HttpResponse(json.dumps({'jockeyrate': jockeyrate}), "application/json")
+
 def racerule(request):
     raceid      = request.GET.get("raceid")
     racedate    = request.GET.get("racedate")
@@ -263,4 +269,6 @@ def singlerace(request):
             horses = race['atlar']
     
     return HttpResponse(json.dumps({'raceinfo': horses}), "application/json")
+
+
 

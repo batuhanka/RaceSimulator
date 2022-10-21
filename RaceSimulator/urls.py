@@ -31,4 +31,5 @@ urlpatterns = [
     path('racerule/',       views.racerule,     name='racerule'),
     path('yearprize/',      views.yearprize,    name='yearprize'),
     path('horsetype/',      views.horsetype,    name='horsetype'),
+    path('jockeyrate/',     views.jockeyrate,   name='jockeyrate'),
 ]
