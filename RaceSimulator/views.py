@@ -67,7 +67,7 @@ def fixture(request):
             for horse in horseorders:
                 for item in all_horses:
                     if(item.code == horse['KOD']):
-                        if(horse['KOSMAZ'] == True):
+                        if(horse['KOSMAZ'] == True or horse['SONUC'] == 0):
                             item.result = 1000
                         else:
                             item.result = horse['SONUC']

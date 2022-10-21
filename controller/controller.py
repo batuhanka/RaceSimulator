@@ -78,28 +78,6 @@ def get_all_rules():
                     
                }
     
-    # if cityname == 'ADANA':
-    #     pass
-    # if cityname == 'IZMIR':
-    #     pass
-    # if cityname == 'ISTANBUL':
-    #     pass
-    # if cityname == 'BURSA':
-    #     pass
-    # if cityname == 'ANKARA':
-    #     pass
-    # if cityname == 'SANLIURFA':
-    #     pass
-    # if cityname == 'ELAZIG':
-    #     pass
-    # if cityname == 'DIYARBAKIR':
-    #     pass
-    # if cityname == 'KOCAELI':
-    #     pass
-    # if cityname == 'ANTALYA':
-    #     pass
-    #
-    #
     return rulemap
 
 def get_races(date):

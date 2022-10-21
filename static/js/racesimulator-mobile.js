@@ -4,6 +4,12 @@ $(document).ready(function(){
 		sortmytable(this, "number");
 	});
 	
+	try{
+		var activeitem = $('.collapse.show')[0];	
+		var scrollPos =  $($(activeitem).parent().parent()).offset().top - 10;
+		$('html, body').animate({ scrollTop: scrollPos }, 2000);
+	}catch(exp){}
+	
 	$(".racerule").each(function(){
 		var thisspan	= $(this);
 		var raceid 		= $(this).attr("raceid");
@@ -124,7 +130,6 @@ $(document).ready(function(){
 				}
 				
 				var horsehp		= $($(prizeElement).closest("tr").prev().prev().find("span")[3]).text();
-				//var ruletext	= $(prizeElement).closest("table").parent().parent().prev().find("div").find("span.racerule").text();
 				var temp		= $($(prizeElement).closest("table").parent().parent().prev().find("button").children()[2]).text();
 				var racetype	= temp.split(",")[0];
 				var horsetext	= temp.split(",")[1];
@@ -133,7 +138,6 @@ $(document).ready(function(){
 				var detailrow	= $(prizeElement).closest("tr").next();
 				var cityname	= $("#citynameinput").val();
 				compare_racerule(data.yearprize, horsehp, racetype, prize1, detailrow, horsetext, cityname);
-					
 				}
     	});
 		
@@ -613,7 +617,7 @@ function compare_racerule(yearprize, horsehp, racetype, prize1, detailrow, horse
 	
 	
 	if(yearprize != ""){
-		var yearprize	= parseFloat(yearprize.replace(".",""));
+		var yearprize	= parseFloat(yearprize.replaceAll(".",""));
 	}
 	
 	
