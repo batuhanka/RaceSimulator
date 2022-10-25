@@ -2,7 +2,7 @@
 <html>
 <head>
 	<meta charset="UTF-8">
-    <title>Race Simulator</title>
+    <title>Yarış Simulasyonu</title>
     {% load static %}
 
     <link href="{% static 'img/favicon.png' %}" 			type="image/png"	rel="icon">
@@ -31,36 +31,34 @@
 <body id="body-pd" style="background-image:url('/static/img/nal.jpg');">
 
 	
-	<header class="header bg-info" id="header">
+	<header class="header" style="background-color:transparent;" id="header">
         <div>  </div>
         <div class="page-header" style="text-align: center;">
-        	<h1><span class="badge badge-pill badge-light">{{ weather.location }}</span></h1>
+        	<h2><span class="badge badge-pill badge-info">{{ weather.location }}</span></h2>
     	</div> 
         <div class="header_img"> <img src="{% static 'img/favicon.png' %}" alt=""> </div>
     </header>
     
-    <div class="l-navbar bg-info" id="nav-bar">
+    <div class="l-navbar" id="nav-bar">
         <nav class="nav">
             <div> 
-            	<div class="nav_logo header_toggle"> <i class='bx bx-menu' style="color:white; "id="header-toggle"></i></div>
-            	<!--  <a href="/" class="nav_logo header_toggle"> <i class='bx bx-layer nav_logo-icon'></i> <span class="nav_logo-name">Yarış Simulasyonu</span> </a> -->
-                <div class="nav_list">
-                	<a href="#" class="nav_link active"> <i class='bx bx-grid-alt nav_icon'></i> <span class="nav_name">Program</span> </a>
-                	<a href="#" class="nav_link"> <i class='bx bx-bookmark nav_icon'></i> <span class="nav_name">Forum</span> </a> 
-                	<a href="#" class="nav_link"> <i class='bx bx-user nav_icon'></i> <span class="nav_name">Tahminler</span> </a> 
-                	<a href="#" class="nav_link"> <i class='bx bx-message-square-detail nav_icon'></i> <span class="nav_name">Mesajlar</span> </a> 
-                	<a href="#" class="nav_link"> <i class='bx bx-folder nav_icon'></i> <span class="nav_name">Kupon Yarat</span> </a> 
-                	<a href="#" class="nav_link"> <i class='bx bx-bar-chart-alt-2 nav_icon'></i> <span class="nav_name">İstatistik</span> </a> 
+            	<div class="nav_logo header_toggle">  <i class='bx bx-menu' style="color:white; font-size:xxx-large;" id="header-toggle"> </i></div>
+                <div class="nav_list">	
+                	<a href="#" class="nav_link active  badge badge-pill badge-info" style="font-size:x-large;"> <i class='bx bx-grid-alt nav_icon' 		style="font-size:xx-large;"></i> <span class="nav_name">Program</span></a>
+                	<a href="#" class="nav_link badge badge-pill badge-info" style="font-size:x-large;"> <i class='bx bx-bookmark nav_icon' 				style="font-size:xx-large;"></i> <span class="nav_name">Forum</span></a> 
+                	<a href="#" class="nav_link badge badge-pill badge-info" style="font-size:x-large;"> <i class='bx bx-user nav_icon' 					style="font-size:xx-large;"></i> <span class="nav_name">Tahminler</span></a> 
+                	<a href="#" class="nav_link badge badge-pill badge-info" style="font-size:x-large;"> <i class='bx bx-message-square-detail nav_icon' 	style="font-size:xx-large;"></i> <span class="nav_name">Mesajlar</span></a> 
+                	<a href="#" class="nav_link badge badge-pill badge-info" style="font-size:x-large;"> <i class='bx bx-folder nav_icon' 					style="font-size:xx-large;"></i> <span class="nav_name">Kupon Yarat</span></a> 
+                	<a href="#" class="nav_link badge badge-pill badge-info" style="font-size:x-large;"> <i class='bx bx-bar-chart-alt-2 nav_icon' 			style="font-size:xx-large;"></i> <span class="nav_name">İstatistik</span></a>
+                	<a href="#" class="nav_link badge badge-pill badge-info" style="font-size:x-large;"> <i class='bx bx-log-out nav_icon' 					style="font-size:xx-large;"></i> <span class="nav_name">Güvenli Çıkış</span></a> 
                 </div>
             </div> 
-            <a href="#" class="nav_link"> <i class='bx bx-log-out nav_icon'></i> <span class="nav_name">Güvenli Çıkış</span> </a>
+            
         </nav>
     </div>
     <!--Container Main start -->
     <div class="height-100">
 	
-	<br>
-
 	<div class="container" style="max-width:100%;">
 
 	{% for singlerace in racedetails %}
@@ -88,14 +86,6 @@
         	</span> 
       		</div>
     	</div>
-        
-        
-        
-        
-        
-       
-        
-<!--         <div style="padding-left:2%;"><span raceid="{{ singlerace.key }}" racedate="{{ singlerace.date }}" cityinfo="{{ weather.cityinfo }}" citycode="{{ weather.citycode }}"  class="label text-white label-{{ singlerace.courtbg }} racerule"></span></div> -->
         
      </div>
      
