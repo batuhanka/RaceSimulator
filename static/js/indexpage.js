@@ -74,6 +74,29 @@ $(document).ready(function(){
 		window.location = "/fixture/?programdate="+programdate+"&cityname="+$(this).attr("sehir");
 	});
 	
+	$(document).on('click', "#register", function() {
+		$(this).prev().hide(1000);
+		$(this).show(1000);
+		$(this).parent().next().hide(1000);
+		$(this).parent().prev().animate({
+        'opacity' : 0
+    	}, 1000, function(){
+        	$(this).html('<div class="input-group mb-2"><div class="input-group-append">'+
+					'<span class="input-group-text"><i class="fas fa-envelope"></i></span></div>'+
+					'<input id="email" type="email" class="form-control input_email" placeholder="email"></div>').animate({'opacity': 1}, 1000);});
+	});
+	
+	$(document).on('click', "#register", function() {
+		$(this).hide(1000);
+		$(this).parent().hide(1000);
+		$(this).parent().next().hide(1000);
+		$(this).parent().prev().animate({
+        'opacity' : 0
+    	}, 1000, function(){
+        	$(this).html('<div class="input-group mb-2"><div class="input-group-append">'+
+					'<span class="input-group-text"><i class="fas fa-envelope"></i></span></div>'+
+					'<input id="email" type="email" class="form-control input_email" placeholder="email"></div>').animate({'opacity': 1}, 1000);});
+	});
 
 }); // document ready end
 

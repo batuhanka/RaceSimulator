@@ -16,13 +16,12 @@
 		<script src="{% static 'js/jquery-ui.min.js' %}" 		type="text/javascript" charset="utf-8"></script>
     	<script src="{% static 'js/bootstrap.min.js' %}" 		type="text/javascript" charset="utf-8"></script>
     	<script src="{% static 'js/fontawesome-all.min.js' %}"	type="text/javascript" charset="utf-8"></script>
-    	<script src="{% static 'js/indexpage.js' %}"			type="text/javascript" charset="utf-8"></script>
-
+		<script src="{% static 'js/indexpage.js' %}"			type="text/javascript" charset="utf-8"></script>
 
 	</head>
 	<body style="background-image:url('/static/img/nal.jpg');">
 	
-		<div class="container h-100">
+        <div class="container h-100">
 		<div class="d-flex justify-content-center h-100">
 			<div class="user_card">
 				<div class="d-flex justify-content-center">
@@ -32,29 +31,32 @@
 				</div>
 				<div id="loginform" class="d-flex justify-content-center form_container">
 					<form>
-						<div class="input-group mb-3">
+						<div class="input-group mb-2">
 							<div class="input-group-append">
 								<span class="input-group-text"><i class="fas fa-user"></i></span>
 							</div>
-							<input type="text" name="" class="form-control input_user" value="" placeholder="kullanıcı adı">
+							<input id="username"type="text" class="form-control input_user" placeholder="kullanıcı adı">
 						</div>
 						<div class="input-group mb-2">
 							<div class="input-group-append">
 								<span class="input-group-text"><i class="fas fa-key"></i></span>
 							</div>
-							<input type="password" name="" class="form-control input_pass" value="" placeholder="şifre">
+							<input id="password" type="password" class="form-control input_pass" placeholder="şifre">
 						</div>
 						<div class="form-group">
 							<div class="custom-control custom-checkbox">
 								<input type="checkbox" class="custom-control-input" id="customControlInline">
 								<label class="custom-control-label" for="customControlInline">Beni Hatırla</label>
-								<a class="float-right text-info" href="#"><b>Şifremi Unuttum<b></a>
+								<a class="float-right text-info" href="#"><b>Şifremi Unuttum</b></a>
 							</div>
 						</div>
 						<div class="d-flex justify-content-center mt-3 login_container">
-				 			<button type="button" name="button" class="btn btn-info"><b>GİRİŞ<b></button>
+				 			<button id="loginbtn" type="button" name="button" class="btn btn-info"><b>GİRİŞ</b></button>
+				 			<button id="register" type="button" name="button" class="btn btn-info" style="margin-left:10%"><b>KAYIT</b></button>
 				   		</div>
+				 			
 				   
+				   		<div id="programsdiv">
 				   		<hr style="border-top: 3px dashed #999;">
 				   
 				   		<div class="input-group mb-3">
@@ -79,6 +81,7 @@
 							<button type="button" class="btn btn-outline-info racefixture" style="margin:3%" id="{{ race.raceid }}" sehir="{{ race.key }}"><b>{{ race.key }}</b></button>
 							{% endfor %}
 				   		</div>
+				   		</div>
 				   
 					</form>
 				</div>
@@ -86,6 +89,80 @@
 			</div>
 		</div>
 	</div>
+        
+        
+        
+    
+	
+	
+	<!-- 	<div class="container h-100">
+		<div class="d-flex justify-content-center h-100">
+			<div class="user_card">
+				<div class="d-flex justify-content-center">
+					<div class="brand_logo_container">
+						<img src="{% static 'img/favicon.png' %}" class="brand_logo" alt="Logo">
+					</div>
+				</div>
+				<div id="loginform" class="d-flex justify-content-center form_container">
+					<form>
+						<div class="input-group mb-2">
+							<div class="input-group-append">
+								<span class="input-group-text"><i class="fas fa-user"></i></span>
+							</div>
+							<input id="username"type="text" class="form-control input_user" placeholder="kullanıcı adı">
+						</div>
+						<div class="input-group mb-2">
+							<div class="input-group-append">
+								<span class="input-group-text"><i class="fas fa-key"></i></span>
+							</div>
+							<input id="password" type="password" class="form-control input_pass" placeholder="şifre">
+						</div>
+						<div class="form-group">
+							<div class="custom-control custom-checkbox">
+								<input type="checkbox" class="custom-control-input" id="customControlInline">
+								<label class="custom-control-label" for="customControlInline">Beni Hatırla</label>
+								<a class="float-right text-info" href="#"><b>Şifremi Unuttum</b></a>
+							</div>
+						</div>
+						<div class="d-flex justify-content-center mt-3 login_container">
+				 			<button id="loginbtn" type="button" name="button" class="btn btn-info"><b>GİRİŞ</b></button>
+				 			<button id="register" type="button" name="button" class="btn btn-info" style="margin-left:10%"><b>KAYIT</b></button>
+				   		</div>
+				 			
+				   
+				   		<div id="programsdiv">
+				   		<hr style="border-top: 3px dashed #999;">
+				   
+				   		<div class="input-group mb-3">
+				   			<div id="prevdate" class="input-group-append" style="cursor:pointer">
+								<span class="input-group-text"><i class="fa-solid fa-angle-left" style="cursor:pointer"></i></span>
+							</div>
+				 			<input id="programdate" type='text' class="form-control" style="font-weight:bolder; background:transparent; text-align:center;" data-provide="datepicker">
+				 			<div id="nextdate" class="input-group-append" style="cursor:pointer">
+								<span class="input-group-text"><i  class="fa-solid fa-angle-right" style="cursor:pointer"></i></span>
+							</div>
+				   		</div>
+				   		
+				   		<div id="loadraces" class="justify-content-center input-group mb-3" style="display:none;">
+				   			<span class="text-info">
+				   				<i class="fa-solid fa-cog fa-spin"></i> <i class="fa-solid fa-cog fa-spin"></i> <i class="fa-solid fa-cog fa-spin"></i>
+				   			</span>
+				   		</div>
+				   		
+				   		<div id="races" class="d-flex justify-content-center input-group mb-3">
+				   			
+				 			{% for race in races %}
+							<button type="button" class="btn btn-outline-info racefixture" style="margin:3%" id="{{ race.raceid }}" sehir="{{ race.key }}"><b>{{ race.key }}</b></button>
+							{% endfor %}
+				   		</div>
+				   		</div>
+				   
+					</form>
+				</div>
+				
+			</div>
+		</div>
+	</div> -->
 			
 	
 	</body>
