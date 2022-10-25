@@ -223,6 +223,17 @@ def find_jersey_bg_hex(imageurl):
  
     return '#{:02x}{:02x}{:02x}'.format(round(r_total/count), round(g_total/count), round(b_total/count))   
 
+def refine_jockey(jockeyname):
+    result      = ""
+    temp = jockeyname.split(" ")
+    for idx, item in enumerate(temp):
+        if (idx == len(temp) - 1):
+            result += item
+        else:
+            result += item[:1]+". "
+    
+    return result
+
 def get_all_horses(racedeatils):
     
     result = []
@@ -241,7 +252,7 @@ def get_all_horses(racedeatils):
             item.weightex   = horse['FAZLAKILO']
             item.fathername = horse['BABA']
             item.mothername = horse['ANNE']
-            item.jockey     = horse['JOKEYADI']
+            item.jockey     = refine_jockey(horse['JOKEYADI'])
             item.owner      = horse['SAHIPADI']
             item.trainer    = horse['ANTRENORADI']
             item.fathercode = horse['BABAKODU']

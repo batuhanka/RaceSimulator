@@ -658,7 +658,7 @@ function find_other_race(yearprize, prize1, rulemap, horsetype, citytype){
 		raceregion		= raceregion.replace("BATI","İzmir,Adana,Antalya,Kocaeli ve Bursa");
 		raceregion		= raceregion.replace("ANKIST","Ankara ve İstanbul");
 		raceregion		= raceregion.replace("DOGU","Diyarbakır,Urfa ve Elazığ");
-		msg = raceregion+"'da <span class='badge badge-pill badge-warning'>"+racetype+"</span>";
+		msg = raceregion+"'da <span class='badge badge-pill badge-warning' style='font-size:large'>"+racetype+"</span>";
 	}
 	
 	return msg;
@@ -685,7 +685,7 @@ function compare_racerule(yearprize, horsehp, racetype, prize1, detailrow, horse
 	var racehp = rulemap[racetext]
 	
 	if( parseInt(horsehp) >= racehp ){
-		msg += ' ve <span class="badge badge-pill badge-warning" style="font-weight:bold;">'+racetype+'</span>'
+		msg += ' ve <span class="badge badge-pill badge-warning" style="font-weight:bold; font-size:large;">'+racetype+'</span>'
 	}
 	
 	if(msg != ""){

@@ -42,7 +42,7 @@
     <div class="l-navbar" id="nav-bar">
         <nav class="nav">
             <div> 
-            	<div class="nav_logo header_toggle" style="padding-left:1rem;">  <i class='bx bx-menu' style="color:white; font-size:5rem;" id="header-toggle"> </i></div>
+             	<div class="nav_logo header_toggle">  <i class='bx bx-layer bx-flashing' style="color:white; font-size:4.5rem;" id="header-toggle"> </i></div> 
                 <div class="nav_list">	
                 	<a href="#" class="nav_link active  badge badge-pill badge-info" style="font-size:x-large;"> <i class='bx bx-grid-alt nav_icon' 		style="font-size:xx-large;"></i> <span class="nav_name">Program</span></a>
                 	<a href="#" class="nav_link badge badge-pill badge-info" style="font-size:x-large;"> <i class='bx bx-bookmark nav_icon' 				style="font-size:xx-large;"></i> <span class="nav_name">Forum</span></a> 
@@ -68,12 +68,11 @@
         
         <div class="row">
       		<div class="col-sm-8">
-      		<button class="btn text-white bg-{{ singlerace.courtbg }}" style="text-align:left; font-weight:bold; font-size:large;" data-toggle="collapse" data-target="#collapse{{ singlerace.key }}" aria-expanded="true" aria-controls="collapse{{ singlerace.key }}">
+      		<button class="btn text-white bg-{{ singlerace.courtbg }}" style="text-align:left; font-weight:bold; font-size:x-large;" data-toggle="collapse" data-target="#collapse{{ singlerace.key }}" aria-expanded="true" aria-controls="collapse{{ singlerace.key }}">
           		<span class="label label-{{ singlerace.courtbg }}" style="text-decoration:underline;">{{ singlerace.racenumber }}. KOŞU : {{ singlerace.time }}</span><br>
           		<span class="label label-{{ singlerace.courtbg }}">{{ singlerace.summary }}</span><br>
-          		<span class="label label-{{ singlerace.courtbg }}">{{ singlerace.racename }}</span><br>
-          		<span class="label text-white label-{{ singlerace.courtbg }} racerule" raceid="{{ singlerace.key }}" racedate="{{ singlerace.date }}" cityinfo="{{ weather.cityinfo }}" citycode="{{ weather.citycode }}"></span>
-        	</button>
+          		<span class="label label-{{ singlerace.courtbg }}">{{ singlerace.racename }}</span>
+          	</button>
       		</div>
       		
       		<div class="col-sm-4">
@@ -81,10 +80,16 @@
         		<span style="font-size: x-large; 	font-weight:bold; 	float:right"> {{ singlerace.prize1 }} <span class="fa-solid fa-turkish-lira-sign"></span></span>					<br>
         		<span style="font-size: large;  	font-weight:bold;	float:right; margin-top:-5%"> {{ singlerace.prize2 }} <span class="fa-solid fa-turkish-lira-sign"></span></span>	<br>
         		<span style="font-size: large;		font-weight:bold;	float:right; margin-top:-15%"> {{ singlerace.prize3 }} <span class="fa-solid fa-turkish-lira-sign"></span></span>	<br>
-        		<span style="font-size: large;		font-weight:bold;	float:right; margin-top:-25%"> {{ singlerace.prize4 }} <span class="fa-solid fa-turkish-lira-sign"></span></span>	<br>
-        		<span style="font-size: large;		font-weight:bold;	float:right; margin-top:-35%"> {{ singlerace.prize5 }} <span class="fa-solid fa-turkish-lira-sign"></span></span>	
+<!--         		<span style="font-size: large;		font-weight:bold;	float:right; margin-top:-25%"> {{ singlerace.prize4 }} <span class="fa-solid fa-turkish-lira-sign"></span></span>	<br> -->
+<!--         		<span style="font-size: large;		font-weight:bold;	float:right; margin-top:-35%"> {{ singlerace.prize5 }} <span class="fa-solid fa-turkish-lira-sign"></span></span>	 -->
         	</span> 
       		</div>
+    	</div>
+    	
+    	<div class="row">
+    		<div class="col-sm-12" style="margin-left:1rem; padding-right:2rem;">
+    			<span class="label text-white label-{{ singlerace.courtbg }} racerule" raceid="{{ singlerace.key }}" racedate="{{ singlerace.date }}" cityinfo="{{ weather.cityinfo }}" citycode="{{ weather.citycode }}"></span>
+    		</div>
     	</div>
         
      </div>
@@ -153,11 +158,12 @@
      		</td>
      		
      		<td style="text-align:end; vertical-align:middle;">
-				<span class="badge badge-pill badge-info jockeyrates" jockeycode="{{ horse.jockeycode }}" style="margin-right:1%; display:none;"></span><span><b>{{ horse.jockey }}</b></span>
+				<span style="font-size: larger;"><b>{{ horse.jockey }}</b></span>
 				{% if horse.apprantice == True %}
 				<sup class="text-info"><b>AP</b></sup>
 				{% endif %}
 				<br>
+				<span class="badge badge-pill badge-success jockeyrates" jockeycode="{{ horse.jockeycode }}" style="margin-right:1%; font-size:large; display:none;"></span>
 				<span>{{ horse.lastsix }}</span>
 			</td>
      	</tr>
@@ -261,11 +267,12 @@
      		</td>
      		
      		<td style="text-align:end; vertical-align:middle;">
-				<span class="badge badge-pill badge-info jockeyrates" jockeycode="{{ horse.jockeycode }}" style="margin-right:1%; display:none;"></span><span><b>{{ horse.jockey }}</b></span>
+				<span style="font-size: larger;"><b>{{ horse.jockey }}</b></span>
 				{% if horse.apprantice == True %}
 				<sup class="text-info"><b>AP</b></sup>
 				{% endif %}
 				<br>
+				<span class="badge badge-pill badge-success jockeyrates" jockeycode="{{ horse.jockeycode }}" style="margin-right:1%; font-size:large; display:none;"></span>
 				<span>{{ horse.lastsix }}</span>
 			</td>
      	</tr>
