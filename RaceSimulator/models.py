@@ -86,6 +86,8 @@ class SingleRaceInfo(models.Model):
     prize4      = models.CharField(max_length=200)
     prize5      = models.CharField(max_length=200)
     completed   = models.BooleanField()
+    racevideo   = models.CharField(max_length=200)
+    racephoto   = models.CharField(max_length=200)
     
 class AgfInfo(models.Model):
     racenumber  = models.IntegerField();

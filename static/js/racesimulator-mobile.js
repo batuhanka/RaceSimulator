@@ -253,6 +253,30 @@ $(document).ajaxStop(function() {
 	*/
 });
 
+
+$(document).on('click', ".racephoto", function() {
+	var divs = $(this).parent().find('.racephotodiv');
+	if(divs.length == 0){
+		var photourl = $(this).attr("photourl");
+		$(this).parent().append('<div class="racephotodiv"><img style="display: block; max-width: 100%; margin-top:1rem;" src='+photourl+'></div>').hide().show('slow');
+	}
+	if(divs.length == 1){
+		$(divs).hide('slow', function(){ $(this).remove(); });
+	}
+});
+
+$(document).on('click', ".racevideo", function() {
+	var divs = $(this).parent().find('.racevideodiv');
+	if(divs.length == 0){
+	var videourl = $(this).attr("videourl");
+	$(this).parent().append('<div class="embed-responsive embed-responsive-16by9 racevideodiv" style="display: block; max-width: 100%; margin-top:1rem;">'+
+							'<iframe class="embed-responsive-item" src='+videourl+'></iframe></div>').hide().show('slow');
+	}
+	if(divs.length == 1){
+		$(divs).hide('slow', function(){ $(this).remove(); });
+	}
+});
+
 $(document).on('click', "#customcalculate", function() {
 	var value1 = $("#slider1").roundSlider("getValue");
 	var value2 = $("#slider2").roundSlider("getValue");
@@ -779,10 +803,10 @@ function sortmytable(tbody, sortoption){
     		}
 
 			// nulls sort after anything else
-    		else if (a === '') {
+    		else if (a === '' || a == 0) {
         		return 1;
     		}
-    		else if (b === '') {
+    		else if (b === '' || b == 0) {
         		return -1;
     		}
 
