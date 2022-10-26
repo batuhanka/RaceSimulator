@@ -161,8 +161,9 @@
        				<span style="font-size: larger;" class="btn btn-sm btn-info"><b>{{ horse.name }}</b>
        			{% endif %}
        				<sup class="text-dark"><b>{{ horse.tool }}</b></sup>
+       			</span>
        			{% if horse.stablemate != False %}
-       				<img src="https://medya-cdn.tjk.org/imageftp/Img/e{{ horse.stablemate }}.gif" height="30"></span>
+       				<span class="btn"><img src="https://medya-cdn.tjk.org/imageftp/Img/e{{ horse.stablemate }}.gif" height="30"></span>
        			{% endif %}
      		</td>
      		
@@ -196,8 +197,8 @@
 			</td>
 			
 			<td style="text-align:end; border:0px; font-size:larger;">
-				<span class="badge">{% if horse.agf1 %} AGF1: </span><span class="text-info"><b>%{{ horse.agf1 }}</b> {% endif %}</span> <br>
-				<span class="badge">{% if horse.agf2 %} AGF2: </span><span class="text-info"><b>%{{ horse.agf2 }}</b> {% endif %}</span>
+				<span class="badge">{% if horse.agf1 %} AGF1: </span><span class="text-info"><b>({{ horse.agf1order }}.) %{{ horse.agf1 }}</b> {% endif %}</span> <br>
+				<span class="badge">{% if horse.agf2 %} AGF2: </span><span class="text-info"><b>({{ horse.agf2order }}.) %{{ horse.agf2 }}</b> {% endif %}</span>
 			</td>
 		</tr>
 		
@@ -208,8 +209,8 @@
 				
 			</td>
 			<td style="text-align:end; border:0px;">
-				<span>{{ horse.owner }}</span> <br>
-       			<span class="badge">Ant: </span><span>{{ horse.trainer }}</span> 
+				<span class="owner">{{ horse.owner }}</span> <br>
+       			<span class="badge">Ant: </span><span class="trainer">{{ horse.trainer }}</span> 
 			</td>
 		</tr>
 		
@@ -270,8 +271,9 @@
        				<span style="font-size: larger;" class="btn btn-sm btn-success"><b>({{ horse.number }}) {{ horse.name }}</b>
        			{% endif %}
        				<sup class="text-dark"><b>{{ horse.tool }}</b></sup>
+       			</span>
        			{% if horse.stablemate != False %}
-       				<img src="https://medya-cdn.tjk.org/imageftp/Img/e{{ horse.stablemate }}.gif" height="30"></span>
+       				<span class="btn"><img src="https://medya-cdn.tjk.org/imageftp/Img/e{{ horse.stablemate }}.gif" height="30"></span>
        			{% endif %}
      		</td>
      		
@@ -307,8 +309,8 @@
 			
 			
 			<td style="text-align:end; border:0px; font-size:larger;">
-				<span class="badge">{% if horse.agf1 %} AGF1: </span><span class="text-info"><b>%{{ horse.agf1 }}</b> {% endif %}</span> <br>
-				<span class="badge">{% if horse.agf2 %} AGF2: </span><span class="text-info"><b>%{{ horse.agf2 }}</b> {% endif %}</span>
+				<span class="badge">{% if horse.agf1 %} AGF1: </span><span class="text-info"><b>({{ horse.agf1order }}.) %{{ horse.agf1 }}</b> {% endif %}</span> <br>
+				<span class="badge">{% if horse.agf2 %} AGF2: </span><span class="text-info"><b>({{ horse.agf2order }}.) %{{ horse.agf2 }}</b> {% endif %}</span>
 			</td> 
 			
 		</tr>
@@ -320,8 +322,8 @@
 				
 			</td>
 			<td style="text-align:end; border:0px;">
-				<span>{{ horse.owner }}</span> <br>
-       			<span class="badge">Ant: </span><span>{{ horse.trainer }}</span> 
+				<span class="owner">{{ horse.owner }}</span> <br>
+       			<span class="badge">Ant: </span><span class="trainer">{{ horse.trainer }}</span> 
 			</td>
 		</tr>
 		

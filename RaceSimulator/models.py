@@ -54,7 +54,9 @@ class HorseInfo(models.Model):
     tool        = models.CharField(max_length=200)
     yearprize   = models.CharField(max_length=200)
     agf1        = models.CharField(max_length=200)
+    agf1order   = models.IntegerField();
     agf2        = models.CharField(max_length=200)
+    agf2order   = models.IntegerField();
     dpvalue     = models.CharField(max_length=200)
     divalue     = models.CharField(max_length=200)
     cdvalue     = models.CharField(max_length=200)

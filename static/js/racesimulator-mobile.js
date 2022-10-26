@@ -46,11 +46,13 @@ $(document).ready(function(){
 		sortmytable(this, "number");
 	});
 	
+	/* Scrolling to Position
 	try{
 		var activeitem = $('.collapse.show')[0];	
 		var scrollPos =  $($(activeitem).parent().parent()).offset().top - 10;
 		$('html, body').animate({ scrollTop: scrollPos }, 2000);
 	}catch(exp){}
+	*/
 	
 	$(".racerule").each(function(){
 		var thisspan	= $(this);
@@ -74,8 +76,6 @@ $(document).ready(function(){
 				$(thisspan).text(data.rule);
         	}
     	});
-		
-		
 	});
 	
 	$(".parent").each(function(){
@@ -130,6 +130,39 @@ $(document).ready(function(){
         	}
     	});
 	});
+	
+	$(".racetable").each(function(){
+		var trainers 	= $(this).find(".trainer");
+		var trainerlist	= []
+		$(trainers).each(function(){
+			var fullname 	= $(this).text().split(" ");
+			var last		= fullname[fullname.length - 1];
+			trainerlist.push(last);
+			if(trainerlist.indexOf(last) != trainerlist.lastIndexOf(last)){
+				$(trainers[trainerlist.indexOf(last)]).addClass("btn btn-outline-danger");
+				$(trainers[trainerlist.lastIndexOf(last)]).addClass("btn btn-outline-danger");
+			}
+			
+		});
+		
+		
+		var owners 		= $(this).find(".owner");
+		var ownerlist	= []
+		$(owners).each(function(){
+			var fullname 	= $(this).text().split(" ");
+			var last		= fullname[fullname.length - 1];
+			ownerlist.push(last);
+			if(ownerlist.indexOf(last) != ownerlist.lastIndexOf(last)){
+				$(owners[ownerlist.indexOf(last)]).addClass("btn btn-outline-danger");
+				$(owners[ownerlist.lastIndexOf(last)]).addClass("btn btn-outline-danger");
+			}
+			
+		});
+		
+		
+		
+	});
+		
 	
 	$(".jockeyrates").each(function(){
 		var jockeycode 	= $(this).attr('jockeycode');

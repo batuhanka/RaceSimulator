@@ -264,7 +264,6 @@ def get_all_horses(racedeatils):
             item.kgs        = horse['KGS']
             item.last20     = horse['SON20']
             item.jerseyimg  = horse['FORMA'].replace("medya", "medya-cdn")
-            #item.jerseybg   = find_jersey_bg_hex(horse['FORMA'].replace("medya", "medya-cdn")) 
             item.disabled   = horse['KOSMAZ']
             
             try: 
@@ -276,11 +275,13 @@ def get_all_horses(racedeatils):
             item.lastsix    = horse['SON6'].replace("K","").replace("C","")
             item.tool       = horse['TAKI']
             try:
-                item.agf1   = horse['AGF1']
+                item.agf1       = horse['AGF1']
+                item.agf1order  = horse['AGFSIRA1']
             except:
                 pass
             try:
-                item.agf2   = horse['AGF2']
+                item.agf2       = horse['AGF2']
+                item.agf2order  = horse['AGFSIRA2']
             except:
                 pass
             
