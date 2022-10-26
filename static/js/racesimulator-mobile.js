@@ -254,28 +254,23 @@ $(document).ajaxStop(function() {
 });
 
 
-$(document).on('click', ".racephoto", function() {
-	var divs = $(this).parent().find('.racephotodiv');
-	if(divs.length == 0){
-		var photourl = $(this).attr("photourl");
-		$(this).parent().append('<div class="racephotodiv"><img style="display: block; max-width: 100%; margin-top:1rem;" src='+photourl+'></div>').hide().show('slow');
+$(document).on('click', ".raceresult", function() {
+	var p_url 	= $(this).attr("photourl");
+	var v_url 	= $(this).attr("videourl");
+	var divs 	= $(this).parent().find("div");
+	$(divs).remove();
+	
+	if(p_url != undefined && v_url == undefined){
+		$(this).parent().append('<div><img style="display: block; max-width: 100%; margin-top:1rem;" src='+p_url+'></div>');
 	}
-	if(divs.length == 1){
-		$(divs).hide('slow', function(){ $(this).remove(); });
+	
+	if(p_url == undefined && v_url != undefined){
+		$(this).parent().append('<div class="section d-flex justify-content-center embed-responsive embed-responsive-16by9" style="margin-top:1rem;">'+
+  							'<video class="embed-responsive-item" controls autoplay muted><source src='+v_url+' type="video/mp4"></video></div>');
 	}
+	
 });
 
-$(document).on('click', ".racevideo", function() {
-	var divs = $(this).parent().find('.racevideodiv');
-	if(divs.length == 0){
-	var videourl = $(this).attr("videourl");
-	$(this).parent().append('<div class="embed-responsive embed-responsive-16by9 racevideodiv" style="display: block; max-width: 100%; margin-top:1rem;">'+
-							'<iframe class="embed-responsive-item" src='+videourl+'></iframe></div>').hide().show('slow');
-	}
-	if(divs.length == 1){
-		$(divs).hide('slow', function(){ $(this).remove(); });
-	}
-});
 
 $(document).on('click', "#customcalculate", function() {
 	var value1 = $("#slider1").roundSlider("getValue");

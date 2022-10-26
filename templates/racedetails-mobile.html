@@ -109,19 +109,11 @@
 		<tr>
     		<th colspan="3" style="text-align:center;"> 
     		{%if singlerace.racephoto %}
-			<button class="btn btn-lg btn-outline-info racephoto" photourl="{{ singlerace.racephoto }}"> <i class="fa-solid fa-image"></i> <b>Fotofiniş</b></button>
-			<button class="btn btn-lg btn-outline-info racevideo" videourl="{{ singlerace.racevideo }}"> <i class="fa-solid fa-video"></i> <b>Yarışı İzle</b></button>
+			<button class="btn btn-lg btn-outline-info raceresult" photourl="{{ singlerace.racephoto }}" style="margin-right:2rem;"> <i class="fa-solid fa-image"></i> <b>Fotofiniş</b></button>
+			<button class="btn btn-lg btn-outline-info raceresult" videourl="{{ singlerace.racevideo }}" style="margin-left:2rem;" > <i class="fa-solid fa-video"></i> <b>Yarışı İzle</b></button>
 			{%else %}
 			
 			{% endif %}
-
-			<!--     		
-			<img style="display: block; max-width: 100%;" src="{{ singlerace.racephoto }}"> 
-    		<div class="embed-responsive embed-responsive-16by9">
- 			<iframe class="embed-responsive-item" src="{{ singlerace.racevideo }}"></iframe> 
-			</div>
-			-->
-			
     		</th>
     	</tr>
 		
