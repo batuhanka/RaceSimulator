@@ -266,7 +266,7 @@ $(document).on('click', ".raceresult", function() {
 	
 	if(p_url == undefined && v_url != undefined){
 		$(this).parent().append('<div class="section d-flex justify-content-center embed-responsive embed-responsive-16by9" style="margin-top:1rem;">'+
-  							'<video class="embed-responsive-item" controls autoplay muted><source src='+v_url+' type="video/mp4"></video></div>');
+  							'<video class="embed-responsive-item" autoplay playsinside controls><source src='+v_url+' type="video/mp4"></video></div>');
 	}
 	
 });
