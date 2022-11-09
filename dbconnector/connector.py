@@ -1,9 +1,9 @@
 '''
-Created on 24 Ara 2014
+Created on 09 Kas 2022
 
 @author: batuhanka
 '''
-import psycopg2
+import psycopg
 import sys
 
 class Postgresql:
@@ -21,7 +21,7 @@ class Postgresql:
 
     def connection(self):
         try:
-            self.conn = psycopg2.connect(self.conn_string)
+            self.conn = psycopg.connect(self.conn_string)
             self.conn.autocommit = True
             return self.conn.cursor()
         except:
@@ -30,7 +30,7 @@ class Postgresql:
 
     def connection_transactional(self):
         try:
-            self.conn = psycopg2.connect(self.conn_string)
+            self.conn = psycopg.connect(self.conn_string)
             self.conn.autocommit = False
             return self.conn, self.conn.cursor()
         except:
@@ -39,7 +39,7 @@ class Postgresql:
 
     def connection_simple(self):
         try:
-            self.conn = psycopg2.connect(self.conn_string)
+            self.conn = psycopg.connect(self.conn_string)
             self.conn.autocommit = False
             return self.conn
         except:
@@ -61,7 +61,7 @@ class Query:
         try:
             self.cursor.execute(query)
             return self.cursor.fetchall()
-        except psycopg2.Error as e:
+        except psycopg.Error as e:
             print(e.pgerror)
             raise Exception(e.pgerror)
         except:
@@ -71,7 +71,7 @@ class Query:
         try:
             self.cursor.execute(query)
             return "SUCCESS"
-        except psycopg2.Error as e:
+        except psycopg.Error as e:
             print(e.pgerror)
             raise Exception(e.pgerror)
             
@@ -87,7 +87,7 @@ class Query:
         try:
             self.cursor.execute(query)
             return "SUCCESS"
-        except psycopg2.Error as e:
+        except psycopg.Error as e:
             return e.pgerror
         except:
             print("sys exc info : ",sys.exc_info()[1])
@@ -96,7 +96,7 @@ class Query:
         try:
             self.cursor.execute(query)
             return "SUCCESS"
-        except psycopg2.Error as e:
+        except psycopg.Error as e:
             print(e.pgerror)
             raise Exception(e.pgerror)
         except:
@@ -106,7 +106,7 @@ class Query:
         try:
             self.cursor.execute(query, params)
             return self.cursor.fetchall()
-        except psycopg2.Error as e:
+        except psycopg.Error as e:
             print(e.pgerror)
             raise Exception(e.pgerror)
         except:
@@ -116,7 +116,7 @@ class Query:
         try:
             self.cursor.execute(query, params)
             return "SUCCESS"
-        except psycopg2.Error as e:
+        except psycopg.Error as e:
             print(e.pgerror)
             raise Exception(e.pgerror)
         except:
@@ -126,7 +126,7 @@ class Query:
         try:
             self.cursor.execute(query, params)
             return self.cursor.fetchall()
-        except psycopg2.Error as e:
+        except psycopg.Error as e:
             print(e.pgerror)
             raise Exception(e.pgerror)
         except:
@@ -136,7 +136,7 @@ class Query:
         try:
             self.cursor.execute(query, params)
             return "SUCCESS"
-        except psycopg2.Error as e:
+        except psycopg.Error as e:
             print(e.pgerror)
             raise Exception(e.pgerror)
         except:
