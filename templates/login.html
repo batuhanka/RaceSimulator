@@ -28,45 +28,51 @@
 					</div>
 				</div>
 				<div id="loginform" class="d-flex justify-content-center form_container">
-					<form>
+					<form class="needs-validation">
 					<div class="input-group mb-2"><div class="input-group-append">
 						<span class="input-group-text"><i class="fas fa-envelope"></i></span></div>
-						<input id="email" type="email" class="form-control input_email" placeholder="email">
+						<input id="email" type="email" class="form-control" placeholder="email">
+						<div class="invalid-tooltip">Lütfen geçerli bir email adresi yazınız.</div>
 					</div>
 					
 					<div class="input-group mb-2"><div class="input-group-append">
 						<span class="input-group-text"><i class="fas fa-phone"></i></span></div>
-						<input id="phone" type="phone" class="form-control input_phone" placeholder="telefon">
+						<input id="phone" type="text" class="form-control" placeholder="telefon">
+						<div class="invalid-tooltip">10 haneli numaranızı başında sıfır olmadan yazınız.</div>
 					</div>
 					
 					<br>
 					
 					<div class="input-group mb-2"><div class="input-group-append">
 						<span class="input-group-text"><i class="fas fa-user"></i></span></div>
-						<input id="firstname" type="text" class="form-control input_firstname" placeholder="isim">
+						<input id="firstname" type="text" class="form-control" placeholder="isim">
+						<div class="invalid-tooltip">Lütfen geçerli bir isim yazınız.</div>
 					</div>
 					
 					<div class="input-group mb-2"><div class="input-group-append">
 						<span class="input-group-text"><i class="fas fa-user"></i></span></div>
-						<input id="surname" type="text" class="form-control input_surname" placeholder="soyisim">
+						<input id="surname" type="text" class="form-control" placeholder="soyisim">
+						<div class="invalid-tooltip">Lütfen geçerli bir soyisim yazınız.</div>
 					</div>
 					
 					<br>
 					
 					<div class="input-group mb-2"><div class="input-group-append">
 						<span class="input-group-text"><i class="fas fa-horse-head"></i></span></div>
-						<input id="username" type="text" class="form-control input_user" placeholder="kullanıcı">
+						<input id="username" type="text" class="form-control" placeholder="kullanıcı">
+						<div class="invalid-tooltip">Lütfen geçerli bir kullanıcı adı yazınız.</div>
 					</div>
 					
 					<div class="input-group mb-2"><div class="input-group-append">
 						<span class="input-group-text"><i class="fas fa-key"></i></span></div>
-						<input id="password" type="password" class="form-control input_pass" placeholder="şifre">
+						<input id="password" type="password" class="form-control" placeholder="şifre">
+						<div class="invalid-tooltip">Şifreniz en az 8 haneli olmalı ve küçük harf, büyük harf, rakam içermelidir.</div>
 					</div>
 					
 					<br>
 						
 					<div class="d-flex justify-content-center mt-3 login_container">
-				 		<a href="/login" id="register" type="button" class="btn btn-info"><b>KAYIT</b></a>
+				 		<button id="register" type="button" class="btn btn-info" disabled><b>KAYIT</b></button>
 				   	</div>	
 					
 					</form>

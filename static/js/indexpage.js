@@ -74,32 +74,91 @@ $(document).ready(function(){
 		window.location = "/fixture/?programdate="+programdate+"&cityname="+$(this).attr("sehir");
 	});
 	
-	/*
-	$(document).on('click', "#register", function() {
-		$(this).prev().hide(1000);
-		$(this).show(1000);
-		$(this).parent().next().hide(1000);
-		$(this).parent().prev().animate({
-        'opacity' : 0
-    	}, 1000, function(){
-        	$(this).html('<div class="input-group mb-2"><div class="input-group-append">'+
-					'<span class="input-group-text"><i class="fas fa-envelope"></i></span></div>'+
-					'<input id="email" type="email" class="form-control input_email" placeholder="email"></div>').animate({'opacity': 1}, 1000);});
+	
+	
+	var register_inputs = $(".needs-validation").find("input.form-control");
+	$(register_inputs).each(function(){
+		$(this).change(function(){
+			var type 	= $(this).attr("id");
+			var value 	= $(this).val();
+			var valid	= true;
+			switch(type) {
+  				case "email":
+				valid = value.match(/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/);
+    			break;
+
+				case "phone":
+				valid = value.match(/^5{1}[0-9]{9}$/);
+    			break;
+				
+				case "firstname":
+    			valid = value.match(/^[a-zA-Z]{3,}$/);
+    			break;
+  			
+				case "surname":
+    			valid = value.match(/^[a-zA-Z]{3,}$/);
+    			break;
+
+				case "username":
+    			valid = value.match(/^[a-zA-Z\-0-9]{3,}$/);
+    			break;
+
+				case "password":
+				valid = value.match(/^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])([a-zA-Z0-9]{8,})$/)
+    			break;
+
+			} // switch case end
+			
+			if(valid){
+				$(this).removeClass("is-invalid");
+				$(this).addClass("is-valid");
+			}else{
+				$(this).removeClass("is-valid");
+				$(this).addClass("is-invalid");
+			}
+		});		
 	});
 	
 	
+	// REGISTER BUTTON CLICK
 	$(document).on('click', "#register", function() {
-		$(this).hide(1000);
-		$(this).parent().hide(1000);
-		$(this).parent().next().hide(1000);
-		$(this).parent().prev().animate({
-        'opacity' : 0
-    	}, 1000, function(){
-        	$(this).html('<div class="input-group mb-2"><div class="input-group-append">'+
-					'<span class="input-group-text"><i class="fas fa-envelope"></i></span></div>'+
-					'<input id="email" type="email" class="form-control input_email" placeholder="email"></div>').animate({'opacity': 1}, 1000);});
+	
+		var email 		= $("#email").val();	
+		var phone 		= $("#phone").val();
+		var firstname 	= $("#firstname").val();	
+		var surname 	= $("#surname").val();	
+		var username 	= $("#username").val();	
+		var password 	= $("#password").val();
+		
+		if(!email)
+			$("#email").addClass("is-invalid");	
+		if(!username)
+			$("#username").addClass("is-invalid");	
+		if(!password)
+			$("#password").addClass("is-invalid");	
+			
+		$.ajax({
+        	type: "GET",
+        	async: true,
+        	url: '/registeruser/',
+        	traditional : true,
+        	data: {
+            	email 		: email,
+				phone		: phone,
+				firstname	: firstname,
+				surname		: surname,
+				username	: username,
+				password	: password,
+        	},
+        	success: function(data) {
+				
+    	   	}
+
+    	});
+	
 	});
-	*/
+	
+	
 	
 }); // document ready end
 

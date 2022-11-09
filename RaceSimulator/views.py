@@ -23,6 +23,16 @@ def get_city_code(val):
 def login(request):
     return render(request, "login.html")
 
+def registeruser(request):
+    email       = request.GET.get("email")
+    phone       = request.GET.get("phone")
+    firstname   = request.GET.get("firstname")
+    surname     = request.GET.get("surname")
+    username    = request.GET.get("username")
+    password    = request.GET.get("password")
+    print(email, phone, firstname, surname, username, password)
+    return render(request, "index.html")
+
 def home(request):
     now                 = datetime.now()
     date_for_request    = now.strftime("%Y%m%d")
