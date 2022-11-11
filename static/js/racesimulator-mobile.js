@@ -1,45 +1,3 @@
-document.addEventListener("DOMContentLoaded", function(event) {
-   
-const showNavbar = (toggleId, navId, bodyId, headerId) =>{
-const toggle = document.getElementById(toggleId),
-nav = document.getElementById(navId),
-bodypd = document.getElementById(bodyId),
-headerpd = document.getElementById(headerId)
-
-// Validate that all variables exist
-if(toggle && nav && bodypd && headerpd){
-toggle.addEventListener('click', ()=>{
-// show navbar
-nav.classList.toggle('showup')
-// change icon
-toggle.classList.toggle('bx-x')
-// add padding to body
-bodypd.classList.toggle('body-pd')
-// add padding to header
-headerpd.classList.toggle('body-pd')
-})
-}
-}
-
-showNavbar('header-toggle','nav-bar','body-pd','header')
-
-/*===== LINK ACTIVE =====*/
-const linkColor = document.querySelectorAll('.nav_link')
-
-function colorLink(){
-if(linkColor){
-linkColor.forEach(l=> l.classList.remove('active'))
-this.classList.add('active')
-}
-}
-linkColor.forEach(l=> l.addEventListener('click', colorLink))
-
- // Your code to run since DOM is loaded and ready
-});
-
-
-
-
 $(document).ready(function(){
 	
 	$(".table tbody").each(function(){
@@ -53,6 +11,8 @@ $(document).ready(function(){
 		$('html, body').animate({ scrollTop: scrollPos }, 2000);
 	}catch(exp){}
 	*/
+	
+	
 	
 	$(".racerule").each(function(){
 		var thisspan	= $(this);
@@ -181,9 +141,10 @@ $(document).ready(function(){
     	}).done(function (){
 			$(thisrow).next().next().hide();   /// hide .loadingrows
 		});
+		});
 		
 		
-			$(".parent").each(function(){
+		$(".parent").each(function(){
 		var thistd 		= $(this);
 		var horsecode	= $(this).attr("horsecode");
 		
@@ -237,7 +198,7 @@ $(document).ready(function(){
 	});
 		
 		
-		$(".jockeyrates").each(function(){
+	$(".jockeyrates").each(function(){
 		var jockeycode 	= $(this).attr('jockeycode');
 		var thisspan	= $(this);
 		$.ajax({
@@ -255,11 +216,6 @@ $(document).ready(function(){
 		});
 	});
 		
-
-	});
-	
-	
-	
 	
 }); // document ready end
 
@@ -274,7 +230,7 @@ $(document).on('click', ".raceresult", function() {
 	$(divs).remove();
 	
 	if(p_url != undefined && v_url == undefined){
-		$(this).parent().append('<div><img style="display: block; max-width: 100%; margin-top:1rem;" src='+p_url+'></div>');
+		$(this).parent().append('<div><img style="max-width: 100%; margin-top:1rem;" src='+p_url+'></div>');
 	}
 	
 	if(p_url == undefined && v_url != undefined){
