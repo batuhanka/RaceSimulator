@@ -78,59 +78,6 @@ $(document).ready(function(){
     	});
 	});
 	
-	$(".parent").each(function(){
-		var thistd 		= $(this);
-		var horsecode	= $(this).attr("horsecode");
-		
-		$.ajax({
-        	type: "GET",
-        	async: true,
-        	url: '/horsetype/',
-        	traditional : true,
-        	data: {
-            	horsecode 	: horsecode,
-        	},
-        	success: function(data) {
-	
-				//var horsetd		= $(thistd).prev().prev();
-				var horsespan 	= $(thistd).parent().prev().find("span")[0];
-				var horsecolor 	= $(horsespan).text().split(" ")[1];
-				// set horse don colour
-				if(horsecolor == 'a'){
-					$(horsespan).addClass("badge-danger");
-				}
-				if(horsecolor == 'd'){
-					$(horsespan).addClass("badge-warning");
-				}
-				if(horsecolor == 'k'){
-					$(horsespan).addClass("badge-secondary");
-				}
-	
-				// set father don colour
-				if(data.fathertype == 'a'){
-					$($(thistd).children()[0]).addClass("badge-danger");
-				}
-				if(data.fathertype == 'd'){
-					$($(thistd).children()[0]).addClass("badge-warning");
-				}
-				if(data.fathertype == 'k'){
-					$($(thistd).children()[0]).addClass("badge-secondary");
-				}
-				
-				// set mother don colour
-				if(data.mothertype == 'a'){
-					$($(thistd).children()[2]).addClass("badge-danger");
-				}
-				if(data.mothertype == 'd'){
-					$($(thistd).children()[2]).addClass("badge-warning");
-				}
-				if(data.mothertype == 'k'){
-					$($(thistd).children()[2]).addClass("badge-secondary");
-				}
-        	}
-    	});
-	});
-	
 	$(".racetable").each(function(){
 		var trainers 	= $(this).find(".trainer");
 		var trainerlist	= []
@@ -159,28 +106,8 @@ $(document).ready(function(){
 			
 		});
 		
-		
-		
 	});
-		
 	
-	$(".jockeyrates").each(function(){
-		var jockeycode 	= $(this).attr('jockeycode');
-		var thisspan	= $(this);
-		$.ajax({
-        	type: "GET",
-        	async: true,
-        	url: '/jockeyrate/',
-        	traditional : true,
-        	data: {
-            	jockeycode 	: jockeycode,
-        	},
-        	success: function(data) {
-				$(thisspan).text("%"+data.jockeyrate);
-				$(thisspan).show();
-			}
-		});
-	});
 	
 	$(".table tbody tr.loadingrow").each(function(){
 		$(this).show();
@@ -255,36 +182,89 @@ $(document).ready(function(){
 			$(thisrow).next().next().hide();   /// hide .loadingrows
 		});
 		
+		
+			$(".parent").each(function(){
+		var thistd 		= $(this);
+		var horsecode	= $(this).attr("horsecode");
+		
+		$.ajax({
+        	type: "GET",
+        	async: true,
+        	url: '/horsetype/',
+        	traditional : true,
+        	data: {
+            	horsecode 	: horsecode,
+        	},
+        	success: function(data) {
+	
+				//var horsetd		= $(thistd).prev().prev();
+				var horsespan 	= $(thistd).parent().prev().find("span")[0];
+				var horsecolor 	= $(horsespan).text().split(" ")[1];
+				// set horse don colour
+				if(horsecolor == 'a'){
+					$(horsespan).addClass("badge-danger");
+				}
+				if(horsecolor == 'd'){
+					$(horsespan).addClass("badge-warning");
+				}
+				if(horsecolor == 'k'){
+					$(horsespan).addClass("badge-secondary");
+				}
+	
+				// set father don colour
+				if(data.fathertype == 'a'){
+					$($(thistd).children()[0]).addClass("badge-danger");
+				}
+				if(data.fathertype == 'd'){
+					$($(thistd).children()[0]).addClass("badge-warning");
+				}
+				if(data.fathertype == 'k'){
+					$($(thistd).children()[0]).addClass("badge-secondary");
+				}
+				
+				// set mother don colour
+				if(data.mothertype == 'a'){
+					$($(thistd).children()[2]).addClass("badge-danger");
+				}
+				if(data.mothertype == 'd'){
+					$($(thistd).children()[2]).addClass("badge-warning");
+				}
+				if(data.mothertype == 'k'){
+					$($(thistd).children()[2]).addClass("badge-secondary");
+				}
+        	}
+    	});
+	});
+		
+		
+		$(".jockeyrates").each(function(){
+		var jockeycode 	= $(this).attr('jockeycode');
+		var thisspan	= $(this);
+		$.ajax({
+        	type: "GET",
+        	async: true,
+        	url: '/jockeyrate/',
+        	traditional : true,
+        	data: {
+            	jockeycode 	: jockeycode,
+        	},
+        	success: function(data) {
+				$(thisspan).text("%"+data.jockeyrate);
+				$(thisspan).show();
+			}
+		});
+	});
+		
 
 	});
+	
+	
+	
 	
 }); // document ready end
 
 let flags 		= [];
 let detailflags = [];
-$(document).ajaxStop(function() {
-	
-	/*
-	try{
-		var activeitem = $('.collapse.show')[0];	
-		var scrollPos =  $($(activeitem).parent().parent()).offset().top - 10;
-		$('html, body').animate({ scrollTop: scrollPos }, 2000);
-	}catch(exp){}
-	*/
-	
-	/*
-	try{
-  		$(datatable).DataTable().destroy();
-		$(datatable).DataTable(tableOptions2);
-		$(".simulation").each(function (){
-			$(this).prop('disabled', false);
-		});
-		$(".showracelist").each(function (){
-			$(this).prop('disabled', false);
-		});
-	}catch(exp){	}
-	*/
-});
 
 
 $(document).on('click', ".raceresult", function() {
