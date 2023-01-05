@@ -83,10 +83,10 @@ DATABASES = {
     },
     'racedb': {
         'ENGINE': 'django.db.backends.postgresql',
-        'HOST': 'racesimulator.c0tmdonx1dll.us-east-1.rds.amazonaws.com',  # database host
+        'HOST': 'localhost',  # database host
         'NAME': 'racedb',  # database name
-        'USER': 'batuhanka',  # database user
-        'PASSWORD': '150201036',  # database pass
+        'USER': 'postgres',  # database user
+        'PASSWORD': 'gs35DBH26..',  # database pass
         'PORT': 5432,  # database port
     },
 }
@@ -133,3 +133,6 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),
 ]
+
+DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
+

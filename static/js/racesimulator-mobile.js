@@ -13,7 +13,6 @@ $(document).ready(function(){
 	*/
 	
 	
-	
 	$(".racerule").each(function(){
 		var thisspan	= $(this);
 		var raceid 		= $(this).attr("raceid");
