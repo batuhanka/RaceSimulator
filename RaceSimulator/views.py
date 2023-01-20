@@ -128,6 +128,16 @@ def degreepredict(request):
     data = json.dumps(context, indent=4, sort_keys=True, default=str)
     return HttpResponse(data, "application/json")
 
+def horsehistory(request):
+    horsecode       = request.GET.get("horsecode")
+    courtcode       = request.GET.get("courtcode")
+    historydata     = CONT.get_historical_data(horsecode, courtcode)
+    context = {
+        'historydata': historydata,
+    }
+    data = json.dumps(context, indent=4, sort_keys=True, default=str)
+    return HttpResponse(data, "application/json")
+
 def rivalstats(request):
     horsecode       = request.GET.get("horsecode")
     racecode        = request.GET.get("racecode")
@@ -204,9 +214,16 @@ def yearprize(request):
         url         = 'https://www.tjk.org/TR/YarisSever/Query/ConnectedPage/AtKosuBilgileri?&QueryParameter_Kosmaz=on&Sort=&OldQueryParameter_AtId='+horsecode
         response    = requests.get(url)
         source      = BeautifulSoup(response.content, "lxml")
-        prizes      = source.find("div", {"class": "grid_10 alpha omega kunye"}).find("table").find("tbody").find_all("tr")
-        yearprize   = prizes[4].find_all("td")[7].text.split(" t")[0]
+        #prizes      = source.find("div", {"class": "grid_10 alpha omega kunye"}).find("table").find("tbody").find_all("tr")
+        #yearprize   = prizes[4].find_all("td")[7].text.split(" t")[0]
         records     = source.find("table", {"id": "queryTable"}).find("tbody").find_all("tr")
+        for record in records:
+            racedatestr = record.find_all("td")[0].text.strip()
+            oldprize    = record.find_all("td")[17].text.strip()
+            racedate    = datetime.strptime(racedatestr,'%d.%m.%Y')
+            if(oldprize and racedate > datetime(2022, 7, 1)):
+                yearprize += float(oldprize)
+        
         firstrow    = records[0]
         columns     = firstrow.find_all("td")
         recordstr   = columns[0].text.strip()
@@ -222,7 +239,7 @@ def yearprize(request):
     except:
         pass
     context = {
-        'yearprize'     : yearprize,
+        'yearprize'     : str(yearprize.__format__(".3f")),
         'nextrecord'    : nextrecord,
         'nextrecordtype': nextrecordtype,
     }

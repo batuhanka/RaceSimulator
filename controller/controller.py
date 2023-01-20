@@ -501,6 +501,47 @@ def get_degree_predict(horsecode, courtcode, curr_temperature, curr_humidity, cu
             return predicted
     else:
         return 0
+    
+
+def get_historical_data(horsecode, courtcode):
+
+    data            = []
+    details_url     = 'https://www.tjk.org/TR/YarisSever/Query/ConnectedPage/AtKosuBilgileri?QueryParameter_AtId='+horsecode 
+    horsedetails    = requests.get(details_url)
+    source          = BeautifulSoup(horsedetails.content,"lxml")
+    allraces        = source.find("table", {"id": "queryTable"})
+
+    for item in allraces.find_all("tr"):
+        columns = item.find_all("td")
+        if(len(columns) == 21):
+            if(columns[4].text.strip() != ""):
+                try:
+                    racedate    = convert_race_date(columns[0].text.strip())
+                    racedatestr = columns[0].text.strip()
+                    racecity    = find_weather_location(columns[1].text.strip())
+                    url         = 'https://ebayi.tjk.org/s/d/sonuclar/%s/full/%s.json' %(racedate, racecity)
+                    races       = requests.get(url).json()
+                    raceno      = columns[12].span.text.strip()
+                    for race in races['kosular']:
+                        if(int(race['NO']) ==  int(raceno)):
+                            distance= race['MESAFE']
+                            pist    = race['PIST']
+                            for horse in race['atlar']:
+                                if(horse['KOD'] == horsecode):
+                                    if(horse['KOSMAZ'] == False and pist == courtcode):
+                                        degree              = horse['DERECE']
+                                        velocity            = (float(distance) / convert_to_second(degree))
+                                        history             = {}
+                                        history             = {}
+                                        history['day']      = int(racedatestr.split(".")[0])
+                                        history['month']    = int(racedatestr.split(".")[1])
+                                        history['year']     = int(racedatestr.split(".")[2])           
+                                        history['velocity'] = velocity
+                                        data.append(history)
+                except:
+                    pass
+    
+    return data
 
 def get_horse_avg_speed(horse_power_list, courtcode):
     

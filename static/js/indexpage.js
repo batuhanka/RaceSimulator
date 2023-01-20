@@ -1,5 +1,19 @@
 $(document).ready(function(){
 	
+/*
+function toogleDataSeries(e){
+	if (typeof(e.dataSeries.visible) === "undefined" || e.dataSeries.visible) {
+		e.dataSeries.visible = false;
+	} else{
+		e.dataSeries.visible = true;
+	}
+	e.chart.render();
+}
+*/
+	
+	
+	
+	
 	try{
 		$('#programdate').datepicker({
             dateFormat: 'd MM yy, DD',

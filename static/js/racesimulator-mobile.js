@@ -1,5 +1,5 @@
 $(document).ready(function(){
-	
+
 	$(".table tbody").each(function(){
 		sortmytable(this, "number");
 	});
@@ -11,7 +11,6 @@ $(document).ready(function(){
 		$('html, body').animate({ scrollTop: scrollPos }, 2000);
 	}catch(exp){}
 	*/
-	
 	
 	$(".racerule").each(function(){
 		var thisspan	= $(this);
@@ -66,7 +65,6 @@ $(document).ready(function(){
 		});
 		
 	});
-	
 	
 	$(".table tbody tr.loadingrow").each(function(){
 		$(this).show();
@@ -214,9 +212,165 @@ $(document).ready(function(){
 			}
 		});
 	});
+	
+	$(".chart").each(function(){
 		
+		var horsecode 	= $(this).attr('horsecode');
+		var courtcode 	= $(this).attr('courtcode');
+		var chartid 	= $(this).attr('id');
+		
+		$.getJSON('/horsehistory/?horsecode='+horsecode+'&courtcode='+courtcode, function(data){
+			var dps	= [];
+			for(var i=0; i < data.historydata.length; i++){
+				dps.push({x: new Date(data.historydata[i]['year'], data.historydata[i]['month'], data.historydata[i]['day']), y: data.historydata[i]['velocity'] })
+			}
+			
+			var chart = new CanvasJS.Chart(chartid, {
+			title :{
+				text: "Ortalama Hız Performansı",
+				fontWeight: "bold"
+			},
+			culture: "tr",
+			height:150,
+			width:450,
+			axisX:{
+        		labelFormatter: function(e){	return  "";		},
+				gridThickness: 0
+      		},
+			axisY:{
+				labelFormatter: function(e){	return  "";		},
+				gridThickness: 0
+			},
+			data: [{
+				type: "spline",
+				lineThickness: 5,
+				markerSize: 0,
+				color: "#17a2b8",
+				dataPoints: dps, 
+			}]
+			});
+			chart.render();
+			
+		});
+		
+	});
+	
+	/*
+	$(".chart").each(function(){ 
+		
+		var horsecode 	= $(this).attr('horsecode');
+		var courtcode 	= $(this).attr('courtcode');
+		var chartid 	= $(this).attr('id');
+		var dps 		= [];
+		
+		function addData(data) {
+			for (const [key, value] of Object.entries(data.historydata)) {
+  				dps.push({x: key, y: value});
+			}
+		chart.render();
+		}
+		
+		$.getJSON('/horsehistory/?horsecode='+horsecode+'&courtcode='+courtcode, addData);
+		
+		}
+			console.log(dps);
+			
+			var chart = new CanvasJS.Chart(chartid, {
+			title :{
+			text: "Ortalama Hız Performansı"
+			},
+			data: [{
+				type: "spline",
+				markerSize: 0,
+				dataPoints: dps, 
+			}]
+			});
+			chart.render();
+			
+			//for (const [key, value] of Object.entries(data.historydata)) {
+  			//	dps.push({x: key, y: value});
+			//}
+		});
+		
+	}); // chart each function end
+	
+	
+	/*	
+$(".chart").each(function(){
+	
+	var horsecode 	= $(this).attr('horsecode');
+	var courtcode 	= $(this).attr('courtcode');
+	var chartid 	= $(this).attr('id');
+	var dps 		= [];
+	
+	var chart = new CanvasJS.Chart(chartid, {
+		title :{
+			text: "Dynamic Spline Chart"
+		},
+		data: [{
+			type: "spline",
+			markerSize: 0,
+			dataPoints: dps 
+		}]
+	});
+	
+	var xVal = 0;
+var yVal = 100;
+var updateInterval = 1000;
+var dataLength = 50; // number of dataPoints visible at any point
+
+var updateChart = function (count) {
+	count = count || 1;
+	// count is number of times loop runs to generate random dataPoints.
+	$.getJSON('/horsehistory/?horsecode='+horsecode+'&courtcode='+courtcode, function(data){
+		for (const [key, value] of Object.entries(data.historydata)) {
+  			dps.push({x: key, y: value});
+		//yVal = yVal + Math.round(5 + Math.random() *(-5-5));
+		//dps.push({
+		//	x: xVal,
+		//	y: yVal
+		//});
+		//xVal++;
+		}
+	});
+	if (dps.length > dataLength) {
+		dps.shift();
+	}
+	chart.render();
+};
+
+updateChart(dataLength); 
+setInterval(function(){ updateChart() }, updateInterval); 
+*/
+	/*
+	$.getJSON('/horsehistory/?horsecode='+horsecode+'&courtcode='+courtcode, function(data){
+		for (const [key, value] of Object.entries(data.historydata)) {
+  			datapoints.push({x: key, y: value});
+		}
+		console.log(datapoints)
+		
+		var chart = new CanvasJS.Chart(chartid, {
+		animationEnabled: true,  
+		axisY: {
+			title: "Units Sold",
+			valueFormatString: "#0,,.",
+			suffix: "mn",
+		},
+		data: [{
+			yValueFormatString: "#,### Units",
+			xValueFormatString: "YYYYMMDD",
+			type: "spline",
+			dataPoints: datapoints,
+		}]
+		});
+		chart.render();
+		
+	});
+	*/
 	
 }); // document ready end
+
+	
 
 let flags 		= [];
 let detailflags = [];

@@ -29,6 +29,7 @@ urlpatterns = [
     path('horsepower/',     views.horsepower,   name='horsepower'),
     path('horsespeed/',     views.horsespeed,   name='horsespeed'),
     path('degreepredict/',  views.degreepredict,name='degreepredict'),
+    path('horsehistory/',   views.horsehistory, name='horsehistory'),
     path('rivalstats/',     views.rivalstats,   name='rivalstats'),
     path('gallop/',         views.gallop,       name='gallop'),
     path('last800/',        views.last800,      name='last800'),

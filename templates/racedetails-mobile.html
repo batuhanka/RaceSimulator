@@ -13,6 +13,7 @@
 	
 
     <script src="{% static 'js/jquery-3.5.1.min.js' %}" 	type="text/javascript" charset="utf-8"></script>
+    <script src="{% static 'js/canvaschart.js' %}" 			type="text/javascript" charset="utf-8"></script>
     <script src="{% static 'js/bootstrap.min.js' %}" 		type="text/javascript" charset="utf-8"></script>
     <script src="{% static 'js/bootstrap-toggle.min.js' %}" type="text/javascript" charset="utf-8"></script>
     <script src="{% static 'js/fontawesome-all.min.js' %}"	type="text/javascript" charset="utf-8"></script>
@@ -219,15 +220,16 @@
 				<br>
 				<span class="btn btn-outline-dark rivalanalysis" style="text-align:left; float:left; font-size:larger;">
     				<span class="fa-solid fa-flag-checkered"></span><b> Rakip Analizi</b>
-    			</span>
+    			</span> 
 			</td>
-			<td style="text-align:end; display:none; font-size:larger; border:0px;">
-				<span class="badge badge-pill badge-info" style="font-size: xx-large; float:right;"><b class="degreeinfo"></b></span>
+			<td style="float:right; font-size:larger; border:0px;">
+				<div class="chart" id="chart-{{ horse.code }}" horsecode="{{ horse.code }}" courtcode="{{ singlerace.courtcode }}" style="height: 150px; width: 450px;"></div>
+<!-- 				<span class="badge badge-pill badge-info" style="font-size: xx-large; float:right;"><b class="degreeinfo"></b></span> -->
 			</td>
 			
-			<td style="text-align:end; font-size:larger; border:0px;">
-				<span class="badge badge-pill badge-info" style="font-size: xx-large; float:right;"><canvas class="performchart"></canvas></span>
-			</td>
+			<!-- <td style="text-align:end; font-size:larger; border:0px;">
+				<span class="chart" id="chartContainer-{{ horse.code }}" style="height: 200px; max-width: 600px; margin: 0px auto;"></span>
+			</td> -->
 			
 		</tr>
 		
