@@ -226,11 +226,7 @@ $(document).ready(function(){
 			}
 			
 			var chart = new CanvasJS.Chart(chartid, {
-			title :{
-				text: "Ortalama Hız Performansı",
-				fontWeight: "bold"
-			},
-			culture: "tr",
+			theme: "light2",
 			height:150,
 			width:450,
 			axisX:{
