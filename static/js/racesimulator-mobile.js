@@ -46,6 +46,8 @@ $(document).ready(function(){
 			if(trainerlist.indexOf(last) != trainerlist.lastIndexOf(last)){
 				$(trainers[trainerlist.indexOf(last)]).addClass("btn btn-outline-danger");
 				$(trainers[trainerlist.lastIndexOf(last)]).addClass("btn btn-outline-danger");
+				$(trainers[trainerlist.indexOf(last)]).css("margin-top","1%");
+				$(trainers[trainerlist.lastIndexOf(last)]).css("margin-top","1%");
 			}
 			
 		});
@@ -73,13 +75,29 @@ $(document).ready(function(){
 	$(".table tbody tr.calculations").each(function(){
 		
 		var thisrow 		= $(this);
+		
 		var prizeElement	= $(this).find("b.yearprize");
 		var recordElement	= $(this).find("b.nextrecord");
-		var horsecode		= $(this).attr('horsecode');
-		
 		var gallopElement 	= $(this).find("b.gallop");
-		var horsename 		= $(this).attr('horsename');
-		var kgs 			= $(this).attr('kgs');
+		var degreeElement 	= $(this).find("b.degreeinfo");
+		
+		var horsecode 		= $(this).attr("horsecode");
+		var horsename 		= $(this).attr("horsename");
+		var courtcode 		= $(this).attr("courtcode");
+		var racecode 		= $(this).attr("racecode");
+		var cityname 		= $(this).attr("cityname");
+		var dateinfo 		= $(this).attr("dateinfo");
+		var temperature		= $(this).attr("temperature");
+    	var humidity   		= $(this).attr("humidity");
+    	var grassrate  		= $(this).attr("grassrate");
+    	var dirtstate  		= $(this).attr("dirtstate");
+    	var distance   		= $(this).attr("distance");
+    	var weight     		= $(this).attr("weight");
+    	var handycap   		= $(this).attr("handycap");
+    	var kgs        		= $(this).attr("kgs");
+    	var last20     		= $(this).attr("last20");
+		var jockeycode 		= $(this).attr("jockeycode");
+		var startno 		= $(this).attr("startno");
 		
 		$.ajax({
         	type: "GET",
@@ -110,11 +128,45 @@ $(document).ready(function(){
 				var horsetext	= temp.split(",")[1];
 				var raceprizes	= $($(prizeElement).closest("table").parent().parent().prev().children())[0];
 				var prize1		= parseFloat($($(raceprizes).children()[0]).text().trim().replace(".",""));
-				var detailrow	= $(prizeElement).closest("tr").next();
+				var detailrow	= $(prizeElement).parent().parent();
 				var cityname	= $("#citynameinput").val();
 				compare_racerule(data.yearprize, horsehp, racetype, prize1, detailrow, horsetext, cityname);
 				$(thisrow).show();
 				}
+    	});
+		
+		
+		$.ajax({
+        	type: "GET",
+        	async: true,
+        	url: '/degreepredict/',
+        	traditional : true,
+        	data: {
+            	horsecode 	: horsecode,
+				horsename	: horsename,
+				courtcode 	: courtcode,
+				racecode	: racecode,
+				cityname	: cityname,
+				dateinfo	: dateinfo,
+				temperature : temperature,
+				humidity	: humidity,
+				grassrate	: grassrate,
+				dirtstate	: dirtstate,
+				distance  	: distance,
+				weight	  	: weight,
+				handycap	: handycap,
+				kgs			: kgs,
+				last20		: last20,
+				jockeycode	: jockeycode,
+				startno		: startno,
+        	},
+        	success: function(data) {
+				if(data.degree_predict == 0){
+					$(degreeElement).text("");
+				}else{
+					$(degreeElement).text(data.degree_predict);
+				}
+        	}
     	});
 		
 		
@@ -250,119 +302,6 @@ $(document).ready(function(){
 		});
 		
 	});
-	
-	/*
-	$(".chart").each(function(){ 
-		
-		var horsecode 	= $(this).attr('horsecode');
-		var courtcode 	= $(this).attr('courtcode');
-		var chartid 	= $(this).attr('id');
-		var dps 		= [];
-		
-		function addData(data) {
-			for (const [key, value] of Object.entries(data.historydata)) {
-  				dps.push({x: key, y: value});
-			}
-		chart.render();
-		}
-		
-		$.getJSON('/horsehistory/?horsecode='+horsecode+'&courtcode='+courtcode, addData);
-		
-		}
-			console.log(dps);
-			
-			var chart = new CanvasJS.Chart(chartid, {
-			title :{
-			text: "Ortalama Hız Performansı"
-			},
-			data: [{
-				type: "spline",
-				markerSize: 0,
-				dataPoints: dps, 
-			}]
-			});
-			chart.render();
-			
-			//for (const [key, value] of Object.entries(data.historydata)) {
-  			//	dps.push({x: key, y: value});
-			//}
-		});
-		
-	}); // chart each function end
-	
-	
-	/*	
-$(".chart").each(function(){
-	
-	var horsecode 	= $(this).attr('horsecode');
-	var courtcode 	= $(this).attr('courtcode');
-	var chartid 	= $(this).attr('id');
-	var dps 		= [];
-	
-	var chart = new CanvasJS.Chart(chartid, {
-		title :{
-			text: "Dynamic Spline Chart"
-		},
-		data: [{
-			type: "spline",
-			markerSize: 0,
-			dataPoints: dps 
-		}]
-	});
-	
-	var xVal = 0;
-var yVal = 100;
-var updateInterval = 1000;
-var dataLength = 50; // number of dataPoints visible at any point
-
-var updateChart = function (count) {
-	count = count || 1;
-	// count is number of times loop runs to generate random dataPoints.
-	$.getJSON('/horsehistory/?horsecode='+horsecode+'&courtcode='+courtcode, function(data){
-		for (const [key, value] of Object.entries(data.historydata)) {
-  			dps.push({x: key, y: value});
-		//yVal = yVal + Math.round(5 + Math.random() *(-5-5));
-		//dps.push({
-		//	x: xVal,
-		//	y: yVal
-		//});
-		//xVal++;
-		}
-	});
-	if (dps.length > dataLength) {
-		dps.shift();
-	}
-	chart.render();
-};
-
-updateChart(dataLength); 
-setInterval(function(){ updateChart() }, updateInterval); 
-*/
-	/*
-	$.getJSON('/horsehistory/?horsecode='+horsecode+'&courtcode='+courtcode, function(data){
-		for (const [key, value] of Object.entries(data.historydata)) {
-  			datapoints.push({x: key, y: value});
-		}
-		console.log(datapoints)
-		
-		var chart = new CanvasJS.Chart(chartid, {
-		animationEnabled: true,  
-		axisY: {
-			title: "Units Sold",
-			valueFormatString: "#0,,.",
-			suffix: "mn",
-		},
-		data: [{
-			yValueFormatString: "#,### Units",
-			xValueFormatString: "YYYYMMDD",
-			type: "spline",
-			dataPoints: datapoints,
-		}]
-		});
-		chart.render();
-		
-	});
-	*/
 	
 }); // document ready end
 
@@ -826,7 +765,7 @@ function compare_racerule(yearprize, horsehp, racetype, prize1, detailrow, horse
 	}
 	
 	if(msg != ""){
-		$($(detailrow).children()[0]).prepend('<div style="font-weight:bold; text-align:start;">Kazanırsa '+msg+' koşamaz.</div>');
+		$(detailrow).append('<br><span style="font-weight:bold; text-align:start; margin-left:1%;">Kazanırsa '+msg+' koşamaz.</span>');
 	}
 	
 }

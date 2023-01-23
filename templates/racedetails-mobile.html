@@ -204,26 +204,25 @@
 		
 		
 		
-		<tr class="calculations" style="display:none;" horsecode="{{ horse.code }}" horsename="{{ horse.name }}" kgs="{{ horse.kgs }}">
+		<tr class="calculations" style="display:none;" horsecode="{{ horse.code }}" horsename="{{ horse.name }}" courtcode="{{ singlerace.courtcode }}" racecode="{{ horse.racecode }}" cityname="{{ weather.cityname }}" dateinfo="{{ singlerace.daterequest }}" temperature="{{ weather.temperature }}" humidity="{{ weather.humidity }}" grassrate="{{ weather.grassrate }}" dirtstate="{{ weather.sandstatus }}" distance="{{ singlerace.distance }}" weight="{{ horse.weight }}" handycap="{{ horse.handycap }}" kgs="{{ horse.kgs }}" last20="{{ horse.last20 }}" jockeycode="{{ horse.jockeycode }}" startno="{{ horse.startno }}">          
 			<td colspan="2" style="font-size:larger; border:0px;">
 				<span class="badge">Yıllık Kazanç: <b class="text-info yearprize"></b></span> 
 				<span class="badge">Sonraki Kayıt: <b class="text-info nextrecord"></b></span>
 			</td>
 			<td style="text-align:end; font-size:larger; border:0px;">
-				<span class="badge" >Galop400m: <b class="text-info gallop"></b></span>
+				<span class="badge" >Galop400m: <b class="text-info gallop"></b></span><br>
+				<span class="badge" >Beklenen Derece: <b class="badge badge-pill badge-info degreeinfo" style="font-size: x-large;"></b></span>
 			</td>
 		</tr>
 		
 		
 		<tr class="finaldegree" horsecode="{{ horse.code }}" horsename="{{ horse.name }}" courtcode="{{ singlerace.courtcode }}" racecode="{{ horse.racecode }}" cityname="{{ weather.cityname }}" dateinfo="{{ singlerace.daterequest }}" temperature="{{ weather.temperature }}" humidity="{{ weather.humidity }}" grassrate="{{ weather.grassrate }}" dirtstate="{{ weather.sandstatus }}" distance="{{ singlerace.distance }}" weight="{{ horse.weight }}" handycap="{{ horse.handycap }}" kgs="{{ horse.kgs }}" last20="{{ horse.last20 }}" jockeycode="{{ horse.jockeycode }}" startno="{{ horse.startno }}">          
 			<td colspan="2" style="text-align:left; border:0px;">
-				<br>
-				<span class="btn btn-outline-dark rivalanalysis" style="text-align:left; float:left; font-size:larger;">
+				<span class="btn btn-outline-dark rivalanalysis" style="text-align:left; float:left; font-size:larger; margin-left:1%;">
     				<span class="fa-solid fa-flag-checkered"></span><b> Rakip Analizi</b>
     			</span> 
 			</td>
 			<td style="float:right; font-size:larger; border:0px;">
-				
 				<div class="chart" id="chart-{{ horse.code }}" horsecode="{{ horse.code }}" courtcode="{{ singlerace.courtcode }}" style="height: 150px; width: 450px;">
 				<i class="fa-solid fa-horse fa-beat-fade fa-2x text-info" style="float:right; height:50%"></i>
 				</div>
