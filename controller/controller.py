@@ -116,30 +116,33 @@ def get_all_races(racedeatils):
     
     result = []
     for one in racedeatils:
-        item            = SingleRaceInfo()
-        item.no         = one['NO']
-        item.key        = one['KOD']
-        item.date       = one['TARIH']
-        item.daterequest= convert_date_for_request(one['TARIH'])
-        item.time       = one['SAAT']
-        item.courtcode  = one['PIST']
-        item.court      = one['PISTADI_TR']
-        item.courtbg    = find_court_background(one['PIST'])
-        item.distance   = one['MESAFE']
-        item.racenumber = one['RACENO']
-        if(one['ONEMLIKOSUADI_TR']):
-            item.racename   = one['ONEMLIKOSUADI_TR']
-        item.group      = one['GRUP_TR']
-        item.info       = one['CINSDETAY_TR']
-        item.summary    = one['BILGI_TR']
-        item.betinfo    = one['BAHISLER_TR']
-        item.prize1     = one['ikramiyeler'][0]
-        item.prize2     = one['ikramiyeler'][1]
-        item.prize3     = one['ikramiyeler'][2]
-        item.prize4     = one['ikramiyeler'][3]
-        item.prize5     = one['ikramiyeler'][4]
-        item.completed  = False
-        result.append(item)
+        try:
+            item            = SingleRaceInfo()
+            item.no         = one['NO']
+            item.key        = one['KOD']
+            item.date       = one['TARIH']
+            item.daterequest= convert_date_for_request(one['TARIH'])
+            item.time       = one['SAAT']
+            item.courtcode  = one['PIST']
+            item.court      = one['PISTADI_TR']
+            item.courtbg    = find_court_background(one['PIST'])
+            item.distance   = one['MESAFE']
+            item.racenumber = one['RACENO']
+            if(one['ONEMLIKOSUADI_TR']):
+                item.racename   = one['ONEMLIKOSUADI_TR']
+            item.group      = one['GRUP_TR']
+            item.info       = one['CINSDETAY_TR']
+            item.summary    = one['BILGI_TR']
+            item.betinfo    = one['BAHISLER_TR']
+            item.prize1     = one['ikramiyeler'][0]
+            item.prize2     = one['ikramiyeler'][1]
+            item.prize3     = one['ikramiyeler'][2]
+            item.prize4     = one['ikramiyeler'][3]
+            item.prize5     = one['ikramiyeler'][4]
+            item.completed  = False
+            result.append(item)
+        except:
+            pass
 
     return result
 
