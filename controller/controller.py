@@ -534,7 +534,6 @@ def get_degree_predict(horsecode, courtcode, curr_temperature, curr_humidity, cu
                                         humidities.append(humidity)
                                         grassrates.append(grassrate)
                                         dirtstatus.append(dirtstate)
-                                        distances.append(int(distance))
                                         
                 except:
                     pass
