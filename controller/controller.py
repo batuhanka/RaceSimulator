@@ -7,10 +7,12 @@ import requests
 from RaceSimulator.models import RaceInfo, SingleRaceInfo, HorseInfo, WeatherInfo, HorsePowerInfo
 from bs4 import BeautifulSoup
 import math
-from datetime import datetime
 import statistics
 from _io import BytesIO
 from PIL.Image import Image
+import pandas as pd
+from datetime import datetime
+from sklearn.linear_model import LinearRegression
 
 
 citycodemap = {1:'Adana', 2:'İzmir', 3:'İstanbul', 4:'Bursa', 5:'Ankara', 6:'Şanlıurfa', 7:'Elazığ', 8:'Diyarbakır', 9:'Kocaeli', 10:'Antalya'}
@@ -421,7 +423,7 @@ def get_last_800(horsecode, courtcode):
     
     return result
     
-def get_degree_predict(horsecode, courtcode, curr_temperature, curr_humidity, curr_grassrate, curr_distance, curr_weight, curr_handycap, curr_kgs, curr_last20, curr_dirtstate, curr_jockeycode, curr_startno, last_gallop):
+def get_kinetic_energy_prediction(horsecode, courtcode, curr_temperature, curr_humidity, curr_grassrate, curr_distance, curr_weight, curr_handycap, curr_kgs, curr_last20, curr_dirtstate, curr_jockeycode, curr_startno, last_gallop):
     
     temperatures= []
     humidities  = []
@@ -503,8 +505,103 @@ def get_degree_predict(horsecode, courtcode, curr_temperature, curr_humidity, cu
         else:
             return predicted
     else:
-        return 0
+        return 0    
+
+def get_regression_analysis_prediction(horsecode, courtcode, curr_temperature, curr_humidity, curr_grassrate, curr_distance, curr_weight, curr_handycap, curr_kgs, curr_last20, curr_dirtstate, curr_jockeycode, curr_startno, last_gallop):
     
+    distances   = [] 
+    weights     = []
+    kgscounts   = []
+    jockeyrates = []
+    kinetic     = []
+    handycaps   = []
+    degrees     = []
+    #dirtmap     = {'':2, 'Sulu': 1, 'Islak': 1.5, 'Normal': 2, 'Nemli': 3 }
+    
+    details_url     = 'https://www.tjk.org/TR/YarisSever/Query/ConnectedPage/AtKosuBilgileri?QueryParameter_AtId='+horsecode
+    horsedetails    = requests.get(details_url)
+    source          = BeautifulSoup(horsedetails.content,"lxml")
+    allraces        = source.find("table", {"id": "queryTable"})
+    
+
+    for item in allraces.find_all("tr"):
+        columns = item.find_all("td")
+        if(len(columns) == 21):
+            if(columns[4].text.strip() != ""):
+                try:
+                    racedate    = convert_race_date(columns[0].text.strip())
+                    raceyear    = columns[0].text.strip().split(".")[2]
+                    racecity    = find_weather_location(columns[1].text.strip())
+                    url         = 'https://ebayi.tjk.org/s/d/sonuclar/%s/full/%s.json' %(racedate, racecity)
+                    races       = requests.get(url).json()
+                    weather     = races['hava']
+                    temperature = weather['SICAKLIK']
+                    humidity    = weather['NEM']
+                    raceno      = columns[12].span.text.strip()
+                    for race in races['kosular']:
+                        if(int(race['NO']) ==  int(raceno)):
+                            distance= race['MESAFE']
+                            pist    = race['PIST']
+                            for horse in race['atlar']:
+                                if(horse['KOD'] == horsecode):
+                                    if(horse['KOSMAZ'] == False and pist==courtcode):
+                                        startno         = horse['START']
+                                        weight          = float(horse['KILO']) + float(horse['FAZLAKILO']) - float(horse['APRANTIKILOINDIRIMI'])
+                                        degree          = convert_to_second(horse['DERECE'])
+                                        jockeyrate      = find_jockey_rate(horse['JOKEYKODU'], raceyear)
+                                        kgs             = 0 if horse['KGS'] == '' else horse['KGS']
+                                        handycap        = 0 if horse['HANDIKAP'] == '' else horse['HANDIKAP'] 
+                                        
+                                        #starts.append(int(startno))
+                                        weights.append(float(weight))
+                                        jockeyrates.append(float(jockeyrate))
+                                        kgscounts.append(int(kgs))
+                                        handycaps.append(float(handycap))
+                                        distances.append(int(distance))
+                                        #temperatures.append(float(temperature))
+                                        #humidities.append(float(humidity))
+                                        degrees.append(degree)
+                                        
+                except:
+                    pass
+    
+    
+            
+    racedata = {    
+                    'Weight'        : weights,
+                    'JockeyRate'    : jockeyrates,
+                    'KGS'           : kgscounts,
+                    'Handycap'      : handycaps,
+                    'Distance'      : distances,
+                    'Degree'        : degrees,    
+                }
+    
+    df = pd.DataFrame(racedata)
+    features    = df.iloc[:,:-1]
+    result      = df.iloc[:,-1]
+    reg         = LinearRegression()
+    model       = reg.fit(features, result)
+    
+    
+    
+    # # Generate a prediction
+    example = pd.DataFrame([{
+        'Weight': curr_weight, 
+        'JockeyRate': find_jockey_rate(curr_jockeycode, datetime.now().strftime("%Y")),
+        'KGS':curr_kgs, 
+        'Handycap': curr_handycap, 
+        'Distance': curr_distance, 
+    }])
+    prediction = model.predict(example)
+    reg_score = reg.score(features, result)
+
+    return convert_to_degree(prediction)
+
+def get_degree_predict(horsecode, courtcode, curr_temperature, curr_humidity, curr_grassrate, curr_distance, curr_weight, curr_handycap, curr_kgs, curr_last20, curr_dirtstate, curr_jockeycode, curr_startno, last_gallop):
+    
+    kinetic     = get_kinetic_energy_prediction(horsecode, courtcode, curr_weight, curr_jockeycode, curr_handycap, curr_distance, curr_kgs, last_gallop)
+    regression  = get_regression_analysis_prediction(horsecode, courtcode, curr_weight, curr_jockeycode, curr_handycap, curr_distance, curr_kgs, last_gallop)
+    return ( convert_to_degree((convert_to_second(kinetic) + convert_to_second(regression)) / 2) )
 
 def get_historical_data(horsecode, courtcode):
 
