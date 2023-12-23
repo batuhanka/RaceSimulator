@@ -1,27 +1,5 @@
 requestPool = [];
 
-function add_keyframes(rows){
-	
-	$(rows).each(function(){
-	
-	var horsedegree		= $(this).attr("horsedegree");
-	var finalposition	= $(this).attr("finalposition");
-	var horsecode 		= $(this).attr("horsecode");
-	const keyframesname = `moveRight_${horsecode}`;
-				$(this).css({"position":"relative", "animation":`${keyframesname} 6s ease-in-out forwards`});
-				//$(this).find("td").css({"position":"relative"});
-	
-	const keyframesstyle = `@keyframes ${keyframesname} {
-        0% {	left: 0;	}
-        100% {  left: ${finalposition}%;  }
-    }`;
-
-    $('<style>').attr('type', 'text/css').text(keyframesstyle).appendTo('head');
-	
-	});
-	
-}
-
 function add_key_frames(horses){
 
 	$(horses).each(function(){
@@ -31,7 +9,7 @@ function add_key_frames(horses){
 	var finalposition	= $(this).attr("finalposition");
 	
 	const keyframesname = `move_right_${horsecode}`;
-				$(this).css({"animation":`${keyframesname} 6s linear forwards`});
+				$(this).css({"animation":`${keyframesname} ${horsedegree}s linear forwards`});
 	
 	const keyframesstyle = `@keyframes ${keyframesname} {
         from {	transform: translateX(0%);	}
@@ -51,6 +29,17 @@ function terminate_running_requests(){
 		var indexToRemove = requestPool.indexOf(request);
 		requestPool.splice(indexToRemove, 1);
 		request.abort();
+	}
+}
+
+function timeStringToMilliseconds(timeString) {
+	var totalMilliseconds = 0;
+	if(timeString != '0'){
+    	const [hours, minutes, seconds] = timeString.split('.').map(Number);
+    	const totalMilliseconds = (hours * 60 * 60 + minutes * 60 + seconds) * 1000;
+    	return totalMilliseconds / (1000 * 1000);
+	}else{
+		return totalMilliseconds / (1000 * 1000);
 	}
 }
 
@@ -109,18 +98,39 @@ $(window).on('load', function(){
 				startno		: startno,
         	},
         	success: function(data) {
-				
-				racelist[horsecode] = data.degree_predict
+
+				var seconds 		= timeStringToMilliseconds(data.degree_predict);
+				racelist[horsecode] = seconds;
 				
 				for(var i=0; i<horses.length; i++){
 					if( startno == $(horses[i]).attr('startno') ){
-						$(horses[startno - 1]).attr('horsedegree', data.degree_predict);
-						$(horses[startno - 1]).attr('finalposition', 90 - startno*2);
+						$(horses[startno - 1]).attr('horsedegree', seconds );
+						$(horses[startno - 1]).attr('finalposition', 90 - seconds);
 						$(columns[startno - 1]).append(horses[i]).hide().show(2000);
 					}
 				}
 				
 				if(horses.length == Object.keys(racelist).length){
+					
+					const nonZeroValues = Object.values(racelist).filter(value => value !== 0);
+					const sum 			= nonZeroValues.reduce((acc, val) => acc + val, 0);
+					const average 		= sum / nonZeroValues.length;
+					const resultarray 	= {};
+					for (const key in racelist) {
+  						resultarray[key] = racelist[key] === 0 ? average : racelist[key];
+					}
+					
+					console.log(resultarray)
+					
+					/*
+					for(var i=0; i<horses.length; i++){
+						if( startno == $(horses[i]).attr('startno') ){
+							$(horses[startno - 1]).attr('horsedegree', resultArray[horsecode]);
+							$(horses[startno - 1]).attr('finalposition', 90 - startno*3);
+						}
+					}
+					*/
+					
 					console.log("all calculated");
 					add_key_frames(horses);
 				}else{
