@@ -24,6 +24,7 @@ urlpatterns = [
     path('login/',          views.login,        name='login'),
     path('registeruser/',   views.registeruser, name='registeruser'),
     path('fixture/',        views.fixture,      name='fixture'),
+    path('simulation/',     views.simulation,   name='simulation'),
     path('prgchange/',      views.prgchange,    name='prgchange'),
     path('singlerace/',     views.singlerace,   name='singlerace'),
     path('horsepower/',     views.horsepower,   name='horsepower'),

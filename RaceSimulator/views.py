@@ -52,6 +52,32 @@ def prgchange(request):
     json_object         = json.dumps({'races': racelist})
     return HttpResponse(json_object, mimetype)
 
+def simulation(request):
+    programdate         = request.GET.get("programdate")
+    temp                = str(programdate).split()
+    daterequest         = temp[0]+temp[1]+temp[2]+temp[3]
+    prgdate             = datetime.strptime(daterequest, '%a%b%d%Y')
+    date_for_request    = prgdate.strftime("%Y%m%d")
+    now                 = datetime.now()
+    cityname            = request.GET.get("cityname")
+    url                 = '''https://ebayi.tjk.org/s/d/program/%s/full/%s.json''' %(date_for_request, cityname)
+    program             = requests.get(url).json()
+    weatherdetails      = program['hava']
+    racedetails         = program['kosular']
+    weather_info        = CONT.get_weather_info(weatherdetails)
+    all_races           = CONT.get_all_races(racedetails)
+    all_horses          = CONT.get_all_horses(racedetails)
+    #all_rules           = CONT.get_all_rules()
+    
+    if date_for_request == now.strftime("%Y%m%d"):
+        currenttime     = now.strftime("%H:%M")
+        nextracetime    = (now + timedelta(minutes=30)).strftime("%H:%M")
+    else:
+        currenttime     = prgdate.strftime("%H:%M")
+        nextracetime    = (prgdate + timedelta(minutes=30)).strftime("%H:%M")
+    
+    return render(request, "simulation.html", {'currenttime': currenttime, 'nextracetime': nextracetime, 'weather': weather_info, 'cityname': cityname, 'programdate':programdate, 'racedetails' : all_races, 'allhorses' : all_horses })
+
 def fixture(request):
     programdate         = request.GET.get("programdate")
     temp                = str(programdate).split()
@@ -96,7 +122,7 @@ def fixture(request):
         currenttime     = prgdate.strftime("%H:%M")
         nextracetime    = (prgdate + timedelta(minutes=30)).strftime("%H:%M")
     
-    return render(request, "racedetails-mobile.html", {'currenttime': currenttime, 'nextracetime': nextracetime, 'weather': weather_info, 'cityname': cityname, 'racedetails' : all_races, 'allhorses' : all_horses, 'allrules': json.dumps(all_rules) })
+    return render(request, "racedetails-mobile.html", {'currenttime': currenttime, 'nextracetime': nextracetime, 'weather': weather_info, 'cityname': cityname, 'programdate':programdate, 'racedetails' : all_races, 'allhorses' : all_horses, 'allrules': json.dumps(all_rules) })
 
 def is_race_completed(racecode, videourl, photourl, allraces):
     for race in allraces:

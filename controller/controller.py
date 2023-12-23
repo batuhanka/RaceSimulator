@@ -510,7 +510,7 @@ def get_degree_predict(horsecode, courtcode, curr_temperature, curr_humidity, cu
                             pist    = race['PIST']
                             for horse in race['atlar']:
                                 if(horse['KOD'] == horsecode):
-                                    if(horse['KOSMAZ'] == False and pist == courtcode):
+                                    if(horse['KOSMAZ'] == False and pist == courtcode and int(horse['SONUC']) < 6):
                                         startno         = horse['START']
                                         weight          = float(horse['KILO']) + float(horse['FAZLAKILO']) - float(horse['APRANTIKILOINDIRIMI'])
                                         degree          = convert_to_second(horse['DERECE'])
@@ -538,20 +538,41 @@ def get_degree_predict(horsecode, courtcode, curr_temperature, curr_humidity, cu
                 except:
                     pass
                 
-    kinetic_prediction = 0
-    regression_prediction = 0
-              
+    
     if(len(kinetic) > 0):
-        kinetic_prediction = get_kinetic_energy_prediction(kinetic, curr_weight, curr_distance, last_gallop)
-    else:
-        pass
     
-    if( (len(weights) == len(jockeyrates) == len(kgscounts) == len(handycaps) == len(distances) == len(degrees)) and len(weights) > 0 ):
-        regression_prediction = get_regression_analysis_prediction(weights, jockeyrates, kgscounts, handycaps, distances, degrees, curr_weight, curr_jockeycode, curr_kgs, curr_handycap, curr_distance)
-    else:
-        pass            
+        total = 0
+        for item in kinetic:
+            total = total + item
     
-    return ( convert_to_degree((convert_to_second(kinetic_prediction) + convert_to_second(regression_prediction)) / 2) )
+        avg_kinetic_energy  = total / len(kinetic)
+        velocity_sqrt       = math.sqrt(float(avg_kinetic_energy) * 2 / float(curr_weight))
+        predicted           = convert_to_degree(float(curr_distance) / float(velocity_sqrt))
+        if float(last_gallop) > 0:
+            temp1   = 400 / float(last_gallop)
+            temp2   = float(curr_distance) / convert_to_second(predicted)
+            result  = float(curr_distance) / ((temp1 + temp2) / 2)
+            return convert_to_degree(result)
+        else:
+            return predicted
+    else:
+        return 0
+    
+    # kinetic_prediction = 0
+    # regression_prediction = 0
+    #
+    # if(len(kinetic) > 0):
+    #     kinetic_prediction = get_kinetic_energy_prediction(kinetic, curr_weight, curr_distance, last_gallop)
+    # else:
+    #     pass
+    #
+    #
+    # if( (len(weights) == len(jockeyrates) == len(kgscounts) == len(handycaps) == len(distances) == len(degrees)) and len(weights) > 0 ):
+    #     regression_prediction = get_regression_analysis_prediction(weights, jockeyrates, kgscounts, handycaps, distances, degrees, curr_weight, curr_jockeycode, curr_kgs, curr_handycap, curr_distance)
+    # else:
+    #     pass            
+    
+    #return ( convert_to_degree((convert_to_second(kinetic_prediction) + convert_to_second(regression_prediction)) / 2) )
 
 def get_historical_data(horsecode, courtcode):
 

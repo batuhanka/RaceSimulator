@@ -30,6 +30,8 @@
     	<span><i class="fa-solid fa-horse fa-beat-fade fa-2x text-info"></i><b style="vertical-align:super; font-size:x-large;"> ALTILI.CLUB</b></span>
   	</button>
   	
+  	<div><h1><span class="badge badge-pill badge-info">{{ weather.location }}</span></h1></div>
+  	
   	<div class="collapse navbar-collapse" id="navbaritems">
     <div class="navbar-nav" style="align-items:center; border-bottom-left-radius:40px; border-bottom-right-radius: 40px;">
     
@@ -42,6 +44,8 @@
     </div>
   	</div>
   	
+  	
+  	
 	</nav>
 	
     <!--  Container Main start -->
@@ -49,7 +53,6 @@
 	<div class="container" style="max-width:98%;">
 	
 	<div id="programdiv">
-	<div style="text-align:center;"><h1><span class="badge badge-pill badge-info">{{ weather.location }}</span></h1></div>
 	
 	{% for singlerace in racedetails %}
 	<div id="accordion-{{ singlerace.key }}">
@@ -347,7 +350,6 @@
 	</div>  <!-- end of accordion -->
 	{% endfor %}
 
-
    </div> <!-- end of container -->
    <br><br><br>
       
@@ -578,9 +580,9 @@
   </div>
 </div> 
 
-  
-  <input type="hidden" id="citynameinput" value="{{ cityname }}">
-  <input type="hidden" id="allrules" value="{{ allrules }}">
+  <input type="hidden" id="programdate" 	value="{{ programdate }}">
+  <input type="hidden" id="citynameinput" 	value="{{ cityname }}">
+  <input type="hidden" id="allrules" 		value="{{ allrules }}">
   
   </div>
   
