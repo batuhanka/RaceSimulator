@@ -9,11 +9,11 @@ from bs4 import BeautifulSoup
 import math
 import statistics
 from _io import BytesIO
-from PIL.Image import Image
+from PIL import Image
 import pandas as pd
 from datetime import datetime
 from sklearn.linear_model import LinearRegression
-
+from collections import Counter
 
 citycodemap = {1:'Adana', 2:'İzmir', 3:'İstanbul', 4:'Bursa', 5:'Ankara', 6:'Şanlıurfa', 7:'Elazığ', 8:'Diyarbakır', 9:'Kocaeli', 10:'Antalya'}
 
@@ -158,20 +158,20 @@ def find_rule_detail(raceid, racedate, cityinfo, citycode):
 
 
 
-def get_weather_info(weatherdeatils):
+def get_weather_info(weatherdetails):
     
     weather_info            = WeatherInfo()
-    weather_info.location   = weatherdeatils['HIPODROMADI']
-    weather_info.cityinfo   = weatherdeatils['HIPODROMYERI']
-    weather_info.cityname   = find_weather_location(weatherdeatils['HIPODROMYERI'])
-    weather_info.citycode   = get_city_code(weatherdeatils['HIPODROMYERI'])
-    weather_info.status     = weatherdeatils['HAVA_TR']
-    weather_info.temperature= weatherdeatils['SICAKLIK']
-    weather_info.humidity   = weatherdeatils['NEM']
-    weather_info.grassstatus= weatherdeatils['CIM_TR']
-    weather_info.grassrate  = weatherdeatils['CIMPISTAGIRLIGI']
-    weather_info.sandstatus = weatherdeatils['KUM_TR']
-    weather_info.sandrate   = weatherdeatils['KUMPISTAGIRLIGI']
+    weather_info.location   = weatherdetails['HIPODROMADI']
+    weather_info.cityinfo   = weatherdetails['HIPODROMYERI']
+    weather_info.cityname   = find_weather_location(weatherdetails['HIPODROMYERI'])
+    weather_info.citycode   = get_city_code(weatherdetails['HIPODROMYERI'])
+    weather_info.status     = weatherdetails['HAVA_TR']
+    weather_info.temperature= weatherdetails['SICAKLIK']
+    weather_info.humidity   = weatherdetails['NEM']
+    weather_info.grassstatus= weatherdetails['CIM_TR']
+    weather_info.grassrate  = weatherdetails['CIMPISTAGIRLIGI']
+    weather_info.sandstatus = weatherdetails['KUM_TR']
+    weather_info.sandrate   = weatherdetails['KUMPISTAGIRLIGI']
     return weather_info
 
 def get_pedigree_info(horsename, fathername, mothername):
@@ -239,6 +239,19 @@ def refine_jockey(jockeyname):
     
     return result
 
+def most_used_color(image_url):
+    result              = []
+    response            = requests.get(image_url)
+    img                 = Image.open(BytesIO(response.content))
+    img                 = img.convert('RGB')
+    pixels              = list(img.getdata())
+    color_counts        = Counter(pixels)
+    most_common_colors  = color_counts.most_common(3)
+    for color, freq in most_common_colors:
+        if color != (255, 255, 255):
+            result.append(color)
+    return result
+
 def get_all_horses(racedeatils):
     
     result = []
@@ -269,7 +282,11 @@ def get_all_horses(racedeatils):
             item.kgs        = horse['KGS']
             item.last20     = horse['SON20']
             item.jerseyimg  = horse['FORMA'].replace("medya", "medya-cdn")
-            item.disabled   = horse['KOSMAZ']
+            jerseycolors    = []
+            #jerseycolors    = most_used_color(horse['FORMA'].replace("medya", "medya-cdn"))
+            #item.jerseycolor1   = "rgb"+str(jerseycolors[0])+";"
+            #item.jerseycolor2   = "rgb"+str(jerseycolors[1])+";"
+            item.disabled       = horse['KOSMAZ']
             
             try: 
                 item.apprantice = horse['APRANTIFLG']
@@ -325,6 +342,9 @@ def get_all_horses_single_race(horses, racecode):
             item.kgs        = horse['KGS']
             item.last20     = horse['SON20']
             item.jerseyimg  = horse['FORMA'].replace("medya", "medya-cdn")
+            jerseycolors    = most_used_color(horse['FORMA'].replace("medya", "medya-cdn"))
+            item.jerseycolor1   = "rgb"+str(jerseycolors[0])+";"
+            item.jerseycolor2   = "rgb"+str(jerseycolors[1])+";"
             item.disabled   = horse['KOSMAZ']
             item.stablemate = horse['EKURI']
             item.bestdegree = horse['ENIYIDERECE']
@@ -526,8 +546,6 @@ def get_degree_predict(horsecode, courtcode, curr_temperature, curr_humidity, cu
                                         kgscounts.append(int(kgs))
                                         handycaps.append(float(handycap))
                                         distances.append(int(distance))
-                                        temperatures.append(float(temperature))
-                                        humidities.append(float(humidity))
                                         degrees.append(degree)
                                         kinetic.append(kinetic_energy) 
                                         temperatures.append(temperature)

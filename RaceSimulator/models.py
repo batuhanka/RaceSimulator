@@ -45,6 +45,8 @@ class HorseInfo(models.Model):
     kgs         = models.IntegerField();
     last20      = models.IntegerField();
     jerseyimg   = models.CharField(max_length=200)
+    jerseycolor1= models.CharField(max_length=200)
+    jerseycolor2= models.CharField(max_length=200)
     jerseybg    = models.CharField(max_length=200)
     disabled    = models.BooleanField()
     apprantice  = models.BooleanField()

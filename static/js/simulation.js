@@ -22,6 +22,8 @@ function add_key_frames(horses){
 	
 }
 
+    
+
 function terminate_running_requests(){
 	// kill all running requests
 	for(var i=0; i<requestPool.length; i++){
