@@ -81,14 +81,14 @@ DATABASES = {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     },
-    'racedb': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'HOST': 'localhost',  # database host
-        'NAME': 'racedb',  # database name
-        'USER': 'postgres',  # database user
-        'PASSWORD': 'gs35DBH26..',  # database pass
-        'PORT': 5432,  # database port
-    },
+    # 'racedb': {
+    #     'ENGINE': 'django.db.backends.postgresql',
+    #     'HOST': 'localhost',  # database host
+    #     'NAME': 'racedb',  # database name
+    #     'USER': 'postgres',  # database user
+    #     'PASSWORD': 'gs35DBH26..',  # database pass
+    #     'PORT': 5432,  # database port
+    # },
 }
 
 
@@ -135,4 +135,3 @@ STATICFILES_DIRS = [
 ]
 
 DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
-

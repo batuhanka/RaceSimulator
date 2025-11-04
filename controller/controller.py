@@ -8,12 +8,8 @@ from RaceSimulator.models import RaceInfo, SingleRaceInfo, HorseInfo, WeatherInf
 from bs4 import BeautifulSoup
 import math
 import statistics
-from _io import BytesIO
-from PIL import Image
-import pandas as pd
 from datetime import datetime
-from sklearn.linear_model import LinearRegression
-from collections import Counter
+#from sklearn.linear_model import LinearRegression
 
 citycodemap = {1:'Adana', 2:'İzmir', 3:'İstanbul', 4:'Bursa', 5:'Ankara', 6:'Şanlıurfa', 7:'Elazığ', 8:'Diyarbakır', 9:'Kocaeli', 10:'Antalya'}
 
@@ -25,7 +21,7 @@ def get_city_code(val):
 
 
 def get_all_rules():
-    
+
     rulemap = {
                'H13-H1':45,             'H13-H2':40,    'H13-H3':35,
                'H14-H1':55,             'H14-H2':50,    'H14-H3':45,
@@ -35,55 +31,55 @@ def get_all_rules():
                'H21-H1':93,             'H21-H2':88, 
                'H22-H1':98,             'H22-H2':93,  
                'H24-H1':105, 
-               
+
                'S2-A-BATI'      :145500,
                'S3-A-BATI'      :211500,
                'S4-A-BATI'      :330000,
                'S5-A-BATI'      :432750,
                'KV6-A-BATI'     :645000,
                'KV7-A-BATI'     :766500,
-               
+
                'S2-A-ANKIST'    :163500,
                'S3-A-ANKIST'    :244500,
                'S4-A-ANKIST'    :387000,
                'S5-A-ANKIST'    :506250,
                'KV6-A-ANKIST'   :759000,
                'KV7-A-ANKIST'   :897000,
-               
+
                'S2-A-DOGU'      :99750,
                'S3-A-DOGU'      :147750,
                'S4-A-DOGU'      :233250,
                'S5-A-DOGU'      :304500,
                'KV6-A-DOGU'     :453750,
                'KV7-A-DOGU'     :537750,
-                
+
                'S2-B-BATI'      :149250,
                'S3-B-BATI'      :263250,
                'S4-B-BATI'      :412500,
                'S5-B-BATI'      :540000,
                'KV6-B-BATI'     :716250,
                'KV7-B-BATI'     :851250,
-               
+
                'S2-B-ANKIST'    :177750,
                'S3-B-ANKIST'    :306000,
                'S4-B-ANKIST'    :483750,
                'S5-B-ANKIST'    :633000,
                'KV6-B-ANKIST'   :843750,
                'KV7-B-ANKIST'   :997500,
-               
+
                'S2-B-DOGU'      :106500,
                'S3-B-DOGU'      :184500,
                'S4-B-DOGU'      :291750,
                'S5-B-DOGU'      :380250, 
                'KV6-B-DOGU'     :504750,
                'KV7-B-DOGU'     :597000,
-                    
+
                }
-    
+
     return rulemap
 
 def get_races(date):
-    
+
     url     = 'https://ebayi.tjk.org/s/d/program/'+date+'/yarislar.json'
     races   = requests.get(url).json()
     result  = []
@@ -96,7 +92,7 @@ def get_races(date):
             item.location   = race['YER']
             item.day        = race['GUN']
             result.append(item)
-       
+
     return result
 
 
@@ -115,7 +111,7 @@ def get_race_details(date, racename):
     return result
 
 def get_all_races(racedeatils):
-    
+
     result = []
     for one in racedeatils:
         try:
@@ -159,7 +155,7 @@ def find_rule_detail(raceid, racedate, cityinfo, citycode):
 
 
 def get_weather_info(weatherdetails):
-    
+
     weather_info            = WeatherInfo()
     weather_info.location   = weatherdetails['HIPODROMADI']
     weather_info.cityinfo   = weatherdetails['HIPODROMYERI']
@@ -173,61 +169,61 @@ def get_weather_info(weatherdetails):
     weather_info.sandstatus = weatherdetails['KUM_TR']
     weather_info.sandrate   = weatherdetails['KUMPISTAGIRLIGI']
     return weather_info
-
-def get_pedigree_info(horsename, fathername, mothername):
-    
-    pedigree_text = ""
-    for i in range(30):
-        if(i == 0 or i == 1):
-            i = ""
-        try:
-            url             = 'https://www.pedigreequery.com/'+horsename+''+str(i)
-            details         = requests.get(url)
-            source          = BeautifulSoup(details.content,"lxml")
-            pedigreetable   = source.find("table", {"class","pedigreetable"})
-            rows            = pedigreetable.find_all("tr")
-            father          = str(rows[0].td.text).split(" (")[0]
-            mother          = str(rows[16].td.text).split(" (")[0]
-    
-            if(father == fathername and mother == mothername):
-                pedigree_text   = source.center.center.text
-                break
-    
-        except:
-            pass
-    
-    return pedigree_text
- 
-def find_jersey_bg_hex(imageurl):
-    
-    response = requests.get(imageurl)
-    # Read Image
-    img = Image.open(BytesIO(response.content))
-    # Convert Image into RGB
-    img = img.convert('RGB')
-    width, height = img.size
-    # Initialize Variable
-    r_total = 0
-    g_total = 0
-    b_total = 0
-    count = 0
- 
-    # Iterate through each pixel
-    for x in range(0, width):
-        for y in range(0, height):
-            # r,g,b value of pixel
-            r, g, b = img.getpixel((x, y))
- 
-            if(r==255 and g==255 and b==255):
-                pass
-            else:
-                r_total += r
-                g_total += g
-                b_total += b
-                count += 1
- 
-    return '#{:02x}{:02x}{:02x}'.format(round(r_total/count), round(g_total/count), round(b_total/count))   
-
+#
+# def get_pedigree_info(horsename, fathername, mothername):
+#
+#     pedigree_text = ""
+#     for i in range(30):
+#         if(i == 0 or i == 1):
+#             i = ""
+#         try:
+#             url             = 'https://www.pedigreequery.com/'+horsename+''+str(i)
+#             details         = requests.get(url)
+#             source          = BeautifulSoup(details.content,"lxml")
+#             pedigreetable   = source.find("table", {"class","pedigreetable"})
+#             rows            = pedigreetable.find_all("tr")
+#             father          = str(rows[0].td.text).split(" (")[0]
+#             mother          = str(rows[16].td.text).split(" (")[0]
+#
+#             if(father == fathername and mother == mothername):
+#                 pedigree_text   = source.center.center.text
+#                 break
+#
+#         except:
+#             pass
+#
+#     return pedigree_text
+#
+# # def find_jersey_bg_hex(imageurl):
+# #
+# #     response = requests.get(imageurl)
+# #     # Read Image
+# #     img = Image.open(BytesIO(response.content))
+# #     # Convert Image into RGB
+# #     img = img.convert('RGB')
+# #     width, height = img.size
+# #     # Initialize Variable
+# #     r_total = 0
+# #     g_total = 0
+# #     b_total = 0
+# #     count = 0
+# #
+# #     # Iterate through each pixel
+# #     for x in range(0, width):
+# #         for y in range(0, height):
+# #             # r,g,b value of pixel
+# #             r, g, b = img.getpixel((x, y))
+# #
+# #             if(r==255 and g==255 and b==255):
+# #                 pass
+# #             else:
+# #                 r_total += r
+# #                 g_total += g
+# #                 b_total += b
+# #                 count += 1
+# #
+# #     return '#{:02x}{:02x}{:02x}'.format(round(r_total/count), round(g_total/count), round(b_total/count))   
+#
 def refine_jockey(jockeyname):
     result      = ""
     temp = jockeyname.split(" ")
@@ -236,24 +232,24 @@ def refine_jockey(jockeyname):
             result += item
         else:
             result += item[:1]+". "
-    
-    return result
 
-def most_used_color(image_url):
-    result              = []
-    response            = requests.get(image_url)
-    img                 = Image.open(BytesIO(response.content))
-    img                 = img.convert('RGB')
-    pixels              = list(img.getdata())
-    color_counts        = Counter(pixels)
-    most_common_colors  = color_counts.most_common(3)
-    for color, freq in most_common_colors:
-        if color != (255, 255, 255):
-            result.append(color)
     return result
-
+#
+# # def most_used_color(image_url):
+# #     result              = []
+# #     response            = requests.get(image_url)
+# #     img                 = Image.open(BytesIO(response.content))
+# #     img                 = img.convert('RGB')
+# #     pixels              = list(img.getdata())
+# #     color_counts        = Counter(pixels)
+# #     most_common_colors  = color_counts.most_common(3)
+# #     for color, freq in most_common_colors:
+# #         if color != (255, 255, 255):
+# #             result.append(color)
+# #     return result
+#
 def get_all_horses(racedeatils):
-    
+
     result = []
     for one in racedeatils:
         racecode    = one['KOD']
@@ -282,12 +278,12 @@ def get_all_horses(racedeatils):
             item.kgs        = horse['KGS']
             item.last20     = horse['SON20']
             item.jerseyimg  = horse['FORMA'].replace("medya", "medya-cdn")
-            jerseycolors    = []
+            #jerseycolors    = []
             #jerseycolors    = most_used_color(horse['FORMA'].replace("medya", "medya-cdn"))
             #item.jerseycolor1   = "rgb"+str(jerseycolors[0])+";"
             #item.jerseycolor2   = "rgb"+str(jerseycolors[1])+";"
             item.disabled       = horse['KOSMAZ']
-            
+
             try: 
                 item.apprantice = horse['APRANTIFLG']
             except:
@@ -306,17 +302,17 @@ def get_all_horses(racedeatils):
                 item.agf2order  = horse['AGFSIRA2']
             except:
                 pass
-            
+
             item.ganyan     = ""
             item.degree     = ""
             item.diff       = ""
-            
+
             result.append(item)
 
     return result
 
 def get_all_horses_single_race(horses, racecode):
-    
+
     result = []
     for horse in horses:
             item            = HorseInfo()
@@ -342,23 +338,23 @@ def get_all_horses_single_race(horses, racecode):
             item.kgs        = horse['KGS']
             item.last20     = horse['SON20']
             item.jerseyimg  = horse['FORMA'].replace("medya", "medya-cdn")
-            jerseycolors    = most_used_color(horse['FORMA'].replace("medya", "medya-cdn"))
-            item.jerseycolor1   = "rgb"+str(jerseycolors[0])+";"
-            item.jerseycolor2   = "rgb"+str(jerseycolors[1])+";"
+            # jerseycolors    = most_used_color(horse['FORMA'].replace("medya", "medya-cdn"))
+            # item.jerseycolor1   = "rgb"+str(jerseycolors[0])+";"
+            # item.jerseycolor2   = "rgb"+str(jerseycolors[1])+";"
             item.disabled   = horse['KOSMAZ']
             item.stablemate = horse['EKURI']
             item.bestdegree = horse['ENIYIDERECE']
             item.ganyan     = horse['GANYAN']
             item.lastsix    = horse['SON6'].replace("K","").replace("C","")
             item.tool       = horse['TAKI']
-            
+
             result.append(item)
 
     return result
 
 
 def get_last_800(horsecode, courtcode):
-    
+
     race_count      = 0
     increment       = 1
     speeds          = []
@@ -398,13 +394,13 @@ def get_last_800(horsecode, courtcode):
                 old_race_url = columns[0].a['href']
                 if(old_race_url != None and old_race_url != "#" and court == courtcode):
                     racecity    = find_weather_location(columns[1].text.strip())
-                    
+
                     query_date  = old_race_url.split("Tarih=")[1].split("&")[0]
                     raceid      = old_race_url.split("#")[1]
                     temp        = query_date.split("/")
                     date_str    = temp[2]+""+temp[1]+""+temp[0]
-                    
-                     
+
+
                     result_url = 'https://ebayi.tjk.org/s/d/sonuclar/%s/full/%s.json' %(date_str, racecity)
                     races = requests.get(result_url).json()
                     for key, value in races.items():
@@ -428,23 +424,23 @@ def get_last_800(horsecode, courtcode):
 
             except:
                 pass
-            
-            
+
+
     finalcount  = 0
     finaltotal  = 0
     for one in speeds:
         finalcount  = finalcount + 1
         finaltotal  = finaltotal + one         
-    
+
     try:
         result = finaltotal / finalcount 
     except:
         result = 0
-    
+
     return result
-    
+
 def get_kinetic_energy_prediction(kinetic, curr_weight, curr_distance, last_gallop):
-    
+
     total = 0
     for item in kinetic:
         total = total + item
@@ -455,39 +451,84 @@ def get_kinetic_energy_prediction(kinetic, curr_weight, curr_distance, last_gall
     return predicted
 
 def get_regression_analysis_prediction(weights, jockeyrates, kgscounts, handycaps, distances, degrees, curr_weight, curr_jockeycode, curr_kgs, curr_handycap, curr_distance):
+    """
+    Performs a linear regression analysis on race data and predicts the degree
+    of performance for a current horse based on its attributes.
+
+    Imports Pandas and LinearRegression inside the function to ensure the 
+    Django server does not fail on startup due to dependency loading issues.
+
+    Args:
+        weights (list): List of historical horse weights.
+        jockeyrates (list): List of historical jockey performance rates.
+        kgscounts (list): List of historical KGS values.
+        handycaps (list): List of historical handicap values.
+        distances (list): List of historical race distances.
+        degrees (list): List of historical performance degrees (target variable).
+        curr_weight (float): Current horse's weight for prediction.
+        curr_jockeycode (str): Current jockey code for rate lookup.
+        curr_kgs (float): Current KGS value for prediction.
+        curr_handycap (float): Current handicap value for prediction.
+        curr_distance (float): Current distance for prediction.
+
+    Returns:
+        The predicted degree of performance after conversion.
+    """
     
-    racedata = {    
-                    'Weight'        : weights,
-                    'JockeyRate'    : jockeyrates,
-                    'KGS'           : kgscounts,
-                    'Handycap'      : handycaps,
-                    'Distance'      : distances,
-                    'Degree'        : degrees,    
-                }
-    
+    # --- LAZY IMPORTS ---
+    # These imports are now ONLY executed when this function is called, 
+    # not when the module is first loaded.
+    try:
+        import pandas as pd
+        from sklearn.linear_model import LinearRegression
+    except ImportError as e:
+        # Handle the error if the user forgets to install dependencies
+        print(f"ERROR: Missing required dependency for regression: {e}")
+        # Return a safe default or raise a specific exception for the view to catch
+        return 0 # Or raise an exception
+    # --------------------
+
+    racedata = {
+        'Weight'        : weights,
+        'JockeyRate'    : jockeyrates,
+        'KGS'           : kgscounts,
+        'Handycap'      : handycaps,
+        'Distance'      : distances,
+        'Degree'        : degrees,
+    }
+
+    # 1. Prepare data
     df = pd.DataFrame(racedata)
     features    = df.iloc[:,:-1]
     result      = df.iloc[:,-1]
+
+    # 2. Train the model
     reg         = LinearRegression()
     model       = reg.fit(features, result)
-    
-    
-    
-    # # Generate a prediction
-    example = pd.DataFrame([{
-        'Weight': curr_weight, 
-        'JockeyRate': find_jockey_rate(curr_jockeycode, datetime.now().strftime("%Y")),
-        'KGS':curr_kgs, 
-        'Handycap': curr_handycap, 
-        'Distance': curr_distance, 
-    }])
-    prediction = model.predict(example)
-    reg_score = reg.score(features, result)
 
+    # 3. Prepare prediction input
+    example = pd.DataFrame([{
+        'Weight': curr_weight,
+        # NOTE: find_jockey_rate must be defined somewhere that is imported 
+        # or defined outside of this function but in this file.
+        'JockeyRate': find_jockey_rate(curr_jockeycode, datetime.now().strftime("%Y")),
+        'KGS':curr_kgs,
+        'Handycap': curr_handycap,
+        'Distance': curr_distance,
+    }])
+
+    # 4. Predict and score
+    prediction = model.predict(example)
+    # reg_score = reg.score(features, result) # Uncomment if needed
+
+    # 5. Return converted result
+    # NOTE: convert_to_degree must also be defined and accessible.
     return convert_to_degree(prediction)
 
+
+
 def get_degree_predict(horsecode, courtcode, curr_temperature, curr_humidity, curr_grassrate, curr_distance, curr_weight, curr_handycap, curr_kgs, curr_last20, curr_dirtstate, curr_jockeycode, curr_startno, last_gallop):
-    
+
     temperatures= []
     humidities  = []
     grassrates  = []
@@ -501,7 +542,7 @@ def get_degree_predict(horsecode, courtcode, curr_temperature, curr_humidity, cu
     kinetic     = []
     degrees     = []
     dirtmap     = {'':2, 'Sulu': 1, 'Islak': 1.5, 'Normal': 2, 'Nemli': 3 }
-    
+
     details_url     = 'https://www.tjk.org/TR/YarisSever/Query/ConnectedPage/AtKosuBilgileri?QueryParameter_AtId='+horsecode 
     horsedetails    = requests.get(details_url)
     source          = BeautifulSoup(horsedetails.content,"lxml")
@@ -539,7 +580,7 @@ def get_degree_predict(horsecode, courtcode, curr_temperature, curr_humidity, cu
                                         handycap        = 0 if horse['HANDIKAP'] == '' else horse['HANDIKAP'] 
                                         velocity        = (float(distance) / degree)
                                         kinetic_energy  = weight * velocity * velocity / 2
-                                        
+
                                         starts.append(int(startno))
                                         weights.append(float(weight))
                                         jockeyrates.append(float(jockeyrate))
@@ -552,17 +593,17 @@ def get_degree_predict(horsecode, courtcode, curr_temperature, curr_humidity, cu
                                         humidities.append(humidity)
                                         grassrates.append(grassrate)
                                         dirtstatus.append(dirtstate)
-                                        
+
                 except:
                     pass
-                
-    
+
+
     if(len(kinetic) > 0):
-    
+
         total = 0
         for item in kinetic:
             total = total + item
-    
+
         avg_kinetic_energy  = total / len(kinetic)
         velocity_sqrt       = math.sqrt(float(avg_kinetic_energy) * 2 / float(curr_weight))
         predicted           = convert_to_degree(float(curr_distance) / float(velocity_sqrt))
@@ -575,7 +616,7 @@ def get_degree_predict(horsecode, courtcode, curr_temperature, curr_humidity, cu
             return predicted
     else:
         return 0
-    
+
     # kinetic_prediction = 0
     # regression_prediction = 0
     #
@@ -589,7 +630,7 @@ def get_degree_predict(horsecode, courtcode, curr_temperature, curr_humidity, cu
     #     regression_prediction = get_regression_analysis_prediction(weights, jockeyrates, kgscounts, handycaps, distances, degrees, curr_weight, curr_jockeycode, curr_kgs, curr_handycap, curr_distance)
     # else:
     #     pass            
-    
+
     #return ( convert_to_degree((convert_to_second(kinetic_prediction) + convert_to_second(regression_prediction)) / 2) )
 
 def get_historical_data(horsecode, courtcode):
@@ -629,14 +670,14 @@ def get_historical_data(horsecode, courtcode):
                                         data.append(history)
                 except:
                     pass
-    
+
     return data
 
 def get_horse_avg_speed(horse_power_list, courtcode):
-    
+
     samples = []
     for item in horse_power_list:
-        
+
         if(item.court == courtcode and item.degree != "" and item.degree != "Koşmaz" and item.degree != "Drcsz" and item.jockey != "Kayıt Koşmaz"):
             raw_degree      = item.degree
             values          = raw_degree.split(".")
@@ -650,8 +691,8 @@ def get_horse_avg_speed(horse_power_list, courtcode):
             ##speed           = float( (float(item.distance) * float(item.weight.replace(",","."))) / float(total_seconds) )
             speed       = float( float(item.distance) / float(total_seconds) )
             samples.append(speed)
-            
-    
+
+
     if(len(samples) == 0):  ## no data for this court
         avg_speed = 0
     if(len(samples) == 1):  ## if there is only one data
@@ -662,10 +703,10 @@ def get_horse_avg_speed(horse_power_list, courtcode):
     return avg_speed
 
 def get_horse_prize_avg_speed(horse_power_list, courtcode):
-    
+
     samples = []
     for item in horse_power_list:
-        
+
         if(item.court == courtcode and item.degree != "" and item.degree != "Koşmaz" and item.degree != "Drcsz" and item.jockey != "Kayıt Koşmaz" and int(item.rank) < 6):
             raw_degree      = item.degree
             values          = raw_degree.split(".")
@@ -679,8 +720,8 @@ def get_horse_prize_avg_speed(horse_power_list, courtcode):
             #speed           = float( (float(item.distance) * float(item.weight.replace(",","."))) / float(total_seconds))
             speed           = float( float(item.distance) / float(total_seconds))
             samples.append(speed)
-            
-    
+
+
     if(len(samples) == 0):  ## no data for this court
         prize_avg_speed = 0
     if(len(samples) == 1):  ## if there is only one data
@@ -698,7 +739,7 @@ def get_gallop_info(horsename, kgs):
     table   = source.find("table", {"id":"queryTable"}).find("tbody")
     rows    = table.find_all("tr")
     gallop  = []
-    
+
     try:
         for row in rows:
             if 'hidable' not in row['class']:
@@ -713,7 +754,7 @@ def get_gallop_info(horsename, kgs):
                         gallop.append(float(seconds) + (float(mseconds) / 100))
     except:
         pass
-    
+
     result = 0
     if(len(gallop) == 0):
         result = 0
@@ -734,28 +775,28 @@ def get_sibling_info(horsecode):
         result.append("Bu atın aynı anneden kardeşi yoktur.")
     else:
         result.append(str(tables[0]).replace('<span class="tlsymbol">t<span></span></span>',''))
-                          
+
     return result
 
 def get_stats_info(horsecode):
-    
+
     url     = 'https://www.tjk.org/TR/YarisSever/Query/AtKosuIstatistik/AtKosuIstatistik?Atkodu='+horsecode
     details = requests.get(url)
     source  = BeautifulSoup(details.content,"lxml")
     tables  = source.find_all("table")
     result  = []
-    
+
     for table in tables:
         links = table.find_all("a")
         for link in links:
             finalstr = 'https://www.tjk.org' + link['href']
             link['href'] = finalstr
-        
+
         result.append(str(table).replace('<span class="tlsymbol">t<span></span></span>',''))
     return result    
 
 def get_rival_info(horsecode, racecode, cityname, dateinfo):
-    
+
     url     = '''https://ebayi.tjk.org/s/d/program/%s/full/%s.json''' %(dateinfo, cityname)
     program = requests.get(url).json()
     rivals  = []
@@ -765,9 +806,9 @@ def get_rival_info(horsecode, racecode, cityname, dateinfo):
             for horse in race['atlar']:
                 if horse['KOD'] != horsecode:
                     rivals.append(horse['KOD'])
-    
-    
-    
+
+
+
     race_count      = 0
     increment       = 1
 
@@ -782,22 +823,22 @@ def get_rival_info(horsecode, racecode, cityname, dateinfo):
             pass
         else:
             race_count = item.text.strip().split("Toplam ")[1].split(" ")[0]
-    
+
     if int(race_count) > 50:
         increment = int(race_count) / 50
     else:
         pass
-    
-    
+
+
     occur = {}
     for index in range(math.ceil(increment)):
         details_url     = 'https://www.tjk.org/TR/YarisSever/Query/ConnectedPage/AtKosuBilgileri?&QueryParameter_AtId='+horsecode+'&PageNumber='+str(index)
         horsedetails    = requests.get(details_url)
         source          = BeautifulSoup(horsedetails.content,"lxml")
         allraces        = source.find("table", {"id": "queryTable"})
-        
-    
-        
+
+
+
         for item in allraces.find_all("tr"):
             columns = item.find_all("td")
             if(len(columns) == 21):
@@ -812,9 +853,9 @@ def get_rival_info(horsecode, racecode, cityname, dateinfo):
                 raceorder   = columns[12].text.strip()
                 now         = datetime.now()
                 today       = now.strftime("%Y%m%d")
-                
+
                 if(int(year) > 2018 and daterequest != today):
-                
+
                     url         = '''https://ebayi.tjk.org/s/d/sonuclar/%s/full/%s.json''' %(daterequest, find_weather_location(cityname))
                     program     = requests.get(url).json()
                     try:
@@ -824,18 +865,18 @@ def get_rival_info(horsecode, racecode, cityname, dateinfo):
                         for race in program['kosular']:
                             if race['NO'] == raceorder and race['KOD'] == raceid:
                                 for item in race['atlar']:
-                                    
+
                                     if item['KOD'] in rivals:
                                         targetorder = int(item['SONUC'])
                                         rivalname   = item['AD']
                                         rivalcode   = item['KOD']
-                                    
+
                                     if item['KOD'] == horsecode:
                                         sourceorder     = int(item['SONUC'])
-                                
+
                                 if(sourceorder != 0 and targetorder != 0):
-                                    
-                                    
+
+
                                     if rivalcode in occur.keys():
                                         if(sourceorder < targetorder):
                                             occur[rivalcode][1] = occur[rivalcode][1] + 1
@@ -850,7 +891,7 @@ def get_rival_info(horsecode, racecode, cityname, dateinfo):
                                         else:
                                             info.append(0)
                                             info.append(1)
-                                        
+
                                         occur[rivalcode] = info
 
                     except:
@@ -859,7 +900,7 @@ def get_rival_info(horsecode, racecode, cityname, dateinfo):
 
 
 def get_rival_stats(horsecode, racecode, cityname, dateinfo):
-    
+
     url     = '''https://ebayi.tjk.org/s/d/program/%s/full/%s.json''' %(dateinfo, cityname)
     program = requests.get(url).json()
     rivals  = []
@@ -869,7 +910,7 @@ def get_rival_stats(horsecode, racecode, cityname, dateinfo):
             for horse in race['atlar']:
                 if horse['KOD'] != horsecode:
                     rivals.append(horse['KOD'])
-    
+
     occur = {}
     for item in rivals:
         occur[item]         = ''
@@ -880,8 +921,8 @@ def get_rival_stats(horsecode, racecode, cityname, dateinfo):
     horsedetails        = requests.get(details_url)
     source              = BeautifulSoup(horsedetails.content,"lxml")
     allraces            = source.find("table", {"id": "queryTable"})
-    
-    
+
+
     for item in allraces.find_all("tr"):
         columns = item.find_all("td")
         if(len(columns) == 21):
@@ -892,11 +933,11 @@ def get_rival_stats(horsecode, racecode, cityname, dateinfo):
             cityname    = columns[1].text.strip();
             race_url    = race_url+'&SehirId='+str(get_city_code(cityname))+'&SehirAdi='+cityname
             racediv     = 'kosubilgisi-'+race_id
-    
+
             races       = requests.get(race_url)
             source2     = BeautifulSoup(races.content,"lxml")
             tbody       = source2.find("div", {"id": race_id}).find("div", {"id" : racediv}).find("tbody")
-    
+
             rows        = tbody.find_all("tr")
             source      = columns[4].text.strip()
             target      = 0
@@ -907,7 +948,7 @@ def get_rival_stats(horsecode, racecode, cityname, dateinfo):
                 rivalid     = start.split("&Era")[0]
                 rivalname   = columns[2].a.text.strip().split("(")[0]
                 target      = columns[1].text.strip()
-    
+
                 if rivalid in rivals:
                     occur[rivalid] = rivalname
                     if(source < target):
@@ -915,40 +956,40 @@ def get_rival_stats(horsecode, racecode, cityname, dateinfo):
                             occur[rivalid+'-loss'] = int(occur[rivalid+'-loss']) + 1
                         else:
                             occur[rivalid+'-loss'] = 1
-                            
+
                     if(source > target):
                         if(occur[rivalid+'-win'] != 0):
                             occur[rivalid+'-win'] = int(occur[rivalid+'-win']) + 1
                         else:
                             occur[rivalid+'-win'] = 1
-      
+
     remove_list     = []
     display_list    = []
     for key, value in occur.items():
         if value == '' or value == 0:
             remove_list.append(key)
-    
+
     for removal in remove_list:
         occur.pop(removal)
-    
+
     for key in occur.keys():
         if "-" not in key:
             display_list.append(key)
-    
+
     resultmsg = []
     for item in display_list:
         message = ""
         if (item+'-win' not in occur.keys()) and (item+'-loss' in occur.keys()):
             message = occur[item]+': <span class="badge badge-pill badge-success" style="font-size:larger">'+str(occur[item+'-loss'])+'</span> kez geçmiştir.'
-        
+
         if (item+'-win' in occur.keys()) and (item+'-loss' not in occur.keys()):
             message = occur[item]+': <span class="badge badge-pill badge-danger" style="font-size:larger">'+str(occur[item+'-win'])+'</span> kez geçilmiştir.'
-            
+
         if (item+'-win' in occur.keys()) and (item+'-loss' in occur.keys()):
             message = occur[item]+': <span class="badge badge-pill badge-success" style="font-size:larger">'+str(occur[item+'-loss'])+'</span> kez geçmiş, <span class="badge badge-pill badge-danger" style="font-size:larger">'+str(occur[item+'-win'])+'</span> kez geçilmiştir.'
-         
+
         resultmsg.append(message) 
-    
+
     return resultmsg
 
 
@@ -956,7 +997,7 @@ def get_horse_power(horsecode):
     race_count  = 0
     increment   = 1
     result      = []
-    
+
     #### first increment check for old horses
     ## for all races 
     horse_details_url   = 'https://www.tjk.org/TR/YarisSever/Query/ConnectedPage/AtKosuBilgileri?QueryParameter_Yil=-1&QueryParameter_SehirId=-1&QueryParameter_PistKodu=-1&QueryParameter_MesafeStart=-1&QueryParameter_MesafeEnd=-1&QueryParameter_Kosmaz=on&Sort=&QueryParameter_AtId='+horsecode
@@ -969,22 +1010,22 @@ def get_horse_power(horsecode):
             pass
         else:
             race_count = item.text.strip().split("Toplam ")[1].split(" ")[0]
-        
+
     if int(race_count) > 50:
         increment = int(race_count) / 50
     else:
         pass
-    
-    
+
+
     for index in range(math.ceil(increment)):
-    
+
         ###details_url     = 'https://www.tjk.org/TR/YarisSever/Query/ConnectedPage/AtKosuBilgileri?QueryParameter_Yil=-1&QueryParameter_SehirId=-1&QueryParameter_PistKodu=-1&QueryParameter_MesafeStart=-1&QueryParameter_MesafeEnd=-1&QueryParameter_Kosmaz=on&Sort=&QueryParameter_AtId='+horsecode+'&PageNumber='+str(index)
         details_url     = 'https://www.tjk.org/TR/YarisSever/Query/ConnectedPage/AtKosuBilgileri?QueryParameter_AtId='+horsecode+'&PageNumber='+str(index)   
         horsedetails    = requests.get(details_url)
         source          = BeautifulSoup(horsedetails.content,"lxml")
         allraces        = source.find("table", {"id": "queryTable"})
-        
-           
+
+
         for item in allraces.find_all("tr"):
             columns = item.find_all("td")
             info    = HorsePowerInfo()
@@ -1012,14 +1053,14 @@ def get_horse_power(horsecode):
                 result.append(info)
             else:
                 pass
-    
+
     if len(result) == 1:
         pass ## firstly recorded
-    
+
     return result
 
 def find_court(value):
-    
+
     result = ""
     if value == 'K':
         result = "kum"
@@ -1040,11 +1081,11 @@ def find_court_background(value):
     return result
 
 def find_weather_location(value):
-    
+
     choices = {"Ğ":"G", "Ü":"U", "Ş":"S", "İ":"I", "Ö":"O", "Ç":"C",  "ğ":"g", "ü":"u", "ş":"s", "ı":"i", "ö":"o", "ç":"c"}
     for i in range(len(value)):
         value = value.replace(value[i:i+1],choices.get(value[i],value[i]))
-    
+
     return value.upper()
 
 def find_jockey_rate(jockeycode, year):
