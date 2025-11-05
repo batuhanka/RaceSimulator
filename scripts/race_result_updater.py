@@ -6,17 +6,14 @@ import json
 from typing import List, Any, Optional
 import time
 
-# --- Sabitler ---
-MASTER_TABLE_NAME = 'master_table'
-# Yeni Başlangıç Tarihi: 1 Ocak 2020
-START_DATE      = datetime(2020, 1, 1).date()
-END_DATE        = datetime(2025, 11, 1).date() - timedelta(days=1)
-DELAY_SECONDS   = 0.5 # API'yi yormamak için her gün arasında 0.5 saniye bekleme
+DB_NAME             = 'all_races.duckdb'
+MASTER_TABLE_NAME   = 'master_table'
+START_DATE          = datetime(2025, 11, 1).date()
+END_DATE            = datetime(2025, 11, 7).date() - timedelta(days=1)
+DELAY_SECONDS       = 0.5
 
-# --- Yardımcı Fonksiyonlar ---
 
 def sanitize_turkish(city_name: str) -> str:
-    """Türkçe karakterleri İngilizce/URL dostu karşılıklarına çevirir."""
     mapping = {
         'İ': 'I', 'I': 'I', 'Ş': 'S', 'Ğ': 'G', 'Ü': 'U', 'Ö': 'O', 'Ç': 'C',
         'ı': 'i', 'ş': 's', 'ğ': 'g', 'ü': 'u', 'ö': 'o', 'ç': 'c'
@@ -26,41 +23,31 @@ def sanitize_turkish(city_name: str) -> str:
     return city_name.upper()
 
 def clean_and_cast_integer(value: Optional[Any], default_val: Optional[int] = None) -> Optional[int]:
-    """Tamsayı değeri temizler, boş veya geçersizse None döndürür. Varsayılan olarak None döndürür."""
     if value is None or str(value).strip() == '':
         return default_val
     
     value_str = str(value)
     
     try:
-        # Virgülü noktaya çevir, float'a dönüştür (virgüllü int durumlarını ele almak için), sonra int'e
         return int(float(value_str.replace(',', '.')))
     except ValueError:
         return default_val
 
 def clean_and_cast_numeric(value: Optional[Any], default_val: float = 0.0) -> float:
-    """Sayısal değeri temizler, boş veya geçersizse varsayılanı döndürür."""
     if value is None or value == '':
         return default_val
     
-    # Gelen değeri güvenli bir şekilde string'e çevir (int/float hatalarını engeller)
     value_str = str(value)
     
     try:
-        # Virgülü noktaya çevir, sonra float'a dönüştür
         return float(value_str.replace(',', '.'))
     except ValueError:
         return default_val
 
-# --- ETL Fonksiyonları ---
 def find_race_centers(date_str: str, con: duckdb.DuckDBPyConnection) -> List[str]:
-    """
-    Belirtilen tarih için yarış merkezlerini çeker ve URL-dostu isimler döndürür.
-    """
     race_centers_url = f"https://ebayi.tjk.org/s/d/sonuclar/{date_str}/yarislar.json"
     
     try:
-        # HTTP üzerinden okuma için httpfs eklentisini yükle
         con.execute("INSTALL httpfs; LOAD httpfs;")
         
         query = f"""
@@ -87,31 +74,22 @@ def find_race_centers(date_str: str, con: duckdb.DuckDBPyConnection) -> List[str
         return url_friendly_names
         
     except Exception as e:
-        # Buradaki hatalar genellikle URL hatası veya veri formatı hatasıdır.
-        # Bu, o güne ait yarış verisi olmadığı anlamına gelebilir.
         print(f"❌ Hata: {date_str} için yarış merkezleri çekilemedi. Hata: {e}")
         return []
 
 def fetch_and_append_results(city_code: str, full_json_url: str, date_str: str, con: duckdb.DuckDBPyConnection):
-    """
-    TJK'dan veriyi çeker, Python'da düzleştirir. 
-    Ana tablo yoksa oluşturur, varsa veri ekler (INSERT INTO).
-    """
     
     try:
-        # 1. Aşama: Veriyi Çek ve Python'da Düzleştir (Flattening)
-        response = requests.get(full_json_url, timeout=10)
+        response    = requests.get(full_json_url, timeout=10)
         response.raise_for_status()
-        data = response.json()
-        
-        hava    = data.get('hava', [])
-        kosular = data.get('kosular', [])
-        flat_records = []
+        data        = response.json()
+        hava        = data.get('hava', [])
+        kosular     = data.get('kosular', [])
+        flat_records= []
 
         for kosu in kosular:
             atlar = kosu.get('atlar', [])
             
-            # Koşu seviyesindeki ana verileri çek
             race_base_data = {
                 'City_Name'             : city_code,
                 'Weather_State'         : hava.get('HAVA_TR'),
@@ -137,7 +115,6 @@ def fetch_and_append_results(city_code: str, full_json_url: str, date_str: str, 
                 'Race_Video'            : kosu.get('VIDEO'),
             }
             
-            # Atlar seviyesini düzleştir ve koşu verileriyle birleştir
             for horse in atlar:
                 horse_data = {
                     'Horse_Code'            : horse.get('KOD'),
@@ -185,19 +162,13 @@ def fetch_and_append_results(city_code: str, full_json_url: str, date_str: str, 
             print(f"   ↳ ⚠️ {date_str} - {city_code}: Koşu veya at verisi bulunamadı.")
             return
 
-        flat_df = pd.DataFrame(flat_records)
-
-        # 2. Aşama: DuckDB'ye Yükle (Koşullu Ekleme/Oluşturma)
-        
-        # Tablo var mı kontrol et
+        flat_df     = pd.DataFrame(flat_records)
         table_check = con.execute(f"SELECT COUNT(*) FROM information_schema.tables WHERE table_name = '{MASTER_TABLE_NAME}'").fetchone()[0]
 
         if table_check == 0:
-            # Tablo yoksa, ilk DataFrame ile tabloyu oluştur.
             con.execute(f"CREATE TABLE {MASTER_TABLE_NAME} AS SELECT * FROM flat_df")
             action = "oluşturuldu"
         else:
-            # Tablo varsa, veri ekle (INSERT INTO)
             con.execute(f"INSERT INTO {MASTER_TABLE_NAME} SELECT * FROM flat_df")
             action = "eklendi"
             
@@ -211,50 +182,35 @@ def fetch_and_append_results(city_code: str, full_json_url: str, date_str: str, 
     except json.JSONDecodeError:
         print(f"   ↳ ❌ JSON Hatası: {date_str} - {city_code} verisi geçersiz JSON formatında.")
     except Exception as e:
-        # Bu hata, muhtemelen sütun tipleri uyumsuzluğundan kaynaklanabilir.
         print(f"   ↳ ❌ Beklenmeyen Hata: {date_str} - {city_code} için hata oluştu. Hata: {e}")
 
-# --- ANA ÇALIŞTIRMA BLOĞU ---
 if __name__ == '__main__':
     
     
     print(f"Veri Çekim Aralığı: {START_DATE} ile {END_DATE} arası.")
-    
-    ## --- VERİTABANI AYARLARI ---
-    DB_NAME = 'all_races.duckdb'
     con = duckdb.connect(database=DB_NAME)
     print(f"\n🔗 DuckDB Bağlantısı '{DB_NAME}' veritabanına kuruldu.")
     
-    # Tarih aralığını döngüye al
     current_date = START_DATE
     while current_date <= END_DATE:
         date_str = current_date.strftime('%Y%m%d')
         print(f"\n--- {date_str} Tarihi İşleniyor ---")
     
-        # URL'ler
         FULL_RESULT_URL_TEMPLATE = f"https://ebayi.tjk.org/s/d/sonuclar/{date_str}/full/"
-    
-        # 1. Adım: Yarış merkezlerini bul
         races_list = find_race_centers(date_str, con)
     
         if races_list:
             print(f"   ↳ Tespit Edilen Merkezler: {races_list}")
-    
-            # 2. Adım: Her merkez için veriyi çek ve ana tabloya ekle
             for center in races_list:
                 full_url = f"{FULL_RESULT_URL_TEMPLATE}{center}.json"
                 fetch_and_append_results(center, full_url, date_str, con)
         else:
             print(f"   ↳ {date_str}: Yarış merkezi bulunamadı (Tatil veya veri yok).")
     
-        # API kısıtlamalarını önlemek için bekleme (Çok sayıda gün çekerken önemlidir)
         time.sleep(DELAY_SECONDS) 
-    
-        # Bir sonraki güne geç
         current_date += timedelta(days=1)
     
     try:
-        # Tüm veriler eklendikten sonra tablonun son satır sayısını göster
         total_rows = con.execute(f"SELECT COUNT(*) FROM {MASTER_TABLE_NAME}").fetchone()[0]
         print(f"\n🏆 TOPLAMA BAŞARILI: '{MASTER_TABLE_NAME}' tablosunda toplam {total_rows} satır veri bulunmaktadır.")
     except Exception as e:
