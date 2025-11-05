@@ -12,6 +12,8 @@ import json
 from django.core import serializers
 from bs4 import BeautifulSoup
 import re
+import duckdb
+from RaceSimulator.settings import BASE_DIR
 
 citycodemap = {1:'Adana', 2:'İzmir', 3:'İstanbul', 4:'Bursa', 5:'Ankara', 6:'Şanlıurfa', 7:'Elazığ', 8:'Diyarbakır', 9:'Kocaeli', 10:'Antalya'}
 def get_city_code(val):
@@ -78,6 +80,76 @@ def simulation(request):
     
     return render(request, "simulation.html", {'currenttime': currenttime, 'nextracetime': nextracetime, 'weather': weather_info, 'cityname': cityname, 'programdate':programdate, 'racedetails' : all_races, 'allhorses' : all_horses })
 
+#### NEW IMPLEMENTATION FROM DUCK DB
+# def fixture(request):
+#     programdate         = request.GET.get("programdate")
+#     cityname            = request.GET.get("cityname")
+#     parsable_string     = programdate[:24].strip()
+#     date_object         = datetime.strptime(parsable_string, "%a %b %d %Y %H:%M:%S")
+#     output_prg_date     = date_object.strftime("%d/%m/%Y")
+#     con                 = duckdb.connect(database=BASE_DIR+"/scripts/all_programs.duckdb")
+#     query               = f"SELECT * FROM program_master_table WHERE Race_Date = '{output_prg_date}' AND City_Name = '{cityname}'"
+#
+#     try:
+#         result_df = con.execute(query).fetchdf()
+#         if result_df.empty:
+#             print(f"Query executed successfully, but **no results** found for Query : {query}'")
+#         else:
+#             print("✅ Query Results:")
+#             print(result_df)
+#
+#     except duckdb.CatalogException as e:
+#         print(f"❌ Error executing query: {e}")
+#         print(f"Please check if the table 'program_master_table' exists in your database.")
+#
+#     finally:
+#         con.close()
+#
+#     return HttpResponse(200)
+#
+#
+#
+#
+#     # url                 = '''https://ebayi.tjk.org/s/d/program/%s/full/%s.json''' %(date_for_request, cityname)
+#     # program             = requests.get(url).json()
+#     # weatherdetails      = program['hava']
+#     # racedetails         = program['kosular']
+#     # weather_info        = CONT.get_weather_info(weatherdetails)
+#     # all_races           = CONT.get_all_races(racedetails)
+#     # all_horses          = CONT.get_all_horses(racedetails)
+#     # all_rules           = CONT.get_all_rules()
+#     # try:
+#     #     resultsurl          = '''https://ebayi.tjk.org/s/d/sonuclar/%s/full/%s.json''' %(date_for_request, cityname)
+#     #     results             = requests.get(resultsurl).json()
+#     #     resultdetails       = results['kosular']
+#     #     for result in resultdetails:
+#     #         racecode    = result['KOD']
+#     #         is_race_completed(racecode, result['VIDEO'], result['FOTOFINISH'], all_races)
+#     #         horseorders = result['atlar']
+#     #         for horse in horseorders:
+#     #             for item in all_horses:
+#     #                 if(item.code == horse['KOD']):
+#     #                     if(horse['KOSMAZ'] == True or horse['SONUC'] == 0 or horse['SONUC'] == ''):
+#     #                         item.result = 1000
+#     #                     else:
+#     #                         item.result = horse['SONUC']
+#     #                         item.ganyan = horse['GANYAN']
+#     #                         item.degree = horse['DERECE']
+#     #                         item.diff   = horse['FARK']
+#     # except:
+#     #     pass
+#     #
+#     # if date_for_request == now.strftime("%Y%m%d"):
+#     #     currenttime     = now.strftime("%H:%M")
+#     #     nextracetime    = (now + timedelta(minutes=30)).strftime("%H:%M")
+#     # else:
+#     #     currenttime     = prgdate.strftime("%H:%M")
+#     #     nextracetime    = (prgdate + timedelta(minutes=30)).strftime("%H:%M")
+#     #
+#     #return render(request, "racedetails-mobile.html", {'currenttime': currenttime, 'nextracetime': nextracetime, 'weather': weather_info, 'cityname': cityname, 'programdate':programdate, 'racedetails' : all_races, 'allhorses' : all_horses, 'allrules': json.dumps(all_rules) })
+
+
+### OLD IMPLEMENTATION
 def fixture(request):
     programdate         = request.GET.get("programdate")
     temp                = str(programdate).split()
@@ -114,14 +186,14 @@ def fixture(request):
                             item.diff   = horse['FARK']
     except:
         pass
-    
+
     if date_for_request == now.strftime("%Y%m%d"):
         currenttime     = now.strftime("%H:%M")
         nextracetime    = (now + timedelta(minutes=30)).strftime("%H:%M")
     else:
         currenttime     = prgdate.strftime("%H:%M")
         nextracetime    = (prgdate + timedelta(minutes=30)).strftime("%H:%M")
-    
+
     return render(request, "racedetails-mobile.html", {'currenttime': currenttime, 'nextracetime': nextracetime, 'weather': weather_info, 'cityname': cityname, 'programdate':programdate, 'racedetails' : all_races, 'allhorses' : all_horses, 'allrules': json.dumps(all_rules) })
 
 def is_race_completed(racecode, videourl, photourl, allraces):

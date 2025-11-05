@@ -110,10 +110,10 @@ def get_race_details(date, racename):
         result.append(item)
     return result
 
-def get_all_races(racedeatils):
+def get_all_races(racedetails):
 
     result = []
-    for one in racedeatils:
+    for one in racedetails:
         try:
             item            = SingleRaceInfo()
             item.no         = one['NO']

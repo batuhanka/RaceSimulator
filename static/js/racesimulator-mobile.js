@@ -24,10 +24,12 @@ $.ajaxSetup({
 
 
 $(document).ready(function(){
-
+	
+	
 	$(".table tbody").each(function(){
 		sortmytable(this, "number");
 	});
+	
 	
 	/* Scrolling to Position
 	try{
@@ -37,6 +39,7 @@ $(document).ready(function(){
 	}catch(exp){}
 	*/
 	
+	/*
 	$(".racerule").each(function(){
 		var thisspan	= $(this);
 		var raceid 		= $(this).attr("raceid");
@@ -60,6 +63,7 @@ $(document).ready(function(){
         	}
     	});
 	});
+	*/
 	
 	$(".racetable").each(function(){
 		var trainers 	= $(this).find(".trainer");
@@ -93,9 +97,11 @@ $(document).ready(function(){
 		
 	});
 	
+	/*
 	$(".table tbody tr.loadingrow").each(function(){
 		$(this).show();
 	});
+	*/
 	
 	$(".table tbody tr.calculations").each(function(){
 		
@@ -160,7 +166,7 @@ $(document).ready(function(){
 				}
     	});
 		
-		
+		/*
 		$.ajax({
         	type: "GET",
         	async: true,
@@ -215,7 +221,9 @@ $(document).ready(function(){
     	}).done(function (){
 			$(thisrow).next().next().hide();   /// hide .loadingrows
 		});
-		});
+		*/
+	});
+		
 		
 		
 		$(".parent").each(function(){
@@ -271,7 +279,7 @@ $(document).ready(function(){
     	});
 	});
 		
-		
+	/*	
 	$(".jockeyrates").each(function(){
 		var jockeycode 	= $(this).attr('jockeycode');
 		var thisspan	= $(this);
@@ -327,6 +335,7 @@ $(document).ready(function(){
 		});
 		
 	});
+	*/
 	
 }); // document ready end
 
@@ -373,10 +382,7 @@ $(document).on('click', "#customcalculate", function() {
 	
 });
 
-$(document).on('click', "#closecalculate", function() {
-	
-});
-
+/*
 $(document).on('click', ".settings", function() {
 $("#slider1").roundSlider({
     	handleShape: "dot",
@@ -486,7 +492,9 @@ $("#slider1").roundSlider({
 	$("#calculateModal").modal('show');
 
 });
+*/
 
+/*
 $(document).on('click', ".rivalanalysis", function() {
 	
 	var infoElement = $(this);
@@ -520,6 +528,7 @@ $(document).on('click', ".rivalanalysis", function() {
     	});
 	
 });
+*/
 
 // GO TO SIMULATION PAGE
 $(document).on('click', "#simulasyonbtn", function() {
@@ -529,7 +538,8 @@ $(document).on('click', "#simulasyonbtn", function() {
 	window.location = "/simulation/?programdate="+programdate+"&cityname="+cityname;
 });
 
-/* COMMENTED CALCULATE METHOD
+/* 
+COMMENTED CALCULATE METHOD
 
 $(document).on('click', ".velocities", function() {
 	
@@ -748,30 +758,26 @@ function calculate_horse_type(text){
 }
 
 
-function find_other_race(yearprize, prize1, rulemap, horsetype, citytype){
-	
-	var msg 		= "";
-	var targetprize = yearprize + prize1;
-	var targetkey	= "";
-	
-	for (const [index, [key, value]] of Object.entries(Object.entries(rulemap))){
-		if( key.includes(citytype) && key.includes(horsetype) && (targetprize > value)){
-				targetkey = key;
-		}
-	}
-	
-	if(targetkey != ""){
-		var racetype 	= targetkey.split("-")[0];
-		var raceregion	= targetkey.split("-")[2];
-		racetype 		= racetype.replace("S","ŞARTLI ");
-		raceregion		= raceregion.replace("BATI","İzmir,Adana,Antalya,Kocaeli ve Bursa");
-		raceregion		= raceregion.replace("ANKIST","Ankara ve İstanbul");
-		raceregion		= raceregion.replace("DOGU","Diyarbakır,Urfa ve Elazığ");
-		msg = raceregion+"'da <span class='badge badge-pill badge-warning' style='font-size:large'>"+racetype+"</span>";
-	}
-	
-	return msg;
-	
+function find_other_race(yearprize, prize1, rulemap, horsetype, citytype) {
+    var msg = "";
+    var targetprize = yearprize + prize1;
+    var targetkey = "";
+
+    for (const [index, [key, value]] of Object.entries(Object.entries(rulemap))) {
+        if (key.includes(citytype) && key.includes(horsetype) && (targetprize > value)) {
+            targetkey = key;
+        }
+    }
+
+    if (targetkey != "") {
+        var racetype = targetkey.split("-")[0];
+        var raceregion = targetkey.split("-")[2];
+        racetype = racetype.replace("S", "ŞARTLI ");
+        raceregion = raceregion.replace("BATI", "İÇ BATI");
+        msg = racetype + " (" + raceregion + ")";
+    }
+
+    return msg;
 }
 
 function compare_racerule(yearprize, horsehp, racetype, prize1, detailrow, horsetext, cityname){
@@ -804,6 +810,8 @@ function compare_racerule(yearprize, horsehp, racetype, prize1, detailrow, horse
 }
 
 
+
+/*
 $(document).on('click', ".sortfornumber", function() {
 	var tbody = $(this).closest("table").find("tbody");
 	$($(tbody).prev().find("button")[1]).empty();
@@ -867,6 +875,8 @@ $(document).on('click', ".sortfordegree", function() {
 	$($(this).children()[0]).removeClass("sorthide").addClass("sortDisplay");
 	sortmytable(tbody, "degree");
 });
+*/
+
 
 function sortmytable(tbody, sortoption){
 	if(sortoption == "degree"){
@@ -1247,4 +1257,3 @@ function sortmytable(tbody, sortoption){
 	
 	
 }
-
