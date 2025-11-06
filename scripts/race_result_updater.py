@@ -8,8 +8,9 @@ import time
 
 DB_NAME             = 'all_races.duckdb'
 MASTER_TABLE_NAME   = 'master_table'
-START_DATE          = datetime(2025, 11, 1).date()
-END_DATE            = datetime(2025, 11, 7).date() - timedelta(days=1)
+TODAY               = datetime.now().date()
+START_DATE          = TODAY
+END_DATE            = TODAY
 DELAY_SECONDS       = 0.5
 
 
